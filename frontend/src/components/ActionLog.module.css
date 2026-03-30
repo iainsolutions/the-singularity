@@ -1,0 +1,121 @@
+.actionLog {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.actionLog h3 {
+  margin: 0 0 16px 0;
+  color: #495057;
+  font-size: 18px;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 8px;
+}
+
+.logEntries {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.noActions {
+  color: #6c757d;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.logEntry {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.logEntry:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.logHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.playerName {
+  font-weight: bold;
+  color: #495057;
+}
+
+.actionType {
+  background: #e9ecef;
+  color: #495057;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.draw .actionType {
+  background: #d4edda;
+  color: #155724;
+}
+
+.meld .actionType {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.dogma .actionType {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.achieve .actionType {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.turnNumber {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.logDescription {
+  color: #495057;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.logTimestamp {
+  color: #6c757d;
+  font-size: 12px;
+  text-align: right;
+}
+
+.logEntries::-webkit-scrollbar {
+  width: 6px;
+}
+
+.logEntries::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.logEntries::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.logEntries::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

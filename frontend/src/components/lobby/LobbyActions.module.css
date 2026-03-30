@@ -1,0 +1,13 @@
+.lobbyActions {
+  margin-top: 20px;
+}
+
+.lobbyActions__buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.lobbyActions__waitingMessage {
+  margin-top: 20px;
+}

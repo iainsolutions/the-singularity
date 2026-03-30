@@ -1,0 +1,112 @@
+.ageRow {
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.ageRowCompact {
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.ageOption {
+  position: relative;
+  width: 37.5px;
+  height: 56.25px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ageRowCompact .ageOption {
+  width: 30px;
+  height: 45px;
+}
+
+.ageOption:hover:not(.ageOptionEmpty):not(.ageOptionDisabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ageCardBack {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: border 0.2s ease;
+}
+
+.ageOptionSelected .ageCardBack {
+  border: 2px solid #1976d2;
+  box-shadow: 0 0 8px rgba(25, 118, 210, 0.5);
+}
+
+.ageOptionEmpty {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ageOptionEmpty:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.ageOptionDisabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ageOptionDisabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.ageEmpty {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+  border: 2px solid #999;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ageEmptyText {
+  font-size: 9px;
+  font-weight: bold;
+  color: #666;
+}
+
+.ageRowCompact .ageNumber {
+  font-size: 8px;
+  padding: 1px 2px;
+  left: 2px;
+  top: 1px;
+}
+
+.ageCount {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 3px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.ageRowCompact .ageCount {
+  font-size: 7px;
+  padding: 1px 2px;
+  right: 2px;
+  bottom: 1px;
+}

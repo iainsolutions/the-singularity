@@ -1,0 +1,28 @@
+.setupPanel {
+  background-color: #e8f4fd;
+  border: 2px solid #2196f3;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem;
+  text-align: center;
+}
+
+.setupPanel__title {
+  margin: 0 0 0.5rem 0;
+  color: #1565c0;
+  font-size: 1.3rem;
+}
+
+.setupPanel__description {
+  margin: 0.5rem 0 1rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.setupPanel__cards {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}

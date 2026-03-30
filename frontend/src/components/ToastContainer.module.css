@@ -1,0 +1,24 @@
+/* Toast Container - manages multiple toasts */
+
+.toastContainer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.toastWrapper {
+  position: fixed;
+  right: 20px;
+  pointer-events: auto;
+  transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 600px) {
+  .toastWrapper {
+    right: 10px;
+    left: 10px;
+  }
+}

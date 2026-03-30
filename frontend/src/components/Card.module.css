@@ -1,0 +1,1052 @@
+/* Innovation Card Component with Playing Card Proportions */
+.card {
+  position: relative;
+  border-radius: 12px;
+  border: 2px solid #333;
+  margin: 4px;
+  /* Playing card proportions: landscape orientation for Innovation cards */
+  width: 150px;
+  height: 100px;
+  cursor: pointer;
+  background-color: #f8f8f8;
+  font-size: 11px;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s ease;
+  z-index: 1;
+  display: block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  will-change: transform;
+  contain: layout;
+}
+
+/* Hover expansion for better readability - no longer using .expanded class */
+.card:hover {
+  transform: translateY(-10px) scale(1.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  position: relative;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s ease;
+}
+
+/* Disable hover scale when selecting cards for dogma */
+.card.selecting:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Innovation card colors with circuit/tech pattern backgrounds */
+.blue {
+  background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 10px,
+      rgba(25, 118, 210, 0.03) 10px,
+      rgba(25, 118, 210, 0.03) 20px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 10px,
+      rgba(25, 118, 210, 0.03) 10px,
+      rgba(25, 118, 210, 0.03) 20px
+    ),
+    linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-color: #1976d2;
+  color: #0d47a1;
+}
+
+.red {
+  background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 10px,
+      rgba(211, 47, 47, 0.03) 10px,
+      rgba(211, 47, 47, 0.03) 20px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 10px,
+      rgba(211, 47, 47, 0.03) 10px,
+      rgba(211, 47, 47, 0.03) 20px
+    ),
+    linear-gradient(135deg, #ffebee, #ffcdd2);
+  border-color: #d32f2f;
+  color: #b71c1c;
+}
+
+.green {
+  background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(56, 142, 60, 0.05) 8px,
+      rgba(56, 142, 60, 0.05) 16px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 8px,
+      rgba(56, 142, 60, 0.05) 8px,
+      rgba(56, 142, 60, 0.05) 16px
+    ),
+    linear-gradient(135deg, #e8f5e8, #c8e6c9);
+  border-color: #388e3c;
+  color: #1b5e20;
+  position: relative;
+}
+
+.green::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 20px,
+      rgba(56, 142, 60, 0.08) 20px,
+      rgba(56, 142, 60, 0.08) 22px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 20px,
+      rgba(56, 142, 60, 0.08) 20px,
+      rgba(56, 142, 60, 0.08) 22px
+    );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.yellow {
+  background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 10px,
+      rgba(245, 127, 23, 0.03) 10px,
+      rgba(245, 127, 23, 0.03) 20px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 10px,
+      rgba(245, 127, 23, 0.03) 10px,
+      rgba(245, 127, 23, 0.03) 20px
+    ),
+    linear-gradient(135deg, #fffde7, #fff9c4);
+  border-color: #f57f17;
+  color: #f57f17;
+}
+
+.purple {
+  background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 10px,
+      rgba(123, 31, 162, 0.03) 10px,
+      rgba(123, 31, 162, 0.03) 20px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 10px,
+      rgba(123, 31, 162, 0.03) 10px,
+      rgba(123, 31, 162, 0.03) 20px
+    ),
+    linear-gradient(135deg, #f3e5f5, #e1bee7);
+  border-color: #7b1fa2;
+  color: #4a148c;
+}
+
+/* Card content is now positioned absolutely with header and effects */
+
+.cardName {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+  color: white;
+  font-weight: bold;
+  font-size: 11px;
+  text-align: center;
+  padding: 4px 28px 4px 20px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 6px 6px 0 0;
+  z-index: 5;
+  border-bottom: 1px solid #000;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardAge {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  background: #4caf50;
+  color: white;
+  border-radius: 3px;
+  width: 20px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 6;
+  border: 1px solid #2e7d32;
+}
+
+/* Innovation card symbol layout - positioned at card edges */
+.cardSymbols {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* Allow clicks to pass through to card content */
+}
+
+.symbol {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: transform 0.1s ease;
+  z-index: 10;
+}
+
+.symbolImage {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.symbol:hover {
+  transform: scale(1.05);
+}
+
+/* Position classes for Innovation card layout */
+/* Innovation cards have symbols in specific positions: */
+/* Array index 0 -> position1: Top-left (card type icon, e.g., factory) */
+/* Array index 1 -> position2: Top-right (rarely used) */
+/* Array index 2 -> position3: Bottom-left */
+/* Array index 3 -> position4: Bottom-right */
+/* Array index 4 -> position5: Bottom-center (special symbols) */
+.position1 {
+  /* Top-left - card type icon */
+  top: 8px;
+  left: 8px;
+}
+
+.position2 {
+  /* Top-right - rarely used in Innovation */
+  top: 8px;
+  right: 8px;
+  display: none; /* Hide for now since most cards don't use this */
+}
+
+.position3 {
+  /* Bottom-left - primary symbol position */
+  bottom: 6px;
+  left: 8px;
+}
+
+.position4 {
+  /* Bottom-right - secondary symbol position */
+  bottom: 6px;
+  right: 8px;
+}
+
+.position5 {
+  /* Bottom-center - special position for some cards */
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.emptyPosition {
+  width: 20px;
+  height: 20px;
+  /* Visible placeholder for empty positions for debugging */
+  border: 1px dashed #ccc;
+  opacity: 0.3;
+}
+
+/* Symbol type styling - no backgrounds, just the icons */
+.symbolCastle {
+}
+
+.symbolLeaf {
+}
+
+.symbolLightbulb {
+}
+
+.symbolCrown {
+}
+
+.symbolFactory {
+}
+
+.symbolClock {
+}
+
+/* Special symbol at position 5 (center bottom) or position 4 hexagonal */
+.position4.hexagon,
+.position5.special {
+  /* No special styling needed anymore */
+}
+
+.dogmaEffects {
+  position: absolute;
+  top: 24px;
+  left: 36px;
+  right: 6px;
+  bottom: 36px;
+  font-size: 8px;
+  line-height: 1.3;
+  padding: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+  color: inherit;
+}
+
+.card:hover .dogmaEffects {
+  font-size: 11px;
+}
+
+.dogmaEffect {
+  margin-bottom: 4px;
+  padding: 3px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+  padding-left: 20px;
+}
+
+.effectText {
+  word-wrap: break-word;
+  display: block;
+}
+
+.dogmaIcon {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dogmaIcon img {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+.small .dogmaEffect {
+  margin-bottom: 2px;
+  padding-left: 14px;
+  min-height: 14px;
+}
+
+.small .dogmaIcon {
+  width: 10px;
+  height: 10px;
+}
+
+.small .dogmaIcon img {
+  width: 9px;
+  height: 9px;
+}
+
+/* Small card variant */
+.small {
+  width: 120px;
+  height: 80px;
+  padding: 4px;
+  font-size: 9px;
+}
+
+/* Extra small card variant for tight layouts */
+.tiny {
+  width: 90px;
+  height: 60px;
+  padding: 2px;
+  font-size: 8px;
+}
+
+.small .cardName {
+  font-size: 10px;
+  padding: 4px 2px;
+}
+
+.small .cardAge {
+  width: 18px;
+  height: 14px;
+  font-size: 9px;
+  top: 2px;
+  right: 4px;
+}
+
+.small .symbol {
+  width: 24px;
+  height: 24px;
+  font-size: 10px;
+}
+
+.small .symbolImage {
+  width: 18px;
+  height: 18px;
+}
+
+.small .position1 {
+  /* Top-left - card type icon */
+  top: 6px;
+  left: 6px;
+}
+
+.small .position2 {
+  /* Top-right - rarely used */
+  display: none;
+}
+
+.small .position3 {
+  /* Bottom-left */
+  bottom: 2px;
+  left: 2px;
+}
+
+.small .position4 {
+  /* Bottom-right */
+  bottom: 2px;
+  right: 2px;
+}
+
+.small .dogmaEffects {
+  font-size: 7px;
+  top: 20px;
+  left: 28px;
+  bottom: 28px;
+}
+
+.small:hover .dogmaEffects {
+  font-size: 9px;
+}
+
+/* Tiny card variant styles */
+.tiny .cardName {
+  font-size: 8px;
+  padding: 2px 1px;
+  height: 16px;
+}
+
+.tiny .cardAge {
+  width: 14px;
+  height: 12px;
+  font-size: 8px;
+  top: 1px;
+  right: 2px;
+}
+
+.tiny .symbol {
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+}
+
+.tiny .symbolImage {
+  width: 12px;
+  height: 12px;
+}
+
+.tiny .position1 {
+  top: 4px;
+  left: 4px;
+}
+
+.tiny .position3 {
+  bottom: 1px;
+  left: 1px;
+}
+
+.tiny .position4 {
+  bottom: 1px;
+  right: 1px;
+}
+
+.tiny .dogmaEffects {
+  font-size: 6px;
+  top: 16px;
+  left: 18px;
+  bottom: 18px;
+}
+
+.tiny:hover .dogmaEffects {
+  font-size: 7px;
+}
+
+/* Tiny cards need bigger expansion for readability */
+.tiny.card:hover {
+  transform: translateY(-15px) scale(3);
+  z-index: 1001;
+}
+
+/* But not when selecting */
+.tiny.card.selecting:hover {
+  transform: translateY(-1px);
+  z-index: 11;
+}
+
+/* Achievement card styling */
+.achievementMarker {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  font-size: 8px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+  color: #8b4513;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 0.5px 1px rgba(255, 255, 255, 0.5);
+  z-index: 10;
+}
+
+/* Special styling for achievement cards */
+.card[data-achievement="true"] {
+  border: 3px solid #daa520;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(218, 165, 32, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: linear-gradient(
+      135deg,
+      rgba(255, 215, 0, 0.05) 0%,
+      rgba(218, 165, 32, 0.05) 100%
+    ),
+    var(--card-background, #f8f8f8);
+}
+
+.card[data-achievement="true"]:hover {
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.2),
+    0 0 0 2px rgba(218, 165, 32, 0.5),
+    0 0 20px rgba(255, 215, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.card[data-achievement="true"].expanded {
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.35),
+    0 0 0 3px rgba(218, 165, 32, 0.7),
+    0 0 40px rgba(255, 215, 0, 0.5);
+}
+
+.cardPlaceholder {
+  text-align: center;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Disable hover effects on empty cards */
+.card.empty:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+/* Microscope icon for expanding cards */
+/* Removed microscope icon - using hover to expand instead */
+
+/* Interactive states */
+.card.selected {
+  border-color: #2196f3;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.4);
+  background-color: rgba(33, 150, 243, 0.05);
+}
+
+/* Eligible for selection during demand responses */
+.card.eligible {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.6);
+  background-color: rgba(76, 175, 80, 0.1);
+  position: relative;
+}
+
+.card.eligible::before {
+  content: "✓";
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  color: #4caf50;
+  font-size: 12px;
+  font-weight: bold;
+  background: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Checkbox for multi-selection */
+.selectionCheckbox {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 4px;
+  padding: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #2196f3;
+}
+
+/* Checkmark overlay for selected cards */
+.selectionCheckmark {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 10;
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+  border: 2px solid #ffffff;
+  animation: checkmarkAppear 0.3s ease-out;
+}
+
+.checkmarkIcon {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes checkmarkAppear {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.2) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Enhanced hover for clickable cards - larger expansion */
+.card.clickable:hover {
+  cursor: pointer;
+  transform: translateY(-12px) scale(1.8);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+  z-index: 1000;
+}
+
+/* Minimal hover when selecting */
+.card.clickable.selecting:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  z-index: 12;
+}
+
+.card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.card.disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Image rendering mode styles */
+.cardImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  z-index: 1;
+}
+
+.imageMode {
+  /* When in image mode, hide JSON-based content */
+}
+
+.imageMode .cardName,
+.imageMode .cardAge,
+.imageMode .cardSymbols,
+.imageMode .dogmaEffects,
+.imageMode .achievementMarker {
+  display: none;
+}
+
+/* Image loading states */
+.imageLoading {
+  background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+  background-size: 20px 20px;
+  animation: loading 1s linear infinite;
+}
+
+.imageError {
+  /* Fallback to JSON rendering on error */
+}
+
+.imageError .cardImage {
+  display: none;
+}
+
+.imageError .cardName,
+.imageError .cardAge,
+.imageError .cardSymbols,
+.imageError .dogmaEffects,
+.imageError .achievementMarker {
+  display: flex;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 20px;
+  }
+}
+
+/* Card image styles */
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Loading overlay styles */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(248, 248, 248, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  z-index: 10;
+}
+
+.loadingSpinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error overlay styles */
+.errorOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffebee;
+  border: 2px solid #f44336;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 10;
+}
+
+.errorOverlay .cardName {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #d32f2f;
+}
+
+.errorOverlay .cardAge {
+  font-size: 10px;
+  margin-bottom: 4px;
+  color: #757575;
+}
+
+.errorText {
+  font-size: 9px;
+  color: #f44336;
+}
+
+/* Placeholder styles for cards without images */
+.cardPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #f5f5f5;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+}
+
+.cardPlaceholder .cardName {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.cardPlaceholder .cardAge {
+  font-size: 10px;
+  margin-bottom: 4px;
+  color: #757575;
+}
+
+.noImageText {
+  font-size: 9px;
+  color: #999;
+}
+
+/* Lazy loading skeleton styles */
+.lazySkeleton {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s ease-in-out infinite;
+  border-radius: 10px;
+}
+
+.skeletonContent {
+  text-align: center;
+  padding: 20px;
+}
+
+.skeletonContent .cardName {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #555;
+  position: static;
+  background: none;
+  border: none;
+  height: auto;
+  display: block;
+}
+
+.skeletonContent .cardAge {
+  font-size: 12px;
+  margin-bottom: 8px;
+  color: #777;
+  position: static;
+  background: none;
+  border: none;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+.loadingText {
+  font-size: 10px;
+  color: #999;
+  font-style: italic;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Enhanced image loading and error states */
+.imageLoaded {
+  /* Applied when image successfully loads */
+}
+
+.imageLoading .cardImage {
+  opacity: 0;
+}
+
+.imageError .cardPlaceholder {
+  /* Use color-specific background when image fails */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid;
+}
+
+/* Color-specific fallback backgrounds */
+.imageError.blue .cardPlaceholder {
+  background-image: url("/cards/card_backgrounds/blue.png");
+  border-color: #1976d2;
+  color: #0d47a1;
+}
+
+.imageError.red .cardPlaceholder {
+  background-image: url("/cards/card_backgrounds/red.png");
+  border-color: #d32f2f;
+  color: #b71c1c;
+}
+
+.imageError.green .cardPlaceholder {
+  background-image: url("/cards/card_backgrounds/green.png");
+  border-color: #388e3c;
+  color: #1b5e20;
+}
+
+.imageError.yellow .cardPlaceholder {
+  background-image: url("/cards/card_backgrounds/yellow.png");
+  border-color: #f57f17;
+  color: #f57f17;
+}
+
+.imageError.purple .cardPlaceholder {
+  background-image: url("/cards/card_backgrounds/purple.png");
+  border-color: #7b1fa2;
+  color: #4a148c;
+}
+
+/* Priority loading styles */
+.priority {
+  /* Cards marked as priority load immediately */
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+
+  .card.expanded {
+    transition: none;
+  }
+
+  .cardImage {
+    transition: none;
+  }
+
+  .lazySkeleton {
+    animation: none;
+    background: #f0f0f0;
+  }
+}
+
+/* Focus states for accessibility */
+.card:focus-visible {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 3px;
+  }
+
+  .loadingOverlay {
+    background: rgba(255, 255, 255, 1);
+    border: 2px solid #000;
+  }
+
+  .errorOverlay {
+    border-width: 3px;
+  }
+}
+
+/* UI Hint: Activatable Dogma Cards - Glow effect for cards that can activate dogma */
+.activatable {
+  box-shadow:
+    0 0 15px rgba(76, 175, 80, 0.6),
+    0 4px 8px rgba(0, 0, 0, 0.12);
+  border: 2px solid #4caf50;
+  animation: dogmaPulse 2s ease-in-out infinite;
+}
+
+.activatable:hover {
+  box-shadow:
+    0 0 25px rgba(76, 175, 80, 0.9),
+    0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes dogmaPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 15px rgba(76, 175, 80, 0.6),
+      0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+  50% {
+    box-shadow:
+      0 0 25px rgba(76, 175, 80, 0.9),
+      0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+}

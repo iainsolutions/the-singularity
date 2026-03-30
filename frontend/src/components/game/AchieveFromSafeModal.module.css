@@ -1,0 +1,138 @@
+.modal {
+  backdrop-filter: blur(4px);
+}
+
+.title {
+  background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+  color: #ffd700;
+  border-bottom: 2px solid #4a4a4a;
+  padding: 16px 24px;
+}
+
+.content {
+  padding: 24px;
+  background: #f5f5f5;
+}
+
+.instructions {
+  margin-bottom: 16px;
+}
+
+.statusBox {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.secretsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.secretWrapper {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.secretWrapper.eligible {
+  background: rgba(76, 175, 80, 0.1);
+  border: 2px solid #4caf50;
+}
+
+.secretWrapper.eligible:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.secretWrapper.selected {
+  background: rgba(25, 118, 210, 0.2);
+  border: 3px solid #1976d2;
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(25, 118, 210, 0.4);
+}
+
+.secretWrapper.ineligible {
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px solid #ddd;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ineligibleOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.ineligibleText {
+  text-align: center;
+  color: #666;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.eligibleBadge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #4caf50;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.selectedBadge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #1976d2;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.actions {
+  padding: 16px 24px;
+  background: #fafafa;
+  border-top: 1px solid #e0e0e0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}

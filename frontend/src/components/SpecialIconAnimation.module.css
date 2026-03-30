@@ -1,0 +1,400 @@
+/* Special Icon Animation Overlay */
+
+.animationOverlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Common animation base */
+.searchAnimation,
+.plusAnimation,
+.arrowAnimation,
+.junkAnimation,
+.upliftAnimation,
+.unsplayAnimation,
+.flagAnimation,
+.fountainAnimation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Text styling */
+.searchText,
+.plusText,
+.arrowText,
+.junkText,
+.upliftText,
+.unsplayText,
+.flagText,
+.fountainText {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Search Animation */
+.magnifyingGlass {
+  font-size: 64px;
+  animation: searchPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes searchPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.revealCards {
+  display: flex;
+  gap: 12px;
+}
+
+.revealCards .card {
+  font-size: 48px;
+  animation: revealCard 0.8s ease-out;
+  animation-fill-mode: both;
+}
+
+.revealCards .card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.revealCards .card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.revealCards .card:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes revealCard {
+  from {
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(0deg);
+  }
+}
+
+/* Plus Animation */
+.plusSymbol {
+  font-size: 64px;
+  animation: plusBounce 1s ease-in-out;
+}
+
+@keyframes plusBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.drawingCard {
+  font-size: 48px;
+  animation: drawCard 1s ease-out;
+}
+
+@keyframes drawCard {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Arrow Animation */
+.arrowSymbol {
+  font-size: 64px;
+  animation: arrowMove 1.5s ease-in-out;
+}
+
+@keyframes arrowMove {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(20px);
+  }
+}
+
+.splayingCards {
+  display: flex;
+  gap: 8px;
+}
+
+.splayingCards .card {
+  font-size: 48px;
+  animation: splayCard 1s ease-out;
+  animation-fill-mode: both;
+}
+
+.splayingCards .card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.splayingCards .card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.splayingCards .card:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes splayCard {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--splay-offset, 30px));
+  }
+}
+
+/* Junk Animation */
+.junkAnimation {
+  flex-direction: row;
+  gap: 24px;
+}
+
+.achievement {
+  font-size: 64px;
+  animation: fadeOut 1.2s ease-in-out;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.trashCan {
+  font-size: 64px;
+  animation: shakeTrash 0.5s ease-in-out 0.5s;
+}
+
+@keyframes shakeTrash {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(15deg);
+  }
+}
+
+/* Uplift Animation */
+.upliftAnimation {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lowerDeck,
+.upperDeck {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.deckLabel {
+  color: #ffd700;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.junkingDeck {
+  font-size: 48px;
+  animation: fadeOut 1s ease-in-out;
+}
+
+.upwardArrow {
+  font-size: 48px;
+  animation: moveUp 1.5s ease-in-out;
+}
+
+@keyframes moveUp {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+/* Unsplay Animation */
+.collapsingCards {
+  display: flex;
+  gap: 24px;
+}
+
+.collapsingCards .card {
+  font-size: 48px;
+  animation: collapse 1.2s ease-in-out;
+}
+
+@keyframes collapse {
+  from {
+    transform: translateX(var(--collapse-from, 30px));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.collapsingCards .card:nth-child(1) {
+  --collapse-from: -30px;
+}
+
+.collapsingCards .card:nth-child(2) {
+  --collapse-from: 0px;
+}
+
+.collapsingCards .card:nth-child(3) {
+  --collapse-from: 30px;
+}
+
+/* Flag Animation */
+.flag {
+  font-size: 96px;
+  animation: flagWave 1.5s ease-in-out;
+}
+
+@keyframes flagWave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+.flagText {
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  animation: textGlow 1s ease-in-out infinite;
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+}
+
+/* Fountain Animation */
+.fountain {
+  font-size: 96px;
+  animation: fountainSplash 1.5s ease-in-out;
+}
+
+@keyframes fountainSplash {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.fountainText {
+  font-size: 24px;
+  font-weight: 800;
+  color: #00bcd4;
+  text-transform: uppercase;
+  animation: textGlow 1s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .animationOverlay {
+    max-width: 90%;
+  }
+
+  .searchAnimation,
+  .plusAnimation,
+  .arrowAnimation,
+  .junkAnimation,
+  .upliftAnimation,
+  .unsplayAnimation,
+  .flagAnimation,
+  .fountainAnimation {
+    padding: 24px;
+  }
+
+  .magnifyingGlass,
+  .plusSymbol,
+  .arrowSymbol,
+  .achievement,
+  .trashCan,
+  .flag,
+  .fountain {
+    font-size: 48px;
+  }
+
+  .card {
+    font-size: 32px !important;
+  }
+
+  .searchText,
+  .plusText,
+  .arrowText,
+  .junkText,
+  .upliftText,
+  .unsplayText {
+    font-size: 14px;
+  }
+
+  .flagText,
+  .fountainText {
+    font-size: 18px;
+  }
+}

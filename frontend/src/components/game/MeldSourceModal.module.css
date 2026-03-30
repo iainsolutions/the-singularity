@@ -1,0 +1,141 @@
+/* MeldSourceModal Component Styles */
+
+.modal {
+  z-index: 1400;
+}
+
+.title {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: #fff;
+  padding: 20px 24px;
+}
+
+.content {
+  padding: 24px;
+  background: #f5f5f5;
+}
+
+.instructions {
+  margin-bottom: 20px;
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+}
+
+.errorAlert {
+  margin-bottom: 16px;
+}
+
+.warningAlert {
+  margin-top: 16px;
+  background: #fff3e0;
+  border-left: 4px solid #ff9800;
+}
+
+.sourceSelector {
+  width: 100%;
+  margin: 20px 0;
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sourceSelector label {
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.sourceSelector label:hover {
+  background: #f5f5f5;
+  border-color: #2196f3;
+}
+
+.sourceSelector .Mui-checked + span {
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.secretsSection {
+  margin-top: 20px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  margin-bottom: 12px;
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.secretsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.secretWrapper {
+  position: relative;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 4px;
+  transition: all 0.2s ease;
+}
+
+.secretWrapper:hover {
+  border-color: #4caf50;
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.secretWrapper.selected {
+  border-color: #2196f3;
+  background: rgba(33, 150, 243, 0.1);
+  box-shadow: 0 0 16px rgba(33, 150, 243, 0.4);
+}
+
+.selectedBadge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #2196f3;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.5);
+  z-index: 10;
+}
+
+.actions {
+  padding: 16px 24px;
+  background: #fafafa;
+  border-top: 1px solid #e0e0e0;
+}
+
+.actions button {
+  min-width: 120px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .content {
+    padding: 16px;
+  }
+
+  .secretsGrid {
+    justify-content: center;
+  }
+
+  .actions button {
+    min-width: 100px;
+    font-size: 0.875rem;
+  }
+}

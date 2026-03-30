@@ -1,0 +1,208 @@
+.achievementRow {
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.achievementRowCompact {
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.achievementOption {
+  position: relative;
+  width: 37.5px;
+  height: 56.25px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.achievementRowCompact .achievementOption {
+  width: 30px;
+  height: 45px;
+}
+
+.achievementOption:hover:not(.achievementClaimed) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.achievementCardBack {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: border 0.2s ease;
+}
+
+.achievementOptionSelected .achievementCardBack {
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.achievementEligible .achievementCardBack {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.6);
+  animation: eligibleGlow 2s ease-in-out infinite alternate;
+}
+
+.achievementEligible:hover .achievementCardBack {
+  border: 2px solid #66bb6a;
+  box-shadow: 0 0 16px rgba(76, 175, 80, 0.8);
+}
+
+@keyframes eligibleGlow {
+  from {
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+  }
+  to {
+    box-shadow: 0 0 16px rgba(76, 175, 80, 0.7);
+  }
+}
+
+.achievementClaimed {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.achievementClaimed:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.achievementEmpty {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+  border: 2px solid #999;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.achievementEmptyText {
+  font-size: 24px;
+  font-weight: bold;
+  color: #666;
+}
+
+/* Special Achievements Styles */
+.specialAchievementRow {
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.specialAchievement {
+  position: relative;
+  width: 37.5px;
+  height: 56.25px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.achievementRowCompact .specialAchievement {
+  width: 30px;
+  height: 45px;
+}
+
+/* New Horizontal Layout Classes */
+.allAchievementsRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+}
+
+.specialAchievementSection {
+  display: flex;
+  gap: 0;
+  align-items: center;
+}
+
+.achievementSeparator {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent, #ccc, transparent);
+  margin: 0 2px;
+}
+
+.regularAchievementSection {
+  display: flex;
+  gap: 0;
+  align-items: center;
+}
+
+.specialAchievementAvailable {
+  opacity: 1;
+}
+
+.specialAchievementAvailable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.specialAchievementEarned {
+  opacity: 1;
+}
+
+.specialAchievementEarned:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+}
+
+/* Special achievement claimed by opponent - greyed out */
+.specialAchievementClaimedByOther {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.specialAchievementClaimedByOther:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Hover overlay for special achievements */
+.specialAchievementHover {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 360px;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.specialAchievementHover.visible {
+  opacity: 1;
+}
+
+.specialAchievementHover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  transform: rotate(90deg);
+}

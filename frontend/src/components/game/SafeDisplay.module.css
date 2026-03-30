@@ -1,0 +1,69 @@
+.safeContainer {
+  background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+  border: 2px solid #4a4a4a;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.safeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #4a4a4a;
+}
+
+.safeTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lockIcon {
+  color: #ffd700;
+  font-size: 20px;
+}
+
+.titleText {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.limitIndicator {
+  font-weight: bold;
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  border: 1px solid currentColor;
+}
+
+.safeContents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 80px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.emptyMessage {
+  color: #888;
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  font-style: italic;
+}
+
+.limitWarning {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(255, 82, 82, 0.1);
+  border: 1px solid #ff5252;
+  border-radius: 4px;
+  text-align: center;
+}

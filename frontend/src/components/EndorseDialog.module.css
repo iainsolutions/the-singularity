@@ -1,0 +1,132 @@
+/* EndorseDialog Styling */
+
+.dialog {
+  z-index: 1300;
+}
+
+.title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+}
+
+.title h5 {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.content {
+  padding: 24px;
+  background-color: #f5f7fa;
+}
+
+.section {
+  margin-bottom: 32px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section h6 {
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* City and Junk Card Styling */
+
+.cityCard,
+.junkCard {
+  transition: all 0.2s ease-in-out;
+  border: 2px solid transparent;
+  height: 100%;
+}
+
+.cityCard:hover,
+.junkCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cityCard.selected {
+  border-color: #667eea;
+  background-color: #f0f4ff;
+}
+
+.junkCard.selected {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+
+.symbolList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+/* Summary */
+
+.summary {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #ecfdf5 !important;
+  border-left: 4px solid #10b981;
+}
+
+.summary .MuiTypography-body2 {
+  margin-top: 4px;
+}
+
+/* Actions */
+
+.actions {
+  padding: 16px 24px;
+  background-color: #fafafa;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+  .content {
+    padding: 16px;
+  }
+
+  .section {
+    padding: 12px;
+  }
+
+  .cityCard,
+  .junkCard {
+    margin-bottom: 12px;
+  }
+}
+
+/* Accessibility */
+
+.cityCard:focus-visible,
+.junkCard:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Animation */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section {
+  animation: fadeIn 0.3s ease-in-out;
+}

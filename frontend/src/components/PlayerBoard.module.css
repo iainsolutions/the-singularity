@@ -1,0 +1,304 @@
+.playerBoard {
+  padding: 4px;
+}
+
+.playerMainContent {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.playerInfo {
+  min-width: 250px;
+  flex-shrink: 0;
+}
+
+.playerHeader {
+  margin-bottom: 12px;
+}
+
+.playerHeader h3 {
+  margin: 0 0 8px 0;
+}
+
+.playerStats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.boardGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 4px;
+  max-width: 750px;
+  flex-shrink: 1;
+  overflow: visible;
+}
+
+.colorStack {
+  min-height: 200px;
+  position: relative;
+  overflow: visible;
+}
+
+/* Splay container - holds all cards in a color stack */
+.splayContainer {
+  position: relative;
+  width: 180px; /* Base width, will be overridden by inline styles */
+  height: 120px; /* Base height, will be overridden by inline styles */
+  margin-right: 10px; /* Add spacing between color stacks */
+}
+
+/* Individual card wrapper in splayed stack */
+.splayedCard {
+  position: absolute;
+  transition: all 0.3s ease;
+  top: 0;
+  left: 0;
+}
+
+/* No splay - cards stacked directly on top */
+.splayNone .splayedCard {
+  top: 0;
+  left: 0;
+}
+
+.splayNone .splayedCard:not(:last-child) {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+/* Left splay - top cards shift left, revealing right symbols (position 3) of cards below */
+.splayLeft .splayedCard {
+  /* Each card shifts 40px left from the one below it */
+  left: calc(var(--card-index) * -40px);
+}
+
+/* Right splay - top cards shift right, revealing left symbols (positions 0, 1) of cards below */
+.splayRight .splayedCard {
+  /* Each card shifts 40px right from the one below it */
+  left: calc(var(--card-index) * 40px);
+}
+
+/* Up splay - top cards shift up, revealing bottom symbols (positions 1, 2, 3) of cards below */
+.splayUp .splayedCard {
+  /* Each card shifts 40px up from the one below it */
+  top: calc(var(--card-index) * -40px);
+}
+
+/* Aslant splay - diagonal arrangement showing all symbols */
+.splayAslant .splayedCard {
+  /* Each card shifts diagonally */
+  left: calc(var(--card-index) * 60px);
+  top: calc(var(--card-index) * -30px);
+}
+
+/* Z-index management - higher cards on top */
+.splayedCard {
+  z-index: calc(var(--card-index) + 1);
+}
+
+/* Splay indicator */
+.splayIndicator {
+  position: absolute;
+  top: -20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Specific positioning for each splay direction */
+.splayIndicator.left {
+  right: 0;
+}
+
+.splayIndicator.left::before {
+  content: "←";
+  font-size: 14px;
+}
+
+.splayIndicator.right {
+  left: 0;
+}
+
+.splayIndicator.right::before {
+  content: "→";
+  font-size: 14px;
+}
+
+.splayIndicator.up {
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.splayIndicator.up::before {
+  content: "↑";
+  font-size: 14px;
+}
+
+.splayIndicator.aslant {
+  left: 0;
+}
+
+.splayIndicator.aslant::before {
+  content: "↗";
+  font-size: 14px;
+}
+
+/* Hover effect for splayed cards - only for top card */
+.splayedCard:last-child:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 999 !important;
+}
+
+/* Compact mode adjustments */
+.splayContainerCompact {
+  width: 100px;
+  height: 50px;
+}
+
+.splayContainerCompact .splayedCard {
+  /* Smaller offsets for compact mode */
+}
+
+.splayContainerCompact.splayLeft .splayedCard {
+  left: calc(var(--card-index) * -20px);
+}
+
+.splayContainerCompact.splayRight .splayedCard {
+  left: calc(var(--card-index) * 20px);
+}
+
+.splayContainerCompact.splayUp .splayedCard {
+  top: calc(var(--card-index) * -20px);
+}
+
+.splayContainerCompact.splayAslant .splayedCard {
+  left: calc(var(--card-index) * 30px);
+  top: calc(var(--card-index) * -15px);
+}
+
+.stackHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.stackLabel {
+  font-size: 12px;
+  color: #666;
+}
+
+.stackCards {
+  position: relative;
+}
+
+.tuckedCard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+.topCard {
+  position: relative;
+  z-index: 2;
+}
+
+.playerHand {
+  margin: 12px 0;
+}
+
+.handCards {
+  display: flex;
+  gap: 12px;
+  overflow: visible;
+  padding: 8px 0;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.handCard {
+  position: relative;
+}
+
+.handCard__eligible {
+  box-shadow:
+    0 0 12px #4caf50,
+    0 0 24px rgba(76, 175, 80, 0.3);
+  border: 2px solid #4caf50;
+  border-radius: 4px;
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
+}
+
+.handCard__ineligible {
+  opacity: 0.4;
+  filter: grayscale(70%);
+  cursor: not-allowed;
+}
+
+.handCard__indicator {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #4caf50;
+  color: white;
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.scorePile {
+  margin-top: 12px;
+}
+
+.achievements {
+  margin-top: 12px;
+  padding: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.08) 0%,
+    rgba(218, 165, 32, 0.08) 100%
+  );
+  border: 2px solid rgba(218, 165, 32, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.achievementTitle {
+  margin: 0 0 8px 0;
+  text-align: center;
+  color: #b8860b;
+  font-size: 0.95rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.achievementCards {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+}

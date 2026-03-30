@@ -1,0 +1,293 @@
+.scorePile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  border: 2px solid #d0d0d0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.scorePile.compact {
+  padding: 4px 8px;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.scorePile.clickable {
+  cursor: pointer;
+}
+
+.scorePile.clickable:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  border-color: #4caf50;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+.stackContainer {
+  position: relative;
+  width: 60px;
+  height: 80px;
+}
+
+.compact .stackContainer {
+  width: 30px;
+  height: 40px;
+}
+
+.stackedCard {
+  position: absolute;
+  width: 56px;
+  height: 76px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.compact .stackedCard {
+  width: 28px;
+  height: 38px;
+  border-radius: 2px;
+}
+
+.topCard {
+  position: absolute;
+  width: 56px;
+  height: 76px;
+  background: linear-gradient(135deg, #4a90e2 0%, #2e69b3 100%);
+  border: 2px solid #2e69b3;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.compact .topCard {
+  width: 28px;
+  height: 38px;
+  border-width: 1px;
+  border-radius: 2px;
+}
+
+.cardIcon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.compact .cardIcon {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.scoreInfo {
+  text-align: center;
+}
+
+.scoreCount {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.compact .scoreCount {
+  font-size: 9px;
+}
+
+.scoreLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.compact .scoreLabel {
+  font-size: 5px;
+}
+
+.emptyPile {
+  width: 60px;
+  height: 80px;
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.compact .emptyPile {
+  width: 30px;
+  height: 40px;
+  border-width: 1px;
+  border-radius: 2px;
+}
+
+.emptyIcon {
+  font-size: 24px;
+  opacity: 0.5;
+}
+
+.compact .emptyIcon {
+  font-size: 12px;
+}
+
+.emptyText {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.compact .emptyText {
+  font-size: 6px;
+  margin-top: 2px;
+}
+
+.scoreDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+}
+
+.scoreValue {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4a90e2;
+  line-height: 1;
+}
+
+.compact .scoreValue {
+  font-size: 14px;
+}
+
+.scoreText {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.compact .scoreText {
+  font-size: 8px;
+  margin-top: 1px;
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modalContent {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 2px solid #e0e0e0;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modalBody {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.cardWrapper {
+  position: relative;
+}
+
+.cardAge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  z-index: 1;
+}

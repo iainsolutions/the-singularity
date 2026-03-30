@@ -1,0 +1,118 @@
+.symbolCounter {
+  padding: 4px;
+  margin: 4px 0;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.symbolCounter--above {
+  margin-bottom: 12px;
+}
+
+.symbolCounter--below {
+  margin-top: 12px;
+}
+
+.symbolGrid {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.symbolItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  min-width: 36px;
+  transition: all 0.3s ease;
+  background: white;
+  border: 1px solid #e0e0e0;
+}
+
+.symbolIcon {
+  width: 17px;
+  height: 17px;
+  margin-bottom: 2px;
+  object-fit: contain;
+}
+
+.symbolCount {
+  font-size: 11px;
+  font-weight: bold;
+  color: #333;
+}
+
+.symbolText {
+  font-size: 17px;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.symbolDivider {
+  width: 1px;
+  background: #e0e0e0;
+  height: 30px;
+  margin: 0 5px;
+}
+
+/* Color coding for symbol dominance */
+.symbolCount__higher {
+  background: linear-gradient(135deg, #d4f5d4 0%, #a8e6a8 100%);
+  border-color: #4caf50;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.symbolCount__higher .symbolCount {
+  color: #2e7d32;
+}
+
+.symbolCount__equal {
+  background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);
+  border-color: #fbc02d;
+  box-shadow: 0 2px 8px rgba(251, 192, 45, 0.3);
+}
+
+.symbolCount__equal .symbolCount {
+  color: #f57c00;
+}
+
+.symbolCount__lower {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  border-color: #ef5350;
+  box-shadow: 0 2px 8px rgba(239, 83, 80, 0.3);
+}
+
+.symbolCount__lower .symbolCount {
+  color: #c62828;
+}
+
+/* Hover effects */
+.symbolItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .symbolGrid {
+    gap: 6px;
+  }
+
+  .symbolItem {
+    min-width: 30px;
+    padding: 3px 5px;
+  }
+
+  .symbolIcon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .symbolCount {
+    font-size: 10px;
+  }
+}

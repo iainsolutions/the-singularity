@@ -1,0 +1,24 @@
+.dogmaResponsePanel {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dogmaResponsePanel__title {
+  margin: 0 0 0.5rem 0;
+  color: #856404;
+  font-size: 1.2rem;
+}
+
+.dogmaResponsePanel__message {
+  margin: 0.5rem 0 1rem 0;
+  color: #856404;
+  font-size: 0.95rem;
+}
+
+.dogmaResponsePanel__declineButton {
+  margin-top: 0.5rem;
+}

@@ -1,0 +1,25 @@
+/* ActionsPanel styles - using Material-UI sx prop for styling, keeping minimal CSS */
+
+.actionsPanel {
+  /* Reserved for any non-MUI specific styles if needed */
+}
+
+/* Accessibility focus styles for better keyboard navigation */
+.actionButton:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .actionButton {
+    border-width: 3px !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .actionButton {
+    transition: none !important;
+  }
+}

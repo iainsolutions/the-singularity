@@ -1,0 +1,73 @@
+.lobby {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.lobby__title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+.lobby__form {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.lobby__form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.lobby__form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.lobby__form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  font-size: 16px;
+}
+
+.lobby__form-group input:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.lobby__button-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.lobby__game-info {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.lobby__error-message {
+  background: #ffe6e6;
+  color: #333;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 16px 0;
+  font-weight: bold;
+}
+
+.lobby__success-message {
+  background: #e6ffe6;
+  color: #333;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 16px 0;
+  font-weight: bold;
+}

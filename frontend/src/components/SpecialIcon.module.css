@@ -1,0 +1,131 @@
+/* Special Icon Component for Cities Expansion Cards */
+
+.specialIcon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  pointer-events: auto;
+  width: 28px;
+  height: 28px;
+}
+
+.specialIcon:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+}
+
+/* Icon size variants */
+.normal {
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+}
+
+.small {
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+}
+
+.large {
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+}
+
+/* Icon symbol styling */
+.iconSymbol {
+  display: block;
+  line-height: 1;
+}
+
+/* Effect type indicators */
+.immediate {
+  border-style: solid;
+  animation: pulseImmediate 2s ease-in-out infinite;
+}
+
+.constant {
+  border-style: double;
+  border-width: 3px;
+}
+
+/* Position-based placement on card */
+/* Icons are positioned along the left edge of the card */
+.position0 {
+  top: 10px;
+  left: 8px;
+}
+
+.position1 {
+  top: 45px;
+  left: 8px;
+}
+
+.position2 {
+  bottom: 10px;
+  left: 8px;
+}
+
+.position3 {
+  top: 10px;
+  right: 8px;
+}
+
+.position4 {
+  top: 45px;
+  right: 8px;
+}
+
+.position5 {
+  bottom: 10px;
+  right: 8px;
+}
+
+/* Pulse animation for immediate effects */
+@keyframes pulseImmediate {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+/* Hover tooltip enhancement */
+.specialIcon::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 30;
+  font-weight: normal;
+  text-shadow: none;
+}
+
+.specialIcon:hover::after {
+  opacity: 1;
+}

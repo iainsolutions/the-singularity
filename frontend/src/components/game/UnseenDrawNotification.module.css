@@ -1,0 +1,50 @@
+.snackbar {
+  z-index: 2000;
+}
+
+.alert {
+  min-width: 400px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-weight: bold;
+  color: #ffd700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.message {
+  color: #e0e0e0;
+  line-height: 1.5;
+}
+
+.message strong {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.hint {
+  color: #aaa;
+  font-style: italic;
+  font-size: 11px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
