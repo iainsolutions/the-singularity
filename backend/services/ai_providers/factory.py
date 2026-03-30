@@ -8,16 +8,12 @@ from urllib.parse import urlparse
 from logging_config import get_logger
 from services.ai_providers.anthropic_provider import AnthropicAIProvider
 from services.ai_providers.base import AIProvider
-from services.ai_providers.gemini_provider import GeminiAIProvider
-from services.ai_providers.openai_provider import OpenAIProvider
 
 logger = get_logger(__name__)
 
 
 _PROVIDER_REGISTRY: dict[str, type[AIProvider]] = {
     AnthropicAIProvider.name: AnthropicAIProvider,
-    GeminiAIProvider.name: GeminiAIProvider,
-    OpenAIProvider.name: OpenAIProvider,
 }
 
 
