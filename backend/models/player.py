@@ -6,28 +6,10 @@ from pydantic import BaseModel, Field
 
 from .board_utils import BoardColorIterator
 from .card import Card, Symbol
-from .forecast_zone import ForecastZone
-from .safe import Safe
 
 
 if TYPE_CHECKING:
     pass
-
-# Echoes expansion: Forecast zone capacity limits based on splay direction
-FORECAST_LIMIT_NO_SPLAY = 5
-FORECAST_LIMIT_LEFT_SPLAY = 4
-FORECAST_LIMIT_RIGHT_SPLAY = 3
-FORECAST_LIMIT_UP_SPLAY = 2
-FORECAST_LIMIT_ASLANT_SPLAY = 1
-
-# Map splay direction to forecast limit (lower is more restrictive)
-FORECAST_SPLAY_LIMITS = {
-    "aslant": FORECAST_LIMIT_ASLANT_SPLAY,
-    "up": FORECAST_LIMIT_UP_SPLAY,
-    "right": FORECAST_LIMIT_RIGHT_SPLAY,
-    "left": FORECAST_LIMIT_LEFT_SPLAY,
-    None: FORECAST_LIMIT_NO_SPLAY,
-}
 
 
 class PlayerBoard(BaseModel):
@@ -273,19 +255,6 @@ class Player(BaseModel):
         default_factory=dict
     )  # AI strategic memory (goals, plans, observations)
 
-    # Echoes expansion fields
-    forecast_zone: ForecastZone | None = None  # Forecast zone for Echoes expansion
-
-    # Unseen expansion fields
-    safe: Safe | None = None  # The Safe (hidden card storage for Unseen cards)
-    first_draw_used: bool = False  # Track first draw per turn for Unseen replacement
-
-    # Artifacts expansion fields
-    display: Card | None = None  # One artifact on display
-    museums: list = Field(default_factory=list)  # Museum collection (list[Museum])
-
-    # Temporary field for showcase icon counting (not serialized, runtime only)
-    showcase_artifact_temp: Card | None = Field(default=None, exclude=True)
 
     def __init__(self, **data):
         if "id" not in data or data["id"] is None:
@@ -460,15 +429,11 @@ class Player(BaseModel):
         self.board.add_card(card)
 
     def count_symbol(self, symbol) -> int:
-        """Count total symbols of a type on the player's board.
-
-        During showcase dogma, also counts symbols from the artifact on display.
-        """
+        """Count total symbols of a type on the player's board."""
         from models.card import Symbol
 
         # Handle both string and Symbol enum
         if isinstance(symbol, str):
-            # Convert string to Symbol enum
             symbol_map = {
                 "castle": Symbol.CASTLE,
                 "leaf": Symbol.LEAF,
@@ -481,17 +446,9 @@ class Player(BaseModel):
             if not symbol_enum:
                 return 0
         else:
-            # Already a Symbol enum
             symbol_enum = symbol
 
-        # Count from board
-        count = self.board.count_symbol(symbol_enum)
-
-        # During showcase dogma, also count symbols from the artifact on display
-        if self.showcase_artifact_temp:
-            count += self.showcase_artifact_temp.get_symbol_count(symbol_enum)
-
-        return count
+        return self.board.count_symbol(symbol_enum)
 
     def count_symbol_by_color(self, symbol, color: str) -> int:
         """Count symbols of a type in a specific color stack (including splayed cards)"""
