@@ -2114,7 +2114,7 @@ class ConsolidatedCompletionPhase(ConsolidatedPhase):
                     pass
 
                 context = context.with_result(
-                    f"{activating_player.name} drew an age {draw_age} card as a sharing bonus"
+                    f"{activating_player.name} researched an era {draw_age} card as a sharing bonus"
                 )
                 logger.info(
                     f"CONSOLIDATED: Sharing bonus awarded - {activating_player.name} drew {drawn_card.name}"

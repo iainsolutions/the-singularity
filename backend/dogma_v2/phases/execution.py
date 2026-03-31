@@ -1253,7 +1253,7 @@ class EffectExecutionPhase(DogmaPhase):
                         context.game.add_log_entry(
                             player_name=context.current_player.name,
                             action_type=ActionType.DOGMA,
-                            description=f"scored {change} cards (from {context.card.name})",
+                            description=f"harvested {change} cards (from {context.card.name})",
                         )
                     elif change < 0:
                         context.game.add_log_entry(
@@ -1268,7 +1268,7 @@ class EffectExecutionPhase(DogmaPhase):
                             context.game.add_log_entry(
                                 player_name=context.current_player.name,
                                 action_type=ActionType.DOGMA,
-                                description=f"melded {board_change['cards_added']} cards to {color} stack (from {context.card.name})",
+                                description=f"deployed {board_change['cards_added']} cards to {color} stack (from {context.card.name})",
                             )
 
         except Exception as e:

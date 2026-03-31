@@ -66,12 +66,12 @@ class RevealAndProcess(ActionPrimitive):
         context.set_variable(self.store_revealed, revealed_cards)
 
         if not revealed_cards:
-            context.add_result(f"No cards available to draw from age {source_age}")
+            context.add_result(f"No cards available to research from era {source_age}")
             logger.info(f"No cards available in age {source_age}")
             return ActionResult.SUCCESS
 
         context.add_result(
-            f"Revealed {len(revealed_cards)} cards from age {source_age}"
+            f"Revealed {len(revealed_cards)} cards from era {source_age}"
         )
         logger.debug(f"Revealed {len(revealed_cards)} cards")
 

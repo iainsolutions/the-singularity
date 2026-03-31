@@ -164,7 +164,7 @@ class ScoreCards(ActionPrimitive):
             )
 
             scored_count += 1
-            context.add_result(f"Scored {card.name} (age {getattr(card, 'age', 0)})")
+            context.add_result(f"Harvested {card.name} (era {getattr(card, 'age', 0)})")
             logger.info(f"Scored {card.name} to {context.player.name}'s score pile")
 
             # Activity: card scored
@@ -185,7 +185,7 @@ class ScoreCards(ActionPrimitive):
             except Exception:
                 pass
 
-        context.add_result(f"Scored {scored_count} card(s)")
+        context.add_result(f"Harvested {scored_count} card(s)")
 
         # NOTE: We do NOT clear last_drawn here because LoopAction needs to check
         # the card's properties after scoring to determine if it should repeat.

@@ -63,42 +63,41 @@ const AchievementRow = memo(
     // Backend achievement data (replaces frontend logic)
     const [achievementData, setAchievementData] = useState(null);
 
-    // Fetch achievement display data from backend
+    // Build special achievement data from game state
     useEffect(() => {
-      const fetchAchievements = async () => {
-        if (!gameState?.game_id || !currentPlayer?.id) {
-          console.log("🎯 AchievementRow: Skipping fetch - missing game_id or player_id", {
-            game_id: gameState?.game_id,
-            player_id: currentPlayer?.id,
-          });
-          return;
-        }
+      if (!gameState) return;
 
-        try {
-          const API_BASE = getApiBase();
-          const url = `${API_BASE}/api/v1/games/${gameState.game_id}/achievements?player_id=${currentPlayer.id}`;
-          console.log("🎯 AchievementRow: Fetching achievements from:", url);
+      const available = gameState.special_achievements_available || [];
+      const specialData = available.map((name) => ({
+        name,
+        display_state: "available",
+        claimed_by: null,
+      }));
 
-          const response = await fetch(url);
-
-          if (response.ok) {
-            const data = await response.json();
-            console.log("✅ AchievementRow: Received achievement data:", {
-              regular_count: data.regular?.length,
-              special_count: data.special?.length,
-              special_achievements: data.special,
-            });
-            setAchievementData(data);
-          } else {
-            console.error("❌ AchievementRow: Failed to fetch achievement data:", response.status);
+      // Check if any player has claimed special achievements
+      for (const player of gameState.players || []) {
+        for (const ach of player.achievements || []) {
+          const achName = ach?.name || ach;
+          if (SPECIAL_ACHIEVEMENTS[achName]) {
+            const existing = specialData.find((s) => s.name === achName);
+            if (existing) {
+              existing.display_state =
+                player.id === currentPlayer?.id ? "earned_by_you" : "earned_by_other";
+              existing.claimed_by = player.name;
+            } else {
+              specialData.push({
+                name: achName,
+                display_state:
+                  player.id === currentPlayer?.id ? "earned_by_you" : "earned_by_other",
+                claimed_by: player.name,
+              });
+            }
           }
-        } catch (error) {
-          console.error("❌ AchievementRow: Error fetching achievement data:", error);
         }
-      };
+      }
 
-      fetchAchievements();
-    }, [gameState?.game_id, currentPlayer?.id, gameState?.players]); // Re-fetch when players change (achievements earned)
+      setAchievementData({ special: specialData });
+    }, [gameState?.special_achievements_available, gameState?.players, currentPlayer?.id]);
 
     // Era-based tile color for achievements
     const getEraColor = (age) => ERA_COLORS[age] || "#666";

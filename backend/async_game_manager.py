@@ -2058,7 +2058,7 @@ class AsyncGameManager:
             game.add_log_entry(
                 player_name=player.name,
                 action_type=ActionType.MELD,
-                description=f"melded {card.name}",
+                description=f"deployed {card.name}",
             )
 
             # Log action event for real-time UI updates
@@ -2067,7 +2067,7 @@ class AsyncGameManager:
                 game_id=game.game_id,
                 player_id=player.id,
                 data={"card_name": card.name, "color": card.color},
-                message=f"{player.name} melded {card.name}",
+                message=f"{player.name} deployed {card.name}",
             )
 
             result = {

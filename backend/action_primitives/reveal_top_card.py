@@ -51,7 +51,7 @@ class RevealTopCard(ActionPrimitive):
         try:
             age = int(age)
         except (ValueError, TypeError):
-            context.add_result(f"Invalid age value: {age}")
+            context.add_result(f"Invalid era value: {age}")
             return ActionResult.FAILURE
 
         # Get the game state
@@ -63,7 +63,7 @@ class RevealTopCard(ActionPrimitive):
         # Get the deck for this age
         deck_key = f"age_{age}"
         if deck_key not in game_state.decks:
-            context.add_result(f"No deck found for age {age}")
+            context.add_result(f"No supply found for era {age}")
             return ActionResult.FAILURE
 
         deck = game_state.decks[deck_key]
@@ -87,7 +87,7 @@ class RevealTopCard(ActionPrimitive):
         context.set_variable(self.store_name, top_card.name)
 
         activity_logger.info(
-            f"🔍 {context.current_player.name} revealed {top_card.name} (age {age}, {top_card.color})"
+            f"🔍 {context.player.name} revealed {top_card.name} (age {age}, {top_card.color})"
         )
 
         return ActionResult.SUCCESS

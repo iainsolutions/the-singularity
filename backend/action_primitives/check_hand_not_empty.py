@@ -35,7 +35,7 @@ class CheckHandNotEmpty(ActionPrimitive):
             else:
                 player = self.player
         else:
-            player = context.current_player
+            player = context.player
 
         # Check hand
         has_cards = False

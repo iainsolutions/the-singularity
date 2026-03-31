@@ -95,6 +95,13 @@ const Card = memo(
             <span className={styles.cardAge}>{card.age}</span>
           </div>
 
+          {/* Featured icon (dogma resource) — determines sharing/override */}
+          {card.dogma_resource && (
+            <div className={styles.featuredIcon}>
+              {renderIcon(card.dogma_resource)}
+            </div>
+          )}
+
           {/* Icons row */}
           <div className={styles.iconRow}>
             <span className={styles.iconSlot}>{topLeft}</span>
@@ -122,6 +129,10 @@ const Card = memo(
             <span className={styles.iconSlot}>{bottomLeft}</span>
             <span className={styles.iconSlot}>{bottomRight}</span>
           </div>
+
+          {card.dogma_resource && (
+            <div className={styles.cardResource}>{card.dogma_resource.replace('_', ' ')}</div>
+          )}
         </div>
 
         {card.is_achievement && (

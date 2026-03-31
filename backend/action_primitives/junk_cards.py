@@ -75,13 +75,13 @@ class JunkCards(ActionPrimitive):
                     or not hasattr(context.game.deck_manager, "age_decks")
                     or age not in context.game.deck_manager.age_decks
                 ):
-                    context.add_result(f"No age {age} deck found")
+                    context.add_result(f"No era {age} supply found")
                     return ActionResult.SUCCESS
 
                 deck_cards = context.game.deck_manager.age_decks[age]
 
                 if not deck_cards:
-                    context.add_result(f"No cards in age {age} deck to junk")
+                    context.add_result(f"No cards in era {age} supply to junk")
                     return ActionResult.SUCCESS
 
                 # Copy list for iteration, then clear original
@@ -92,7 +92,7 @@ class JunkCards(ActionPrimitive):
                 deck_cards.clear()
                 context.game.deck_manager.junk_pile.extend(cards_to_junk)
 
-                context.add_result(f"Junked {junked_count} cards from age {age} deck")
+                context.add_result(f"Junked {junked_count} cards from era {age} supply")
                 return ActionResult.SUCCESS
 
             # Determine which cards to junk

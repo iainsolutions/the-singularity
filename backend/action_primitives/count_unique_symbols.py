@@ -34,7 +34,7 @@ class CountUniqueSymbols(ActionPrimitive):
 
         if self.scope == "board":
             # Count unique symbols on player's board
-            player = context.current_player
+            player = context.player
             if hasattr(player, "board"):
                 for color in ["red", "blue", "green", "yellow", "purple"]:
                     cards = getattr(player.board, f"{color}_cards", [])
@@ -45,7 +45,7 @@ class CountUniqueSymbols(ActionPrimitive):
 
         elif self.scope == "hand":
             # Count unique symbols in player's hand
-            player = context.current_player
+            player = context.player
             if hasattr(player, "hand"):
                 for card in player.hand:
                     if hasattr(card, "symbols"):
@@ -54,7 +54,7 @@ class CountUniqueSymbols(ActionPrimitive):
 
         elif self.scope == "all":
             # Count unique symbols across all player's cards
-            player = context.current_player
+            player = context.player
             # Board
             if hasattr(player, "board"):
                 for color in ["red", "blue", "green", "yellow", "purple"]:

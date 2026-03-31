@@ -500,14 +500,14 @@ class ActionLogger:
     def log_card_draw(context: ActionContext, cards: list[Card], age: int) -> None:
         """Log a card draw action."""
         if not cards:
-            context.add_result(f"No cards available to draw from age {age}")
+            context.add_result(f"No cards available to research from era {age}")
             return
 
         count = len(cards)
         if count == 1:
-            context.add_result(f"drew {cards[0].name} from age {age}")
+            context.add_result(f"researched {cards[0].name} from era {age}")
         else:
-            context.add_result(f"drew {count} cards from age {age}")
+            context.add_result(f"researched {count} cards from era {age}")
 
     @staticmethod
     def log_selection_required(

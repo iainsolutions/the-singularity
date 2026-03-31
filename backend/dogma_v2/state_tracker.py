@@ -339,16 +339,16 @@ class StateChangeTracker:
             if not is_owner:
                 # Hide details from non-owners and public view
                 if change.change_type == "draw":
-                    return f"{data['player']} drew an age {data['age']} card"
+                    return f"{data['player']} researched an era {data['age']} card"
                 return None  # Skip other owner-only changes
 
         # Format based on type
         if change.change_type == "draw":
             if data["revealed"]:
-                return f"{data['player']} draws and reveals {data['card']} (age {data['age']})"
+                return f"{data['player']} researches and reveals {data['card']} (era {data['age']})"
             else:
                 # Owner can see full details
-                return f"{data['player']} draws {data['card']} (age {data['age']})"
+                return f"{data['player']} researches {data['card']} (era {data['age']})"
 
         elif change.change_type == "transfer":
             # Handle non-player locations (achievements, junk_pile, etc.)
@@ -370,13 +370,13 @@ class StateChangeTracker:
             return f"{data['card']} transferred from {from_str} to {to_str}"
 
         elif change.change_type == "meld":
-            return f"{data['player']} melds {data['card']} to {data['color']} stack"
+            return f"{data['player']} deploys {data['card']} to {data['color']} stack"
 
         elif change.change_type == "score":
-            return f"{data['player']} scores {data['card']}"
+            return f"{data['player']} harvests {data['card']}"
 
         elif change.change_type == "tuck":
-            return f"{data['player']} tucks {data['card']} under {data['color']} stack"
+            return f"{data['player']} archives {data['card']} under {data['color']} stack"
 
         elif change.change_type == "symbol_check":
             line = f"{data['player']} has {data['count']} {data['symbol']}"
@@ -410,10 +410,10 @@ class StateChangeTracker:
             return f"{data['player']} {has_cards} cards with {data['symbol']} in hand"
 
         elif change.change_type == "splay":
-            return f"{data['player']} splays {data['color']} stack {data['direction']}"
+            return f"{data['player']} proliferates {data['color']} stack {data['direction']}"
 
         elif change.change_type == "return":
-            return f"{data['player']} returns {data['card']} to {data['position']} of age {data['age']} deck"
+            return f"{data['player']} recalls {data['card']} to {data['position']} of era {data['age']} supply"
 
         return None
 

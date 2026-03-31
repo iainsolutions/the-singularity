@@ -41,7 +41,7 @@ class RevealHand(ActionPrimitive):
             else:
                 player = self.player
         else:
-            player = context.current_player
+            player = context.player
 
         # Get the hand
         if not hasattr(player, "hand"):

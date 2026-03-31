@@ -38,12 +38,12 @@ class JunkAllDeck(ActionPrimitive):
         # Get the age deck via deck_manager
         age_decks = deck_manager.age_decks
         if self.age not in age_decks:
-            context.add_result(f"Age {self.age} deck not found")
+            context.add_result(f"Era {self.age} supply not found")
             return ActionResult.SUCCESS
 
         deck = age_decks[self.age]
         if not deck:
-            context.add_result(f"Age {self.age} deck is already empty")
+            context.add_result(f"Era {self.age} supply is already empty")
             return ActionResult.SUCCESS
 
         # Move all cards from deck to junk pile
@@ -61,7 +61,7 @@ class JunkAllDeck(ActionPrimitive):
                 f"JunkAllDeck: Junked {getattr(card, 'name', 'card')} from age {self.age} deck"
             )
 
-        context.add_result(f"Junked all {junked_count} cards from age {self.age} deck")
+        context.add_result(f"Junked all {junked_count} cards from era {self.age} supply")
 
         # Activity log entry for visibility in UI
         try:
@@ -76,7 +76,7 @@ class JunkAllDeck(ActionPrimitive):
                     "age": int(self.age),
                     "count": junked_count,
                 },
-                message=f"Junked all {junked_count} cards from age {self.age} deck",
+                message=f"Junked all {junked_count} cards from era {self.age} supply",
             )
         except Exception:
             pass

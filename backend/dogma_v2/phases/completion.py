@@ -135,13 +135,13 @@ class CompletionPhase(DogmaPhase):
                             sharing_player_id=activating_player.id,
                             triggering_player_id="sharing_players",
                             card_name=context.card.name,
-                            benefit_description=f"Sharing bonus: {activating_player.name} drew {getattr(drawn_card, 'name', 'a card')} (age {getattr(drawn_card, 'age', '?')})",
+                            benefit_description=f"Sharing bonus: {activating_player.name} researched {getattr(drawn_card, 'name', 'a card')} (era {getattr(drawn_card, 'age', '?')})",
                             benefit_type="sharing_bonus",
                         )
                 except Exception:
                     pass
                 context = context.with_result(
-                    f"{activating_player.name} drew {drawn_card.name} (sharing bonus)"
+                    f"{activating_player.name} researched {drawn_card.name} (sharing bonus)"
                 )
                 logger.debug(
                     f"Sharing bonus: {activating_player.name} drew {drawn_card.name}"

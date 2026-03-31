@@ -47,7 +47,7 @@ class GetSplayDirection(ActionPrimitive):
             else:
                 player = self.player
         else:
-            player = context.current_player
+            player = context.player
 
         # Get the splay direction
         if not hasattr(player, "board"):
@@ -62,6 +62,6 @@ class GetSplayDirection(ActionPrimitive):
         # Store the result
         context.set_variable(self.store_result, splay_direction)
         logger.debug(f"Splay direction for {color}: {splay_direction}")
-        context.add_result(f"{color} splay direction: {splay_direction}")
+        context.add_result(f"{color} proliferate direction: {splay_direction}")
 
         return ActionResult.SUCCESS

@@ -41,14 +41,14 @@ class GetCardAge(ActionPrimitive):
         if hasattr(card_data, "age"):
             age = card_data.age
             context.set_variable(self.store_result, age)
-            context.add_result(f"Retrieved age {age} from card")
+            context.add_result(f"Retrieved era {age} from card")
             return ActionResult.SUCCESS
 
         # If it's a single card (dict), get its age
         if isinstance(card_data, dict):
             age = card_data.get("age", 0)
             context.set_variable(self.store_result, age)
-            context.add_result(f"Retrieved age {age} from card dict")
+            context.add_result(f"Retrieved era {age} from card dict")
             return ActionResult.SUCCESS
 
         # If it's a list of cards, get the first card's age
@@ -61,7 +61,7 @@ class GetCardAge(ActionPrimitive):
             else:
                 age = getattr(first_card, "age", 0)
             context.set_variable(self.store_result, age)
-            context.add_result(f"Retrieved age {age} from first card in list")
+            context.add_result(f"Retrieved era {age} from first card in list")
             return ActionResult.SUCCESS
 
         # Default case

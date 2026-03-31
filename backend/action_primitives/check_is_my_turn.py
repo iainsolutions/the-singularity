@@ -31,11 +31,11 @@ class CheckIsMyTurn(ActionPrimitive):
         # Check if game state has current_turn_player
         if hasattr(context.game_state, "current_turn_player"):
             current_turn_player = context.game_state.current_turn_player
-            is_my_turn = current_turn_player == context.current_player.id
+            is_my_turn = current_turn_player == context.player.id
 
         # Also check activating_player (for dogma execution context)
         elif hasattr(context, "activating_player"):
-            is_my_turn = context.activating_player == context.current_player
+            is_my_turn = context.activating_player == context.player
 
         # Store result
         context.set_variable(self.store_result, is_my_turn)

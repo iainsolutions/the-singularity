@@ -99,7 +99,7 @@ class ExtendedConditions(BaseConditionEvaluator):
         elif condition_type == "value_not_in_board_or_score":
             # Check if a value is not present in board or score (10 usages)
             value = condition.get("value")
-            player = context.current_player
+            player = context.player
 
             # Check board
             if hasattr(player, "board"):
@@ -123,7 +123,7 @@ class ExtendedConditions(BaseConditionEvaluator):
             if isinstance(color, str) and context.has_variable(color):
                 color = context.get_variable(color)
 
-            player = context.current_player
+            player = context.player
             if hasattr(player, "board"):
                 splay_attr = f"{color}_splay"
                 splay = getattr(player.board, splay_attr, "none")
@@ -176,7 +176,7 @@ class ExtendedConditions(BaseConditionEvaluator):
             if isinstance(color, str) and context.has_variable(color):
                 color = context.get_variable(color)
 
-            player = context.current_player
+            player = context.player
             if hasattr(player, "board"):
                 splay_attr = f"{color}_splay"
                 splay = getattr(player.board, splay_attr, "none")
@@ -189,7 +189,7 @@ class ExtendedConditions(BaseConditionEvaluator):
             if isinstance(color, str) and context.has_variable(color):
                 color = context.get_variable(color)
 
-            player = context.current_player
+            player = context.player
             if hasattr(player, "board"):
                 cards = getattr(player.board, f"{color}_cards", [])
                 return len(cards) == 0
@@ -203,7 +203,7 @@ class ExtendedConditions(BaseConditionEvaluator):
             if isinstance(color, str) and context.has_variable(color):
                 color = context.get_variable(color)
 
-            player = context.current_player
+            player = context.player
             if hasattr(player, "board"):
                 cards = getattr(player.board, f"{color}_cards", [])
                 if cards:
@@ -324,7 +324,7 @@ class ExtendedConditions(BaseConditionEvaluator):
 
         elif condition_type == "is_current_turn":
             if hasattr(context.game_state, "current_turn_player"):
-                return context.game_state.current_turn_player == context.current_player.id
+                return context.game_state.current_turn_player == context.player.id
             return False
 
         # Return False for unhandled conditions

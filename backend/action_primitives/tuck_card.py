@@ -102,7 +102,7 @@ class TuckCard(ActionPrimitive):
                 self._splay_color(context, color)
 
         if tucked_count > 0:
-            context.add_result(f"Tucked {tucked_count} cards")
+            context.add_result(f"Archived {tucked_count} cards")
             logger.info(f"Tucked {tucked_count} cards under board stacks")
 
             # Track for Monument achievement
@@ -117,7 +117,7 @@ class TuckCard(ActionPrimitive):
                     # Special achievements not available
                     pass
         else:
-            context.add_result("No cards were tucked")
+            context.add_result("No cards were archived")
 
         return ActionResult.SUCCESS
 
@@ -257,5 +257,5 @@ class TuckCard(ActionPrimitive):
                 if not hasattr(context.player.board, "splay_directions"):
                     context.player.board.splay_directions = {}
                 context.player.board.splay_directions[color] = self.splay_direction
-                context.add_result(f"Splayed {color} cards {self.splay_direction}")
+                context.add_result(f"Proliferated {color} cards {self.splay_direction}")
                 logger.debug(f"Auto-splayed {color} cards {self.splay_direction}")

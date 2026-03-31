@@ -214,7 +214,7 @@ class ReturnCards(ActionPrimitive):
                 logger.info(
                     f"ReturnCards: Successfully returned {card.name} from {removal_location} to age {card.age} deck"
                 )
-                context.add_result(f"Returned {card.name} to age {card.age} deck")
+                context.add_result(f"Recalled {card.name} to era {card.age} supply")
             else:
                 # Not in hand — check if card is in any age deck (deck-return/junk workflows)
                 removed_from_deck = False
@@ -246,7 +246,7 @@ class ReturnCards(ActionPrimitive):
                     logger.info(
                         f"ReturnCards: Junked {card.name} from age {deck_age} deck"
                     )
-                    context.add_result(f"Junked {card.name} from age {deck_age} deck")
+                    context.add_result(f"Junked {card.name} from era {deck_age} supply")
                     # Activity log entry for visibility in UI
                     try:
                         from logging_config import EventType, activity_logger
@@ -260,7 +260,7 @@ class ReturnCards(ActionPrimitive):
                                 "card_name": getattr(card, "name", None),
                                 "age": int(deck_age) if deck_age is not None else None,
                             },
-                            message=f"Junked {getattr(card, 'name', 'card')} from age {deck_age} deck",
+                            message=f"Junked {getattr(card, 'name', 'card')} from era {deck_age} supply",
                         )
                     except Exception:
                         pass
@@ -332,7 +332,7 @@ class ReturnCards(ActionPrimitive):
                     logger.info(
                         f"ReturnCards: Fallback removed {removed_card_name} from hand; returned to age deck"
                     )
-                    context.add_result(f"Returned {removed_card_name} to age deck")
+                    context.add_result(f"Recalled {removed_card_name} to era supply")
                 else:
                     logger.error(
                         f"ReturnCards: FAILED to remove {removed_card_name} from hand!"
@@ -355,18 +355,18 @@ class ReturnCards(ActionPrimitive):
         if failed_removals:
             error_details = "; ".join(failed_removals)
             context.add_result(
-                f"Partial return: {returned_count}/{len(cards_to_return)} cards returned. Errors: {error_details}"
+                f"Partial recall: {returned_count}/{len(cards_to_return)} cards recalled. Errors: {error_details}"
             )
             logger.error(
                 f"ReturnCards: Partial failure - {returned_count}/{len(cards_to_return)} returned. Errors: {error_details}"
             )
         elif returned_count > 0:
-            context.add_result(f"Successfully returned {returned_count} card(s)")
+            context.add_result(f"Successfully recalled {returned_count} card(s)")
             logger.info(
                 f"ReturnCards: All {returned_count} cards returned successfully"
             )
         else:
-            context.add_result("No cards returned - all removal attempts failed")
+            context.add_result("No cards recalled - all removal attempts failed")
             logger.error("ReturnCards: All card removal attempts failed!")
 
         return ActionResult.SUCCESS

@@ -58,7 +58,7 @@ class ScoreExcess(ActionPrimitive):
             return ActionResult.FAILURE
 
         # Get the player's board
-        player = context.current_player
+        player = context.player
         board = player.board
 
         # Get the color stack

@@ -55,7 +55,7 @@ async def draw_card(game: Game, player: Player) -> dict[str, Any]:
         game.add_log_entry(
             player_name=player.name,
             action_type=ActionType.DRAW,
-            description=f"drew an age {card.age} card",
+            description=f"researched an era {card.age} card",
         )
 
         activity_logger.log_game_event(
@@ -63,7 +63,7 @@ async def draw_card(game: Game, player: Player) -> dict[str, Any]:
             game_id=game.game_id,
             player_id=player.id,
             data={"card_name": card.name, "age": age},
-            message=f"{player.name} drew an age {card.age} card",
+            message=f"{player.name} researched an era {card.age} card",
         )
 
         if game.state.actions_remaining > 0:
@@ -191,7 +191,7 @@ async def claim_achievement(game: Game, player: Player, age: int) -> dict[str, A
     game.add_log_entry(
         player_name=player.name,
         action_type=ActionType.ACHIEVE,
-        description=f"claimed age {age} achievement",
+        description=f"breakthrough: era {age}",
     )
 
     activity_logger.log_game_event(
@@ -204,7 +204,7 @@ async def claim_achievement(game: Game, player: Player, age: int) -> dict[str, A
             "score": score,
             "required_score": required_score,
         },
-        message=f"{player.name} claimed age {age} achievement",
+        message=f"{player.name} breakthrough: era {age}",
     )
 
     if game.state.actions_remaining > 0:

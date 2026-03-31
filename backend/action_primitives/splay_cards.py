@@ -91,7 +91,7 @@ class SplayCards(ActionPrimitive):
         if len(stack) < 2:
             # Silently skip - nothing to splay
             logger.info(f"🎴 SplayCards: Not enough cards to splay ({len(stack)} < 2), returning SUCCESS")
-            context.add_result(f"No cards to splay in {color_str}")
+            context.add_result(f"No cards to proliferate in {color_str}")
             return ActionResult.SUCCESS
 
         # Check if already splayed in this direction
@@ -112,7 +112,7 @@ class SplayCards(ActionPrimitive):
         ):
             try:
                 context.player.board.splay(color_str, self.direction)
-                context.add_result(f"{color_str.capitalize()} stack splayed {self.direction}")
+                context.add_result(f"{color_str.capitalize()} stack proliferated {self.direction}")
                 logger.info(
                     f"✅ Splayed {color_str} cards {self.direction} for player {getattr(context.player, 'name', 'Player')}"
                 )
@@ -152,7 +152,7 @@ class SplayCards(ActionPrimitive):
             context=context.get_variable("current_effect_context", "splay"),
         )
 
-        context.add_result(f"{color_str.capitalize()} stack splayed {self.direction}")
+        context.add_result(f"{color_str.capitalize()} stack proliferated {self.direction}")
         logger.info(
             f"✅ Splayed {color_str} cards {self.direction} for player {getattr(context.player, 'name', 'Player')}"
         )
@@ -171,7 +171,7 @@ class SplayCards(ActionPrimitive):
                     "color": color_str,
                     "direction": self.direction,
                 },
-                message=f"Splayed {color_str} {self.direction}",
+                message=f"Proliferated {color_str} {self.direction}",
             )
         except Exception:
             pass

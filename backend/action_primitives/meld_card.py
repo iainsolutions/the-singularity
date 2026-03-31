@@ -72,7 +72,7 @@ class MeldCard(ActionPrimitive):
         if melded_count > 0:
             # Add detailed logging with card names (melded cards are public)
             card_names = [context.get_public_card_name(card) for card in melded_cards]
-            context.add_result(f"Melded {', '.join(card_names)}")
+            context.add_result(f"Deployed {', '.join(card_names)}")
 
             # Store melded cards for reference by other actions
             context.set_variable("melded_cards", melded_cards)
@@ -85,7 +85,7 @@ class MeldCard(ActionPrimitive):
             if self.store_color and colors_melded:
                 context.set_variable(self.store_color, next(iter(colors_melded)))
         else:
-            context.add_result("No cards melded")
+            context.add_result("No cards deployed")
 
         return ActionResult.SUCCESS
 

@@ -72,7 +72,7 @@ class RevealCard(ActionPrimitive):
 
         # Log the reveal
         card_name = card.name if hasattr(card, "name") else card.get("name", "Unknown")
-        player_name = context.current_player.name if hasattr(context.current_player, "name") else "Player"
+        player_name = context.player.name if hasattr(context.player, "name") else "Player"
 
         if self.to_player:
             to_player_name = self.to_player if isinstance(self.to_player, str) else getattr(self.to_player, "name", "unknown")

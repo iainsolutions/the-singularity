@@ -85,7 +85,7 @@ class DrawCards(ActionPrimitive):
             logger.error(
                 f"DrawCards: Failed to convert age value: {age} (type: {type(age)}) - Error: {e}"
             )
-            context.add_result(f"Invalid age value: {age}")
+            context.add_result(f"Invalid era value: {age}")
             return ActionResult.FAILURE
 
         # Resolve count value
@@ -127,7 +127,7 @@ class DrawCards(ActionPrimitive):
                     )
                     # Use private card name for hand draws (unless revealed)
                     card_name = context.get_card_name_for_log(card, is_owner=True)
-                    context.add_result(f"Drew {card_name} to hand")
+                    context.add_result(f"Researched {card_name} to hand")
                     # Activity: card drawn to hand
                     try:
                         if activity_logger:
@@ -304,7 +304,7 @@ class DrawCards(ActionPrimitive):
                             # Place in hand (per official rules)
                             context.player.hand.append(card)
                             context.add_result(
-                                f"Age {age} empty, drew and revealed {card.name} (age {card.age})"
+                                f"Era {age} empty, researched and revealed {card.name} (era {card.age})"
                             )
                             try:
                                 if activity_logger:
@@ -335,7 +335,7 @@ class DrawCards(ActionPrimitive):
                                 # CardColor is str enum, can use directly
                                 context.set_variable("revealed_color", str(card.color))
                 else:
-                    context.add_result(f"No cards available from age {age} or higher")
+                    context.add_result(f"No cards available from era {age} or higher")
 
         # Store drawn cards in variable
         if drawn_cards:

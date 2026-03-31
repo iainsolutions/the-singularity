@@ -71,12 +71,12 @@ class CountColorsWithSplay(ActionPrimitive):
 
             # Log the action
             if self.direction == "any":
-                context.add_result(f"Counted {count} splayed colors")
+                context.add_result(f"Counted {count} proliferated colors")
             else:
-                context.add_result(f"Counted {count} colors splayed {self.direction}")
+                context.add_result(f"Counted {count} colors proliferated {self.direction}")
 
             return ActionResult.SUCCESS
 
         except Exception as e:
-            context.add_result(f"Error counting splayed colors: {e!s}")
+            context.add_result(f"Error counting proliferated colors: {e!s}")
             return ActionResult.FAILURE
