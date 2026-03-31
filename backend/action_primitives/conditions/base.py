@@ -58,12 +58,12 @@ class BaseConditionEvaluator(ABC):
         from models.card import Symbol
 
         symbol_map = {
-            "castle": Symbol.CASTLE,
-            "leaf": Symbol.LEAF,
-            "lightbulb": Symbol.LIGHTBULB,
-            "crown": Symbol.CROWN,
-            "factory": Symbol.FACTORY,
-            "clock": Symbol.CLOCK,
+            "circuit": Symbol.CIRCUIT,
+            "data": Symbol.DATA,
+            "algorithm": Symbol.ALGORITHM,
+            "neural_net": Symbol.NEURAL_NET,
+            "robot": Symbol.ROBOT,
+            "human_mind": Symbol.HUMAN_MIND,
         }
 
         target_symbol = symbol_map.get(symbol_name.lower())

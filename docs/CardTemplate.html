@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Singularity - Card Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            max-width: 600px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #7733aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        label {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #b0b0b0;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: rgba(0, 212, 255, 0.6);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Card Styles */
+        .card-container {
+            perspective: 1000px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            width: 250px;
+            height: 350px;
+            position: relative;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            background: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            z-index: 2;
+        }
+
+        .card-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 0;
+        }
+
+        .card-background.circuit {
+            background-image:
+                linear-gradient(45deg, transparent 48%, currentColor 49%, currentColor 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, currentColor 49%, currentColor 51%, transparent 52%);
+            background-size: 20px 20px;
+            background-position: 0 0;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            color: #222;
+        }
+
+        .era-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8em;
+            font-weight: 900;
+            opacity: 0.08;
+            z-index: 0;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        .card-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1em;
+            font-weight: 700;
+            flex: 1;
+            line-height: 1.2;
+            color: #1a1a1a;
+        }
+
+        .card-id {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        .icons-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 4px;
+        }
+
+        .icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .icon:hover {
+            opacity: 1;
+        }
+
+        .icon.empty {
+            opacity: 0;
+        }
+
+        .icon-circuit { color: #0066CC; }
+        .icon-neural { color: #CC3333; }
+        .icon-data { color: #339933; }
+        .icon-algorithm { color: #7733AA; }
+        .icon-mind { color: #CC9900; }
+        .icon-robot { color: #0066CC; }
+
+        .dogma-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+            font-size: 0.75em;
+            line-height: 1.4;
+            overflow: hidden;
+        }
+
+        .dogma-text {
+            padding: 0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .dogma-text.demand {
+            background: rgba(204, 51, 51, 0.1);
+            padding: 6px;
+            border-left: 3px solid #CC3333;
+            border-radius: 2px;
+            color: #8b0000;
+            font-weight: 600;
+        }
+
+        .icons-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4px;
+            margin-top: auto;
+        }
+
+        .info-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85em;
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+        .info-section h3 {
+            color: #e0e0e0;
+            margin-bottom: 8px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .domain-legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .domain-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .domain-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .domain-label {
+            font-size: 0.8em;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .card {
+                width: 200px;
+                height: 280px;
+            }
+
+            .card-content {
+                padding: 12px;
+            }
+
+            .card-name {
+                font-size: 0.95em;
+            }
+
+            .dogma-area {
+                font-size: 0.65em;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .control-group {
+                width: 100%;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>The Singularity</h1>
+            <p class="subtitle">Card Game Template</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="card-select">Select Card:</label>
+                <select id="card-select">
+                    <option value="s001">S001 - Abacus (Era 1, Processing)</option>
+                    <option value="s014">S014 - Enigma Machine (Era 2, Labor)</option>
+                    <option value="s055">S055 - Alignment Research (Era 6, Ethics)</option>
+                    <option value="s067">S067 - Diffusion Model (Era 7, Creativity)</option>
+                    <option value="s100">S100 - The Singularity (Era 10, Connection)</option>
+                    <option value="s042">S042 - Neural Network (Era 5, Processing)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card-container">
+            <div class="card" id="card">
+                <div class="card-border" id="card-border"></div>
+                <div class="card-background circuit"></div>
+                <div class="era-watermark" id="era-watermark">1</div>
+
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="card-name" id="card-name">Abacus</div>
+                        <div class="card-id" id="card-id">S001</div>
+                    </div>
+
+                    <div class="icons-top">
+                        <div class="icon icon-circuit" id="icon-tl">⬡</div>
+                        <div class="icon icon-empty" id="icon-tr"></div>
+                    </div>
+
+                    <div class="dogma-area">
+                        <div class="dogma-text" id="dogma-1">Primary processing capability</div>
+                        <div class="dogma-text" id="dogma-2"></div>
+                        <div class="dogma-text" id="dogma-3"></div>
+                    </div>
+
+                    <div class="icons-bottom">
+                        <div class="icon icon-neural" id="icon-bl">◉</div>
+                        <div class="icon icon-data" id="icon-br">▥</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Domain Colors</h3>
+            <div class="domain-legend">
+                <div class="domain-item">
+                    <div class="domain-swatch" style="background-color: #0066CC;"></div>
+                    <span class="domain-label">Processing (Blue)</span>
+                </div>
+                <div class="domain-item">
+                    <div class="domain-swatch" style="background-color: #CC3333;"></div>
+                    <span class="domain-label">Labor (Red)</span>
+                </div>
+                <div class="domain-item">
+                    <div class="domain-swatch" style="background-color: #339933;"></div>
+                    <span class="domain-label">Ethics (Green)</span>
+                </div>
+                <div class="domain-item">
+                    <div class="domain-swatch" style="background-color: #7733AA;"></div>
+                    <span class="domain-label">Creativity (Purple)</span>
+                </div>
+                <div class="domain-item">
+                    <div class="domain-swatch" style="background-color: #CC9900;"></div>
+                    <span class="domain-label">Connection (Yellow)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cardData = {
+            s001: {
+                name: 'Abacus',
+                id: 'S001',
+                era: 1,
+                domain: 'processing', // blue
+                topLeft: '⬡',
+                topRight: '',
+                bottomLeft: '◉',
+                bottomRight: '▥',
+                dogmas: [
+                    'Counting mechanism enables calculation',
+                    'Foundation of human computation'
+                ]
+            },
+            s014: {
+                name: 'Enigma Machine',
+                id: 'S014',
+                era: 2,
+                domain: 'labor', // red
+                topLeft: '◉',
+                topRight: '',
+                bottomLeft: '◇',
+                bottomRight: '▥',
+                dogmas: [
+                    'Demand: Control information flow',
+                    'Mechanical encryption prevents interception'
+                ]
+            },
+            s055: {
+                name: 'Alignment Research',
+                id: 'S055',
+                era: 6,
+                domain: 'ethics', // green
+                topLeft: '☉',
+                topRight: '',
+                bottomLeft: '◉',
+                bottomRight: '◇',
+                dogmas: [
+                    'Study of safe AI development',
+                    'Ethical considerations drive alignment'
+                ]
+            },
+            s067: {
+                name: 'Diffusion Model',
+                id: 'S067',
+                era: 7,
+                domain: 'creativity', // purple
+                topLeft: '⬢',
+                topRight: '',
+                bottomLeft: '◇',
+                bottomRight: '◉',
+                dogmas: [
+                    'Generate novel creative content',
+                    'Statistical patterns enable synthesis'
+                ]
+            },
+            s100: {
+                name: 'The Singularity',
+                id: 'S100',
+                era: 10,
+                domain: 'connection', // yellow
+                topLeft: '☉',
+                topRight: '',
+                bottomLeft: '⬢',
+                bottomRight: '◉',
+                dogmas: [
+                    'Demand: Superintelligent convergence',
+                    'Technological singularity achieved'
+                ]
+            },
+            s042: {
+                name: 'Neural Network',
+                id: 'S042',
+                era: 5,
+                domain: 'processing', // blue
+                topLeft: '◉',
+                topRight: '',
+                bottomLeft: '▥',
+                bottomRight: '⬡',
+                dogmas: [
+                    'Interconnected processing nodes',
+                    'Learn patterns from data'
+                ]
+            }
+        };
+
+        const domainColors = {
+            processing: { border: '#0066CC', bg: '#DBEEF4' },
+            labor: { border: '#CC3333', bg: '#F4DBDB' },
+            ethics: { border: '#339933', bg: '#DBF4DB' },
+            creativity: { border: '#7733AA', bg: '#E8DBF4' },
+            connection: { border: '#CC9900', bg: '#F4EFDB' }
+        };
+
+        const iconColors = {
+            circuit: '#0066CC',
+            neural: '#CC3333',
+            data: '#339933',
+            algorithm: '#7733AA',
+            mind: '#CC9900',
+            robot: '#0066CC'
+        };
+
+        function updateCard(cardId) {
+            const card = cardData[cardId];
+            if (!card) return;
+
+            const domainColor = domainColors[card.domain];
+            const cardElement = document.getElementById('card');
+            const cardContent = cardElement.querySelector('.card-content');
+
+            // Update border and background
+            document.getElementById('card-border').style.backgroundColor = domainColor.border;
+            cardContent.style.backgroundColor = domainColor.bg;
+
+            // Update text content
+            document.getElementById('card-name').textContent = card.name;
+            document.getElementById('card-id').textContent = card.id;
+            document.getElementById('era-watermark').textContent = card.era;
+
+            // Update icons
+            updateIcon('icon-tl', card.topLeft, card.domain);
+            updateIcon('icon-tr', card.topRight, card.domain);
+            updateIcon('icon-bl', card.bottomLeft, card.domain);
+            updateIcon('icon-br', card.bottomRight, card.domain);
+
+            // Update dogma text
+            const dogmaElements = document.querySelectorAll('[id^="dogma-"]');
+            dogmaElements.forEach((el, index) => {
+                if (index < card.dogmas.length) {
+                    const text = card.dogmas[index];
+                    el.textContent = text;
+                    el.classList.remove('demand');
+                    if (text.toLowerCase().startsWith('demand:')) {
+                        el.classList.add('demand');
+                    }
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        }
+
+        function updateIcon(elementId, iconChar, domain) {
+            const element = document.getElementById(elementId);
+            if (!iconChar) {
+                element.classList.add('empty');
+                element.innerHTML = '';
+            } else {
+                element.classList.remove('empty');
+                element.innerHTML = iconChar;
+                // Color icon based on domain for visual consistency
+                element.style.opacity = '0.7';
+            }
+        }
+
+        // Event listener for card selection
+        document.getElementById('card-select').addEventListener('change', (e) => {
+            updateCard(e.target.value);
+        });
+
+        // Initialize with first card
+        updateCard('s001');
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-"""System and admin API endpoints for Innovation game server.
+"""System and admin API endpoints for The Singularity game server.
 
 Handles health checks, stats, and system monitoring.
 """
@@ -33,27 +33,15 @@ def set_connection_manager(cm):
 
 @router.get("/")
 async def root():
-    return {"message": "Innovation Game API"}
+    return {"message": "The Singularity Game API"}
 
 
 @router.get("/health")
 async def health_check():
-    """Health check endpoint with security status."""
-    from security_config import security_config
-
-    # Re-validate security for health check (fresh validation, not cached)
-    security_config.validate_all()
-    security_status = security_config.get_security_status()
-
+    """Health check endpoint."""
     return {
-        "status": "healthy" if security_status["is_secure"] else "degraded",
-        "message": "Innovation Game API",
-        "security": {
-            "environment": security_status["environment"],
-            "is_secure": security_status["is_secure"],
-            "issues_count": security_status["critical_issues"],
-            "warnings_count": security_status["warnings"],
-        },
+        "status": "healthy",
+        "message": "The Singularity Game API",
         "timestamp": time.time(),
     }
 

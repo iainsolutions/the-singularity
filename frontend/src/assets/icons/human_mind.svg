@@ -1,0 +1,24 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Human mind consciousness">
+  <!-- Head profile outline -->
+  <path d="M 18 24 Q 16 32 18 40 Q 20 48 28 50 L 28 20 Q 24 18 18 24 Z" stroke="#1B2A4A" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+
+  <!-- Forehead -->
+  <path d="M 28 20 Q 32 16 38 16 Q 42 16 44 20" stroke="#1B2A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Face line down -->
+  <line x1="44" y1="20" x2="46" y2="40" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Chin -->
+  <path d="M 46 40 Q 44 48 36 50 Q 28 50 28 50" stroke="#1B2A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Central glowing point (brain) -->
+  <circle cx="32" cy="32" r="4" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Radiating lines from brain -->
+  <line x1="32" y1="24" x2="32" y2="16" stroke="#1B2A4A" stroke-width="2" fill="none"/>
+  <line x1="40" y1="28" x2="46" y2="22" stroke="#1B2A4A" stroke-width="2" fill="none"/>
+  <line x1="40" y1="36" x2="48" y2="38" stroke="#1B2A4A" stroke-width="2" fill="none"/>
+  <line x1="32" y1="40" x2="32" y2="50" stroke="#1B2A4A" stroke-width="2" fill="none"/>
+  <line x1="24" y1="36" x2="16" y2="40" stroke="#1B2A4A" stroke-width="2" fill="none"/>
+  <line x1="24" y1="28" x2="16" y2="22" stroke="#1B2A4A" stroke-width="2" fill="none"/>
+</svg>

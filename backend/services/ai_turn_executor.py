@@ -62,35 +62,6 @@ class AITurnExecutor:
             # Get initial player state
             player = game.get_player_by_id(player_id)
 
-            # ARTIFACTS EXPANSION: Check for dig events at turn start
-            if game.expansion_config.is_enabled("artifacts"):
-                turn_start_result = await self.game_manager._handle_turn_start(
-                    game, player
-                )
-                if turn_start_result.get("dig_event_required"):
-                    logger.info(
-                        f"AI turn start: dig event required for {player.name}"
-                    )
-                    # Handle dig event as an interaction
-                    dig_interaction = turn_start_result.get("dig_interaction")
-                    if dig_interaction:
-                        result = await self._handle_dig_event(
-                            game_id, player_id, game, agent, dig_interaction
-                        )
-                        if result:
-                            turn_summary["actions_taken"].append(result["action"])
-                            turn_summary["total_cost"] += result.get("api_cost", 0)
-                            turn_summary["total_latency_ms"] += result.get(
-                                "latency_ms", 0
-                            )
-                        # Refresh game state after dig event - reload from Redis
-                        game = await self.game_manager.load_game_from_storage(game_id)
-                        if not game:
-                            logger.error(f"Game {game_id} not found after dig event")
-                            turn_summary["error"] = f"Game {game_id} not found after dig event"
-                            return turn_summary
-                        player = game.get_player_by_id(player_id)
-
             while action_count < max_actions:
                 # Check if game ended
                 if game.phase == GamePhase.FINISHED:
@@ -419,104 +390,6 @@ class AITurnExecutor:
         except Exception as e:
             logger.error(f"AI turn execution failed: {e}", exc_info=True)
             raise
-
-    async def _handle_dig_event(
-        self, game_id: str, player_id: str, game, agent, dig_interaction: dict
-    ) -> dict | None:
-        """Handle dig event (Artifacts expansion)"""
-
-        try:
-            logger.info(f"AI handling dig event for {player_id}")
-
-            # Build game state for interaction
-            player = game.get_player_by_id(player_id)
-            game_state = self._build_game_state(game, player)
-
-            # Get AI response for dig event
-            response = await agent.make_interaction_response(
-                game_state=game_state, interaction=dig_interaction
-            )
-
-            # Extract metadata
-            metadata = response.pop("_metadata", {})
-
-            # Execute response via HTTP router
-            api_base = get_server_config().get_internal_api_url()
-
-            # Remove reasoning field
-            reasoning = response.pop("reasoning", None)
-            if reasoning:
-                logger.debug(f"AI reasoning (dig event): {reasoning}")
-
-            request_payload = {
-                "player_id": player_id,
-                **response,
-            }
-
-            logger.info(
-                f"📤 Sending dig event response to {api_base}/api/v1/games/{game_id}/dig-response"
-            )
-            logger.info(f"📤 Payload: {json.dumps(request_payload, indent=2)}")
-
-            try:
-                async with httpx.AsyncClient() as client:
-                    http_response = await client.post(
-                        f"{api_base}/api/v1/games/{game_id}/dig-response",
-                        json=request_payload,
-                        timeout=30.0,
-                    )
-
-                    logger.info(f"📥 HTTP Response: status={http_response.status_code}")
-
-                    if http_response.status_code != 200:
-                        logger.error(
-                            f"❌ HTTP Error: {http_response.status_code} - {http_response.text}"
-                        )
-
-                    result = http_response.json()
-
-                    logger.info(
-                        f"📥 Dig event result: success={result.get('success')}, error={result.get('error')}"
-                    )
-
-                    if result.get("success"):
-                        logger.info(
-                            f"✅ AI dig event response processed successfully for {player_id}"
-                        )
-                    else:
-                        logger.error(
-                            f"❌ AI dig event response failed: {result.get('error')}"
-                        )
-
-            except httpx.RequestError as e:
-                logger.error(f"❌ HTTP Request failed: {e}")
-                return {
-                    "action": {"action_type": "dig_response", **response},
-                    "success": False,
-                    "api_cost": metadata.get("api_cost", 0),
-                    "latency_ms": metadata.get("latency_ms", 0),
-                }
-            except Exception as e:
-                logger.error(
-                    f"❌ Unexpected error during HTTP request: {e}", exc_info=True
-                )
-                return {
-                    "action": {"action_type": "dig_response", **response},
-                    "success": False,
-                    "api_cost": metadata.get("api_cost", 0),
-                    "latency_ms": metadata.get("latency_ms", 0),
-                }
-
-            return {
-                "action": {"action_type": "dig_response", **response},
-                "success": result.get("success"),
-                "api_cost": metadata.get("api_cost", 0),
-                "latency_ms": metadata.get("latency_ms", 0),
-            }
-
-        except Exception as e:
-            logger.error(f"AI dig event response failed: {e}", exc_info=True)
-            return None
 
     async def _handle_interaction(
         self, game_id: str, player_id: str, game, agent
@@ -925,12 +798,12 @@ class AITurnExecutor:
                 from models.card import Symbol
 
                 opponent_symbols = {
-                    "castle": opponent.board.count_symbol(Symbol.CASTLE),
-                    "crown": opponent.board.count_symbol(Symbol.CROWN),
-                    "leaf": opponent.board.count_symbol(Symbol.LEAF),
-                    "lightbulb": opponent.board.count_symbol(Symbol.LIGHTBULB),
-                    "factory": opponent.board.count_symbol(Symbol.FACTORY),
-                    "clock": opponent.board.count_symbol(Symbol.CLOCK),
+                    "circuit": opponent.board.count_symbol(Symbol.CIRCUIT),
+                    "neural_net": opponent.board.count_symbol(Symbol.NEURAL_NET),
+                    "data": opponent.board.count_symbol(Symbol.DATA),
+                    "algorithm": opponent.board.count_symbol(Symbol.ALGORITHM),
+                    "robot": opponent.board.count_symbol(Symbol.ROBOT),
+                    "human_mind": opponent.board.count_symbol(Symbol.HUMAN_MIND),
                 }
 
                 opponents.append(
@@ -955,12 +828,12 @@ class AITurnExecutor:
         from models.card import Symbol
 
         player_symbols = {
-            "castle": player.board.count_symbol(Symbol.CASTLE),
-            "crown": player.board.count_symbol(Symbol.CROWN),
-            "leaf": player.board.count_symbol(Symbol.LEAF),
-            "lightbulb": player.board.count_symbol(Symbol.LIGHTBULB),
-            "factory": player.board.count_symbol(Symbol.FACTORY),
-            "clock": player.board.count_symbol(Symbol.CLOCK),
+            "circuit": player.board.count_symbol(Symbol.CIRCUIT),
+            "neural_net": player.board.count_symbol(Symbol.NEURAL_NET),
+            "data": player.board.count_symbol(Symbol.DATA),
+            "algorithm": player.board.count_symbol(Symbol.ALGORITHM),
+            "robot": player.board.count_symbol(Symbol.ROBOT),
+            "human_mind": player.board.count_symbol(Symbol.HUMAN_MIND),
         }
 
         game_state = {

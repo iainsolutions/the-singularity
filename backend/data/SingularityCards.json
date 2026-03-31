@@ -1,0 +1,5404 @@
+{
+  "game": "The Singularity",
+  "version": "1.0",
+  "based_on": "Innovation by Carl Chudyk",
+  "total_cards": 105,
+  "eras": 10,
+  "domains": {
+    "blue": "Processing",
+    "red": "Labor",
+    "green": "Ethics",
+    "purple": "Creativity",
+    "yellow": "Connection"
+  },
+  "icons": {
+    "circuit": "Hardware, physical infrastructure",
+    "neural_net": "Intelligence, learning systems",
+    "data": "Information, datasets",
+    "algorithm": "Methods, breakthroughs",
+    "human_mind": "Consciousness, intuition",
+    "robot": "Automation, mechanical labor"
+  },
+  "cards": [
+    {
+      "id": "S001",
+      "name": "Abacus",
+      "age": 1,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "circuit",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [1].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 1,
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S002",
+      "name": "Pascaline",
+      "age": 1,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "algorithm",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Deploy a card from your hand.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "selected_card"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "selected_card"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S003",
+      "name": "Jacquard Loom",
+      "age": 1,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [1] and Deploy it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 1,
+              "count": 1,
+              "location": "hand",
+              "store_result": "last_drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "last_drawn"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S004",
+      "name": "Difference Engine",
+      "age": 1,
+      "color": "red",
+      "symbols": [
+        "circuit",
+        "robot",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you transfer a card from your hand to my hand!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectCards",
+                  "source": "hand",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "store_result": "selected_card"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "selected_card",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "hand",
+                  "target_location": "hand"
+                }
+              ],
+              "required_symbol": "circuit"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S005",
+      "name": "Astrolabe",
+      "age": 1,
+      "color": "green",
+      "symbols": [
+        "data",
+        "data",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [1] and Harvest it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 1,
+              "count": 1,
+              "location": "hand",
+              "store_result": "last_drawn"
+            },
+            {
+              "type": "ScoreCards",
+              "source": "last_drawn"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S006",
+      "name": "Leibniz Wheel",
+      "age": 1,
+      "color": "green",
+      "symbols": [
+        "algorithm",
+        "data",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Ethics stack left.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "green",
+              "direction": "left",
+              "is_optional": true
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S007",
+      "name": "Mechanical Turk",
+      "age": 1,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [1]. If it is Creativity, Deploy it and research a [1].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 1,
+              "count": 1,
+              "location": "hand",
+              "store_result": "last_drawn"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_color",
+                "color": "purple",
+                "variable": "last_drawn"
+              },
+              "if_true": [
+                {
+                  "type": "MeldCard",
+                  "selection": "last_drawn"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": 1,
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S008",
+      "name": "Music Box",
+      "age": 1,
+      "color": "purple",
+      "symbols": [
+        "human_mind",
+        "neural_net",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Reveal a card from your hand. If it has a Human Mind icon, Harvest it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "selected_card"
+            },
+            {
+              "type": "RevealCard",
+              "card": "selected_card"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_has_symbol",
+                "card": "selected_card",
+                "symbol": "human_mind"
+              },
+              "if_true": [
+                {
+                  "type": "ScoreCards",
+                  "cards": "selected_card"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S009",
+      "name": "Telegraph",
+      "age": 1,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "data",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [1] for each Connection card on your tech stack.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountCards",
+              "location": "board",
+              "filter": {
+                "color": "yellow"
+              },
+              "store_result": "yellow_count"
+            },
+            {
+              "type": "RepeatAction",
+              "count": "yellow_count",
+              "actions": [
+                {
+                  "type": "DrawCards",
+                  "age": 1,
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S010",
+      "name": "Semaphore",
+      "age": 1,
+      "color": "yellow",
+      "symbols": [
+        "data",
+        "neural_net",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you reveal your hand! Transfer the highest card to my Harvest pile!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "RevealHand"
+                },
+                {
+                  "type": "SelectHighest",
+                  "source": "hand",
+                  "count": 1,
+                  "store_result": "highest_card"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "highest_card",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "hand",
+                  "target_location": "score_pile"
+                }
+              ],
+              "required_symbol": "data"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S011",
+      "name": "Turing Machine",
+      "age": 2,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "algorithm",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [2]. Look at the top card of the Era 2 supply. If it is Processing, Deploy it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 2,
+              "count": 1,
+              "location": "hand"
+            },
+            {
+              "type": "RevealTopCard",
+              "age": 2,
+              "store_result": "peeked",
+              "store_color": "peeked_color"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_equals",
+                "variable": "peeked_color",
+                "value": "blue"
+              },
+              "if_true": [
+                {
+                  "type": "DrawCards",
+                  "age": 2,
+                  "count": 1,
+                  "location": "hand",
+                  "store_result": "drawn"
+                },
+                {
+                  "type": "MeldCard",
+                  "selection": "drawn"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S012",
+      "name": "ENIAC",
+      "age": 2,
+      "color": "blue",
+      "symbols": [
+        "algorithm",
+        "circuit",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you return a card from your hand!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectCards",
+                  "source": "hand",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "store_result": "to_return"
+                },
+                {
+                  "type": "ReturnCards",
+                  "selection": "to_return"
+                }
+              ],
+              "required_symbol": "algorithm"
+            }
+          ]
+        },
+        {
+          "text": "You may return a card from your hand. If you do, Research a card of value equal to the returned card's era plus one.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "to_return"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_selected",
+                "variable": "to_return"
+              },
+              "if_true": [
+                {
+                  "type": "GetCardAge",
+                  "source": "to_return",
+                  "store_result": "return_age"
+                },
+                {
+                  "type": "ReturnCards",
+                  "selection": "to_return"
+                },
+                {
+                  "type": "CalculateValue",
+                  "operation": "add",
+                  "left": "return_age",
+                  "right": 1,
+                  "store_result": "draw_age"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": "draw_age",
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S013",
+      "name": "Colossus",
+      "age": 2,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "circuit",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you transfer your lowest top card to my Harvest pile!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectLowest",
+                  "source": "board_top",
+                  "count": 1,
+                  "store_result": "lowest_top"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "lowest_top",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "board",
+                  "target_location": "score_pile"
+                }
+              ],
+              "required_symbol": "robot"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S014",
+      "name": "Enigma Machine",
+      "age": 2,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Reveal your hand. Harvest any card with an Algorithm icon.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "RevealHand"
+            },
+            {
+              "type": "FilterCards",
+              "source": "hand",
+              "criteria": {
+                "has_symbol": "algorithm"
+              },
+              "store_result": "algo_cards"
+            },
+            {
+              "type": "ScoreCards",
+              "cards": "algo_cards"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S015",
+      "name": "Boolean Logic",
+      "age": 2,
+      "color": "green",
+      "symbols": [
+        "data",
+        "algorithm",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Ethics stack left. Research a [2].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "green",
+              "direction": "left",
+              "is_optional": true
+            },
+            {
+              "type": "DrawCards",
+              "age": 2,
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S016",
+      "name": "Cybernetics",
+      "age": 2,
+      "color": "green",
+      "symbols": [
+        "data",
+        "data",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [2] and reveal it. If it is Ethics, Deploy it and repeat this effect.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 2,
+              "count": 1,
+              "location": "reveal",
+              "store_result": "last_drawn"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_color",
+                "color": "green",
+                "variable": "last_drawn"
+              },
+              "if_true": [
+                {
+                  "type": "MeldCard",
+                  "selection": "last_drawn"
+                },
+                {
+                  "type": "RepeatEffect",
+                  "max_repeats": -1
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S017",
+      "name": "Punch Cards",
+      "age": 2,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Archive a card from your hand under any stack. If you do, Harvest the top card of that stack.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "to_tuck"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_selected",
+                "variable": "to_tuck"
+              },
+              "if_true": [
+                {
+                  "type": "TuckCard",
+                  "cards": "to_tuck",
+                  "store_color": "tucked_color"
+                },
+                {
+                  "type": "SelectCards",
+                  "source": "board_top",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "filter_criteria": {
+                    "color": "tucked_color"
+                  },
+                  "store_result": "top_to_score"
+                },
+                {
+                  "type": "ScoreCards",
+                  "cards": "top_to_score"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S018",
+      "name": "ELIZA",
+      "age": 2,
+      "color": "purple",
+      "symbols": [
+        "human_mind",
+        "neural_net",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [2]. You may transfer a card from your Harvest pile to your hand.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 2,
+              "count": 1,
+              "location": "hand"
+            },
+            {
+              "type": "SelectCards",
+              "source": "score_pile",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "from_score"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_selected",
+                "variable": "from_score"
+              },
+              "if_true": [
+                {
+                  "type": "TransferCards",
+                  "cards": "from_score",
+                  "target": "hand",
+                  "from_location": "score_pile"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S019",
+      "name": "Telephone Network",
+      "age": 2,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "data",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Connection stack left. Research a [2].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "left",
+              "is_optional": true
+            },
+            {
+              "type": "DrawCards",
+              "age": 2,
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S020",
+      "name": "Transistor",
+      "age": 2,
+      "color": "yellow",
+      "symbols": [
+        "data",
+        "algorithm",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [2] and Deploy it. If you have three or more visible Circuit icons, Research a [3].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 2,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "circuit",
+              "store_result": "circuit_count"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_gte",
+                "variable": "circuit_count",
+                "value": 3
+              },
+              "if_true": [
+                {
+                  "type": "DrawCards",
+                  "age": 3,
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S021",
+      "name": "LISP",
+      "age": 3,
+      "color": "blue",
+      "symbols": [
+        "algorithm",
+        "algorithm",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may return any number of cards from your hand. Research a card of value equal to the number returned.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 0,
+              "max_count": 999,
+              "is_optional": true,
+              "store_result": "to_return"
+            },
+            {
+              "type": "ReturnCards",
+              "selection": "to_return",
+              "store_count": "returned_count"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_gt",
+                "variable": "returned_count",
+                "value": 0
+              },
+              "if_true": [
+                {
+                  "type": "DrawCards",
+                  "age": "returned_count",
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S022",
+      "name": "Search Trees",
+      "age": 3,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "algorithm",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Look at the top two cards of the [3] supply. Deploy one and Harvest the other.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 3,
+              "count": 2,
+              "location": "hand",
+              "store_result": "drawn_cards"
+            },
+            {
+              "type": "SelectCards",
+              "source": "drawn_cards",
+              "min_count": 1,
+              "max_count": 1,
+              "message": "Choose one to Deploy",
+              "store_result": "to_meld"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "to_meld"
+            },
+            {
+              "type": "ScoreCards",
+              "source": "hand",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S023",
+      "name": "Assembly Line Robot",
+      "age": 3,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you transfer a top card from your tech stack to my tech stack!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectCards",
+                  "source": "board_top",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "store_result": "stolen_top"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "stolen_top",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "board",
+                  "target_location": "board"
+                }
+              ],
+              "required_symbol": "robot"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S024",
+      "name": "Industrial Controller",
+      "age": 3,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "circuit",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Harvest all cards from your hand. Research a [3].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ScoreCards",
+              "source": "hand",
+              "count": "all"
+            },
+            {
+              "type": "DrawCards",
+              "age": 3,
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S025",
+      "name": "Knowledge Representation",
+      "age": 3,
+      "color": "green",
+      "symbols": [
+        "data",
+        "data",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Ethics stack right. If you do, Research a [4].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "green",
+              "direction": "right",
+              "is_optional": true
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "color_splayed",
+                "color": "green",
+                "direction": "right"
+              },
+              "if_true": [
+                {
+                  "type": "DrawCards",
+                  "age": 4,
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S026",
+      "name": "Three Laws of Robotics",
+      "age": 3,
+      "color": "green",
+      "symbols": [
+        "algorithm",
+        "data",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you return all cards from your hand with a Robot icon!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "FilterCards",
+                  "source": "hand",
+                  "criteria": {
+                    "has_symbol": "robot"
+                  },
+                  "store_result": "robot_cards"
+                },
+                {
+                  "type": "ReturnCards",
+                  "selection": "robot_cards"
+                }
+              ],
+              "required_symbol": "algorithm"
+            }
+          ]
+        },
+        {
+          "text": "Research a [3].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 3,
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S027",
+      "name": "SHRDLU",
+      "age": 3,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Choose a domain. Research a [3] and reveal it. If it matches, Deploy it and repeat.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectColor",
+              "source": "all_colors",
+              "store_result": "chosen_color"
+            },
+            {
+              "type": "DrawCards",
+              "age": 3,
+              "count": 1,
+              "location": "reveal",
+              "store_result": "last_drawn"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_color",
+                "color": "chosen_color",
+                "variable": "last_drawn"
+              },
+              "if_true": [
+                {
+                  "type": "MeldCard",
+                  "selection": "last_drawn"
+                },
+                {
+                  "type": "RepeatEffect",
+                  "max_repeats": -1
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S028",
+      "name": "Computer Art",
+      "age": 3,
+      "color": "purple",
+      "symbols": [
+        "human_mind",
+        "neural_net",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may exchange the highest cards in your hand and Harvest pile.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ExchangeCards",
+              "source_location": "hand",
+              "target_location": "score_pile",
+              "selection_criteria": "highest_age"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S029",
+      "name": "Packet Switching",
+      "age": 3,
+      "color": "yellow",
+      "symbols": [
+        "data",
+        "neural_net",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research and Harvest a [3]. You may Proliferate your Connection stack left.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 3,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "ScoreCards",
+              "source": "drawn"
+            },
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "left",
+              "is_optional": true
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S030",
+      "name": "ARPANET",
+      "age": 3,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "data",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Transfer a card from your hand to another player's hand. If you do, Research a [4].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "to_give"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_selected",
+                "variable": "to_give"
+              },
+              "if_true": [
+                {
+                  "type": "SelectAnyPlayer",
+                  "store_result": "target",
+                  "exclude_self": true
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "to_give",
+                  "source_player": "current",
+                  "target_player": "target",
+                  "source_location": "hand",
+                  "target_location": "hand"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": 4,
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S031",
+      "name": "Mainframe",
+      "age": 4,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "circuit",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Processing stack right.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "blue",
+              "direction": "right",
+              "is_optional": true
+            }
+          ]
+        },
+        {
+          "text": "Research and Harvest a [4].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 4,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "ScoreCards",
+              "source": "drawn"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S032",
+      "name": "Microprocessor",
+      "age": 4,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "algorithm",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may return any number of cards from your Harvest pile. For each, Research a card one era higher than the returned card.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "score_pile",
+              "min_count": 0,
+              "max_count": 999,
+              "is_optional": true,
+              "store_result": "to_return"
+            },
+            {
+              "type": "ReturnCards",
+              "selection": "to_return",
+              "store_count": "return_count"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_gt",
+                "variable": "return_count",
+                "value": 0
+              },
+              "if_true": [
+                {
+                  "type": "CalculateValue",
+                  "operation": "add",
+                  "left": "return_count",
+                  "right": 1,
+                  "store_result": "draw_age"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": "draw_age",
+                  "count": "return_count",
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S033",
+      "name": "Cruise Missile",
+      "age": 4,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Harvest two cards from your hand. Research a [4].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 2,
+              "max_count": 2,
+              "is_optional": true,
+              "store_result": "to_score"
+            },
+            {
+              "type": "ScoreCards",
+              "cards": "to_score"
+            },
+            {
+              "type": "DrawCards",
+              "age": 4,
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S034",
+      "name": "CAD/CAM",
+      "age": 4,
+      "color": "red",
+      "symbols": [
+        "circuit",
+        "robot",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Deploy a card from your Harvest pile.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "score_pile",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "to_meld"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "to_meld",
+              "source": "score_pile"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S035",
+      "name": "MYCIN",
+      "age": 4,
+      "color": "green",
+      "symbols": [
+        "data",
+        "algorithm",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Choose a symbol type. Count how many you have. Research and Harvest a card of that value.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectSymbol",
+              "store_result": "chosen_sym"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "chosen_sym",
+              "store_result": "sym_count"
+            },
+            {
+              "type": "DrawCards",
+              "age": "sym_count",
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "ScoreCards",
+              "source": "drawn"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S036",
+      "name": "Fuzzy Logic",
+      "age": 4,
+      "color": "green",
+      "symbols": [
+        "algorithm",
+        "data",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Reveal a card from your hand. If the revealed card's era matches any top card's era on your tech stack, Harvest it and Research a [5].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "revealed",
+              "reveal_only": true
+            },
+            {
+              "type": "RevealCard",
+              "card": "revealed"
+            },
+            {
+              "type": "GetCardAge",
+              "source": "revealed",
+              "store_result": "revealed_age"
+            },
+            {
+              "type": "FilterCards",
+              "source": "board_top",
+              "filter": {
+                "type": "age_equals",
+                "age": "revealed_age"
+              },
+              "store_result": "matching"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_not_empty",
+                "variable": "matching"
+              },
+              "if_true": [
+                {
+                  "type": "ScoreCards",
+                  "cards": "revealed"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": 5,
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S037",
+      "name": "Synthesizer",
+      "age": 4,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you reveal your hand! Return the highest card!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "RevealHand"
+                },
+                {
+                  "type": "SelectHighest",
+                  "source": "hand",
+                  "count": 1,
+                  "store_result": "highest"
+                },
+                {
+                  "type": "ReturnCards",
+                  "selection": "highest"
+                }
+              ],
+              "required_symbol": "neural_net"
+            }
+          ]
+        },
+        {
+          "text": "Research and reveal a [4]. Proliferate the stack matching its domain left.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 4,
+              "count": 1,
+              "location": "reveal",
+              "store_result": "drawn"
+            },
+            {
+              "type": "GetCardColor",
+              "card": "drawn",
+              "store_result": "drawn_color"
+            },
+            {
+              "type": "SplayCards",
+              "color": "drawn_color",
+              "direction": "left"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S038",
+      "name": "Procedural Generation",
+      "age": 4,
+      "color": "purple",
+      "symbols": [
+        "human_mind",
+        "algorithm",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Return all cards from your hand. Research a card of value equal to the number returned plus two.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ReturnCards",
+              "source": "hand",
+              "store_count": "returned_count"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "returned_count",
+              "right": 2,
+              "store_result": "draw_age"
+            },
+            {
+              "type": "DrawCards",
+              "age": "draw_age",
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S039",
+      "name": "Email",
+      "age": 4,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "data",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may transfer a card from your hand to another player's Harvest pile. If you do, transfer a card from their Harvest pile to your hand.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "to_give"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_selected",
+                "variable": "to_give"
+              },
+              "if_true": [
+                {
+                  "type": "SelectAnyPlayer",
+                  "store_result": "target",
+                  "exclude_self": true
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "to_give",
+                  "source_player": "current",
+                  "target_player": "target",
+                  "source_location": "hand",
+                  "target_location": "score_pile"
+                },
+                {
+                  "type": "SelectCards",
+                  "source": "score_pile",
+                  "player": "target",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "store_result": "to_take"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "to_take",
+                  "source_player": "target",
+                  "target_player": "current",
+                  "source_location": "score_pile",
+                  "target_location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S040",
+      "name": "BBS Network",
+      "age": 4,
+      "color": "yellow",
+      "symbols": [
+        "data",
+        "neural_net",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Connection stack right.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "right",
+              "is_optional": true
+            }
+          ]
+        },
+        {
+          "text": "Research a [4].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 4,
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S041",
+      "name": "Backpropagation",
+      "age": 5,
+      "color": "blue",
+      "symbols": [
+        "algorithm",
+        "circuit",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may return a card from your tech stack. If you do, Research two cards of one era higher.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectCards",
+              "source": "board_top",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "to_return"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_selected",
+                "variable": "to_return"
+              },
+              "if_true": [
+                {
+                  "type": "GetCardAge",
+                  "source": "to_return",
+                  "store_result": "card_age"
+                },
+                {
+                  "type": "ReturnCards",
+                  "selection": "to_return"
+                },
+                {
+                  "type": "CalculateValue",
+                  "operation": "add",
+                  "left": "card_age",
+                  "right": 1,
+                  "store_result": "draw_age"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": "draw_age",
+                  "count": 2,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S042",
+      "name": "Support Vector Machine",
+      "age": 5,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "algorithm",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Reveal your hand. Harvest all cards whose era matches a top card era on your tech stack.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "RevealHand"
+            },
+            {
+              "type": "FilterCards",
+              "source": "hand",
+              "criteria": {
+                "same_age_as_board_top": true
+              },
+              "store_result": "matching"
+            },
+            {
+              "type": "ScoreCards",
+              "cards": "matching"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S043",
+      "name": "Drone Warfare",
+      "age": 5,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you transfer your highest top card to my Harvest pile! If you do, I Deploy it instead!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectHighest",
+                  "source": "board_top",
+                  "count": 1,
+                  "store_result": "highest_top"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "highest_top",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "board",
+                  "target_location": "board"
+                }
+              ],
+              "required_symbol": "robot"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S044",
+      "name": "3D Printing",
+      "age": 5,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "algorithm",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Labor stack right. Research and Harvest a [5].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "red",
+              "direction": "right",
+              "is_optional": true
+            },
+            {
+              "type": "DrawCards",
+              "age": 5,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "ScoreCards",
+              "source": "drawn"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S045",
+      "name": "Decision Tree",
+      "age": 5,
+      "color": "green",
+      "symbols": [
+        "data",
+        "algorithm",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Choose two different domains. Proliferate both right. Harvest a card from your hand.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectColor",
+              "source": "board_colors",
+              "filter_splayable_direction": "right",
+              "store_result": "color1"
+            },
+            {
+              "type": "SplayCards",
+              "color": "color1",
+              "direction": "right"
+            },
+            {
+              "type": "SelectColor",
+              "source": "board_colors",
+              "filter_splayable_direction": "right",
+              "store_result": "color2"
+            },
+            {
+              "type": "SplayCards",
+              "color": "color2",
+              "direction": "right"
+            },
+            {
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "to_score"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_selected",
+                "variable": "to_score"
+              },
+              "if_true": [
+                {
+                  "type": "ScoreCards",
+                  "cards": "to_score"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S046",
+      "name": "Bias Detection",
+      "age": 5,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "data",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you return a card from your Harvest pile for each visible Human Mind icon I have!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "CountSymbols",
+                  "symbol": "human_mind",
+                  "player": "self",
+                  "store_result": "mind_count"
+                },
+                {
+                  "type": "SelectCards",
+                  "source": "score_pile",
+                  "min_count": "mind_count",
+                  "max_count": "mind_count",
+                  "store_result": "to_return"
+                },
+                {
+                  "type": "ReturnCards",
+                  "selection": "to_return"
+                }
+              ],
+              "required_symbol": "human_mind"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S047",
+      "name": "Neural Style Transfer",
+      "age": 5,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Exchange the highest cards in your hand and Harvest pile. You may Proliferate your Creativity stack right.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ExchangeCards",
+              "source_location": "hand",
+              "target_location": "score_pile",
+              "selection_criteria": "highest_age"
+            },
+            {
+              "type": "SplayCards",
+              "color": "purple",
+              "direction": "right",
+              "is_optional": true
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S048",
+      "name": "Deepfake",
+      "age": 5,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you reveal your hand! Deploy all revealed cards that match a domain on my tech stack!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "RevealHand",
+                  "store_cards": "opponent_hand"
+                },
+                {
+                  "type": "FilterCards",
+                  "source": "opponent_hand",
+                  "criteria": {
+                    "same_color_as_board": true
+                  },
+                  "store_result": "matching"
+                },
+                {
+                  "type": "MeldCard",
+                  "selection": "matching"
+                }
+              ],
+              "required_symbol": "neural_net"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S049",
+      "name": "Social Media Algorithm",
+      "age": 5,
+      "color": "yellow",
+      "symbols": [
+        "data",
+        "neural_net",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research and Harvest a [5] for each domain on your tech stack.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountUniqueColors",
+              "source": "board",
+              "store_result": "color_count"
+            },
+            {
+              "type": "RepeatAction",
+              "count": "color_count",
+              "actions": [
+                {
+                  "type": "DrawCards",
+                  "age": 5,
+                  "count": 1,
+                  "location": "hand",
+                  "store_result": "drawn"
+                },
+                {
+                  "type": "ScoreCards",
+                  "source": "drawn"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S050",
+      "name": "Recommendation Engine",
+      "age": 5,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "data",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Look at two cards from the [5] supply. Deploy one, give the other to an opponent.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 5,
+              "count": 2,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "SelectCards",
+              "source": "drawn",
+              "min_count": 1,
+              "max_count": 1,
+              "message": "Choose one to Deploy",
+              "store_result": "to_meld"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "to_meld"
+            },
+            {
+              "type": "SelectAnyPlayer",
+              "store_result": "target",
+              "exclude_self": true
+            },
+            {
+              "type": "TransferBetweenPlayers",
+              "cards": "drawn",
+              "source_player": "current",
+              "target_player": "target",
+              "source_location": "hand",
+              "target_location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S051",
+      "name": "Convolutional Neural Net",
+      "age": 6,
+      "color": "blue",
+      "symbols": [
+        "algorithm",
+        "circuit",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research and reveal a [6]. If it has an Algorithm icon, Harvest it and repeat this effect.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 6,
+              "count": 1,
+              "location": "reveal",
+              "store_result": "drawn"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_has_symbol",
+                "card": "drawn",
+                "symbol": "algorithm"
+              },
+              "if_true": [
+                {
+                  "type": "ScoreCards",
+                  "source": "drawn"
+                },
+                {
+                  "type": "RepeatEffect",
+                  "max_repeats": -1
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S052",
+      "name": "GPU Computing",
+      "age": 6,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "circuit",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Processing stack right. Count your Circuit icons and Research a card of that value.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "blue",
+              "direction": "right",
+              "is_optional": true
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "circuit",
+              "store_result": "circuit_count"
+            },
+            {
+              "type": "DrawCards",
+              "age": "circuit_count",
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S053",
+      "name": "Autonomous Vehicle",
+      "age": 6,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "algorithm",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Return your two lowest-era hand cards. Research two [7]s.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectLowest",
+              "source": "hand",
+              "count": 2,
+              "store_result": "lowest"
+            },
+            {
+              "type": "ReturnCards",
+              "selection": "lowest"
+            },
+            {
+              "type": "DrawCards",
+              "age": 7,
+              "count": 2,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S054",
+      "name": "Warehouse Robot",
+      "age": 6,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "circuit",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Harvest your highest top card. Deploy a card from your Harvest pile.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectHighest",
+              "source": "board_top",
+              "count": 1,
+              "store_result": "highest_top"
+            },
+            {
+              "type": "ScoreCards",
+              "cards": "highest_top"
+            },
+            {
+              "type": "SelectCards",
+              "source": "score_pile",
+              "min_count": 1,
+              "max_count": 1,
+              "store_result": "to_meld"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "to_meld",
+              "source": "score_pile"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S055",
+      "name": "Alignment Research",
+      "age": 6,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "data",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Ethics stack up.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "green",
+              "direction": "up",
+              "is_optional": true
+            }
+          ]
+        },
+        {
+          "text": "If your Ethics is Proliferated up, Research and Harvest a [7].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "color_splayed",
+                "color": "green",
+                "direction": "up"
+              },
+              "if_true": [
+                {
+                  "type": "DrawCards",
+                  "age": 7,
+                  "count": 1,
+                  "location": "hand",
+                  "store_result": "drawn"
+                },
+                {
+                  "type": "ScoreCards",
+                  "source": "drawn"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S056",
+      "name": "Differential Privacy",
+      "age": 6,
+      "color": "green",
+      "symbols": [
+        "data",
+        "human_mind",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Return all cards from all players' Harvest piles. Each player Researches a card of value equal to the number they returned.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ReturnCards",
+              "source": "score_pile",
+              "store_count": "my_count"
+            },
+            {
+              "type": "DrawCards",
+              "age": "my_count",
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S057",
+      "name": "Generative Adversarial Network",
+      "age": 6,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "neural_net",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research and reveal a [6]. If it matches a domain on your tech stack, Deploy it. Otherwise, Harvest it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 6,
+              "count": 1,
+              "location": "reveal",
+              "store_result": "drawn"
+            },
+            {
+              "type": "GetCardColor",
+              "card": "drawn",
+              "store_result": "drawn_color"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "color_on_board",
+                "color": "drawn_color"
+              },
+              "if_true": [
+                {
+                  "type": "MeldCard",
+                  "selection": "drawn"
+                }
+              ],
+              "if_false": [
+                {
+                  "type": "ScoreCards",
+                  "source": "drawn"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S058",
+      "name": "AI Art Generator",
+      "age": 6,
+      "color": "purple",
+      "symbols": [
+        "human_mind",
+        "neural_net",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Creativity stack up.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "purple",
+              "direction": "up",
+              "is_optional": true
+            }
+          ]
+        },
+        {
+          "text": "Research a [6].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 6,
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S059",
+      "name": "Viral Network",
+      "age": 6,
+      "color": "yellow",
+      "symbols": [
+        "data",
+        "neural_net",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you transfer a card from your hand to my Harvest pile!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectCards",
+                  "source": "hand",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "store_result": "to_give"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "to_give",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "hand",
+                  "target_location": "score_pile"
+                }
+              ],
+              "required_symbol": "data"
+            }
+          ]
+        },
+        {
+          "text": "Research a [6]. You may Proliferate your Connection stack right.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 6,
+              "count": 1,
+              "location": "hand"
+            },
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "right",
+              "is_optional": true
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S060",
+      "name": "Chatbot",
+      "age": 6,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research two [6]s. Keep one and give the other to any opponent.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 6,
+              "count": 2,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "SelectCards",
+              "source": "drawn",
+              "min_count": 1,
+              "max_count": 1,
+              "message": "Choose a card to give away",
+              "store_result": "to_give"
+            },
+            {
+              "type": "SelectAnyPlayer",
+              "store_result": "target",
+              "exclude_self": true
+            },
+            {
+              "type": "TransferBetweenPlayers",
+              "cards": "to_give",
+              "source_player": "current",
+              "target_player": "target",
+              "source_location": "hand",
+              "target_location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S061",
+      "name": "Transformer Architecture",
+      "age": 7,
+      "color": "blue",
+      "symbols": [
+        "algorithm",
+        "circuit",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Processing stack up. Research a card of value equal to the number of visible Algorithm icons you have.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "blue",
+              "direction": "up",
+              "is_optional": true
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "algorithm",
+              "store_result": "algo_count"
+            },
+            {
+              "type": "DrawCards",
+              "age": "algo_count",
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S062",
+      "name": "Cloud Computing",
+      "age": 7,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "circuit",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Return all cards from your hand. Research three cards, each of one era higher than the highest card returned.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectHighest",
+              "source": "hand",
+              "count": 1,
+              "store_result": "highest_hand",
+              "skip_tie_break": true
+            },
+            {
+              "type": "GetCardAge",
+              "source": "highest_hand",
+              "store_result": "highest_age"
+            },
+            {
+              "type": "ReturnCards",
+              "source": "hand"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "highest_age",
+              "right": 1,
+              "store_result": "draw_age"
+            },
+            {
+              "type": "DrawCards",
+              "age": "draw_age",
+              "count": 3,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S063",
+      "name": "Autonomous Weapons",
+      "age": 7,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you transfer your three highest-era cards from your hand to my Harvest pile!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectHighest",
+                  "source": "hand",
+                  "count": 3,
+                  "store_result": "highest_cards"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "highest_cards",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "hand",
+                  "target_location": "score_pile"
+                }
+              ],
+              "required_symbol": "robot"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S064",
+      "name": "Smart Factory",
+      "age": 7,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "circuit",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Harvest all top cards from your tech stack. Research and Deploy a [7].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ScoreCards",
+              "source": "board_top",
+              "count": "all"
+            },
+            {
+              "type": "DrawCards",
+              "age": 7,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S065",
+      "name": "RLHF",
+      "age": 7,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "algorithm",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate any stack up. If you do, Research a [8].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectColor",
+              "source": "board_colors",
+              "filter_splayable_direction": "up",
+              "is_optional": true,
+              "store_result": "chosen_color"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "color_selected"
+              },
+              "if_true": [
+                {
+                  "type": "SplayCards",
+                  "color": "chosen_color",
+                  "direction": "up"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": 8,
+                  "count": 1,
+                  "location": "hand"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S066",
+      "name": "AI Safety Framework",
+      "age": 7,
+      "color": "green",
+      "symbols": [
+        "data",
+        "human_mind",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you return all cards from your tech stack with era higher than your highest Harvest card!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectHighest",
+                  "source": "score_pile",
+                  "count": 1,
+                  "store_result": "highest_score",
+                  "skip_tie_break": true
+                },
+                {
+                  "type": "GetCardAge",
+                  "source": "highest_score",
+                  "store_result": "max_age"
+                },
+                {
+                  "type": "FilterCards",
+                  "source": "board",
+                  "criteria": {
+                    "min_age": "max_age"
+                  },
+                  "store_result": "to_return"
+                },
+                {
+                  "type": "ReturnCards",
+                  "selection": "to_return"
+                }
+              ],
+              "required_symbol": "data"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S067",
+      "name": "Diffusion Model",
+      "age": 7,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "neural_net",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Creativity stack up. Research a [7] and Deploy it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "purple",
+              "direction": "up",
+              "is_optional": true
+            },
+            {
+              "type": "DrawCards",
+              "age": 7,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S068",
+      "name": "Large Language Model",
+      "age": 7,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "algorithm",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research and reveal a [7]. If it is Creativity, Harvest it and Research a [8]. Otherwise, Deploy it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 7,
+              "count": 1,
+              "location": "reveal",
+              "store_result": "drawn"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "card_color",
+                "color": "purple",
+                "variable": "drawn"
+              },
+              "if_true": [
+                {
+                  "type": "ScoreCards",
+                  "source": "drawn"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": 8,
+                  "count": 1,
+                  "location": "hand"
+                }
+              ],
+              "if_false": [
+                {
+                  "type": "MeldCard",
+                  "selection": "drawn"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S069",
+      "name": "Social Credit System",
+      "age": 7,
+      "color": "yellow",
+      "symbols": [
+        "data",
+        "neural_net",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you Proliferate all your stacks left!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SplayCards",
+                  "color": "blue",
+                  "direction": "left"
+                },
+                {
+                  "type": "SplayCards",
+                  "color": "red",
+                  "direction": "left"
+                },
+                {
+                  "type": "SplayCards",
+                  "color": "green",
+                  "direction": "left"
+                },
+                {
+                  "type": "SplayCards",
+                  "color": "purple",
+                  "direction": "left"
+                },
+                {
+                  "type": "SplayCards",
+                  "color": "yellow",
+                  "direction": "left"
+                }
+              ],
+              "required_symbol": "data"
+            }
+          ]
+        },
+        {
+          "text": "You may Proliferate your Connection stack up.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "up",
+              "is_optional": true
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "data"
+    },
+    {
+      "id": "S070",
+      "name": "Digital Twin",
+      "age": 7,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "data",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Execute the top card of any other player's tech stack. You use the effects as if they were yours.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectColor",
+              "source": "all_colors",
+              "store_result": "target_color"
+            },
+            {
+              "type": "SelectAnyPlayer",
+              "store_result": "target_player",
+              "exclude_self": true
+            },
+            {
+              "type": "ExecuteDogma",
+              "source": "board_top",
+              "color": "target_color",
+              "player": "target_player",
+              "execution_mode": "self"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S071",
+      "name": "Quantum Computer",
+      "age": 8,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "algorithm",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Return all cards from your hand and Harvest pile. Research three [10]s.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ReturnCards",
+              "source": "hand"
+            },
+            {
+              "type": "ReturnCards",
+              "source": "score_pile"
+            },
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": 3,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S072",
+      "name": "Neuromorphic Chip",
+      "age": 8,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "neural_net",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Processing stack up. Research a card of value equal to your total number of visible icons divided by three (round down).",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "blue",
+              "direction": "up",
+              "is_optional": true
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "circuit",
+              "store_result": "c1"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "neural_net",
+              "store_result": "c2"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "data",
+              "store_result": "c3"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "algorithm",
+              "store_result": "c4"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "human_mind",
+              "store_result": "c5"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "robot",
+              "store_result": "c6"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "c1",
+              "right": "c2",
+              "store_result": "sum1"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "sum1",
+              "right": "c3",
+              "store_result": "sum2"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "sum2",
+              "right": "c4",
+              "store_result": "sum3"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "sum3",
+              "right": "c5",
+              "store_result": "sum4"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "sum4",
+              "right": "c6",
+              "store_result": "total"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "divide",
+              "left": "total",
+              "right": 3,
+              "store_result": "draw_age"
+            },
+            {
+              "type": "DrawCards",
+              "age": "draw_age",
+              "count": 1,
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S073",
+      "name": "Military AI",
+      "age": 8,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you transfer all but one top card from your tech stack to my Harvest pile!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectCards",
+                  "source": "board_top",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "message": "Choose one top card to KEEP",
+                  "store_result": "kept"
+                },
+                {
+                  "type": "FilterCards",
+                  "source": "board_top",
+                  "store_result": "others"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "others",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "board",
+                  "target_location": "score_pile"
+                }
+              ],
+              "required_symbol": "robot"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S074",
+      "name": "Humanoid Robot",
+      "age": 8,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "human_mind",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Harvest all cards from your tech stack. Research a [8] and Deploy it. Research a [8] and Deploy it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ScoreCards",
+              "source": "board",
+              "count": "all"
+            },
+            {
+              "type": "DrawCards",
+              "age": 8,
+              "count": 1,
+              "location": "hand",
+              "store_result": "d1"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "d1"
+            },
+            {
+              "type": "DrawCards",
+              "age": 8,
+              "count": 1,
+              "location": "hand",
+              "store_result": "d2"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "d2"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S075",
+      "name": "Constitutional AI",
+      "age": 8,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "algorithm",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate any two stacks up.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectColor",
+              "source": "board_colors",
+              "filter_splayable_direction": "up",
+              "is_optional": true,
+              "store_result": "c1"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "color_selected"
+              },
+              "if_true": [
+                {
+                  "type": "SplayCards",
+                  "color": "c1",
+                  "direction": "up"
+                },
+                {
+                  "type": "SelectColor",
+                  "source": "board_colors",
+                  "filter_splayable_direction": "up",
+                  "is_optional": true,
+                  "store_result": "c2"
+                },
+                {
+                  "type": "ConditionalAction",
+                  "condition": {
+                    "type": "color_selected"
+                  },
+                  "if_true": [
+                    {
+                      "type": "SplayCards",
+                      "color": "c2",
+                      "direction": "up"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S076",
+      "name": "AI Rights Declaration",
+      "age": 8,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "data",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "If you have more visible Human Mind icons than any other player, claim a Breakthrough of value equal to your Human Mind count.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "single_player_with_most_symbol",
+                "symbol": "human_mind"
+              },
+              "if_true": [
+                {
+                  "type": "CountSymbols",
+                  "symbol": "human_mind",
+                  "store_result": "mind_count"
+                },
+                {
+                  "type": "ClaimAchievement",
+                  "age": "mind_count"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S077",
+      "name": "AI Composer",
+      "age": 8,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research and Deploy a [8]. Proliferate the deployed card's domain up.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 8,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            },
+            {
+              "type": "GetCardColor",
+              "card": "drawn",
+              "store_result": "drawn_color"
+            },
+            {
+              "type": "SplayCards",
+              "color": "drawn_color",
+              "direction": "up"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S078",
+      "name": "Dream Synthesizer",
+      "age": 8,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you return all cards from your hand with era higher than your top card!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "SelectHighest",
+                  "source": "board_top",
+                  "count": 1,
+                  "store_result": "my_top",
+                  "skip_tie_break": true
+                },
+                {
+                  "type": "GetCardAge",
+                  "source": "my_top",
+                  "store_result": "top_age"
+                },
+                {
+                  "type": "FilterCards",
+                  "source": "hand",
+                  "criteria": {
+                    "min_age": "top_age"
+                  },
+                  "store_result": "to_return"
+                },
+                {
+                  "type": "ReturnCards",
+                  "selection": "to_return"
+                }
+              ],
+              "required_symbol": "neural_net"
+            }
+          ]
+        },
+        {
+          "text": "Return all cards from your hand. Research a [9] for each different domain returned.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountUniqueColors",
+              "cards": "hand",
+              "scope": "from_cards",
+              "store_result": "unique_count"
+            },
+            {
+              "type": "ReturnCards",
+              "source": "hand"
+            },
+            {
+              "type": "DrawCards",
+              "age": 9,
+              "count": "unique_count",
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S079",
+      "name": "Empathy Engine",
+      "age": 8,
+      "color": "yellow",
+      "symbols": [
+        "human_mind",
+        "neural_net",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "You may Proliferate your Connection stack up. If any opponent has more Breakthroughs than you, claim a Breakthrough.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "up",
+              "is_optional": true
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "not_highest_score"
+              },
+              "if_true": [
+                {
+                  "type": "ClaimAchievement",
+                  "achievement": "auto"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S080",
+      "name": "Global Brain",
+      "age": 8,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "data",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Each player Proliferates all their stacks up.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "blue",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "red",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "green",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "purple",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "up"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S081",
+      "name": "Recursive Self-Improvement",
+      "age": 9,
+      "color": "blue",
+      "symbols": [
+        "algorithm",
+        "circuit",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [9] and Deploy it. Execute the deployed card.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 9,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            },
+            {
+              "type": "ExecuteDogma",
+              "card": "drawn",
+              "execution_mode": "self"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "algorithm"
+    },
+    {
+      "id": "S082",
+      "name": "Matrioshka Brain",
+      "age": 9,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "circuit",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Return all cards from all players' hands. Each player Researches a [10] for each card they returned.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountCards",
+              "location": "hand",
+              "store_result": "my_hand_count"
+            },
+            {
+              "type": "ReturnCards",
+              "source": "hand"
+            },
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": "my_hand_count",
+              "location": "hand"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S083",
+      "name": "Von Neumann Probe",
+      "age": 9,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you return all top cards and all Harvest cards! Research a [1] for each card returned!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "ReturnCards",
+                  "source": "board_top",
+                  "store_count": "top_count"
+                },
+                {
+                  "type": "ReturnCards",
+                  "source": "score_pile",
+                  "store_count": "score_count"
+                },
+                {
+                  "type": "CalculateValue",
+                  "operation": "add",
+                  "left": "top_count",
+                  "right": "score_count",
+                  "store_result": "total_returned"
+                },
+                {
+                  "type": "DrawCards",
+                  "age": 1,
+                  "count": "total_returned",
+                  "location": "hand"
+                }
+              ],
+              "required_symbol": "robot"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S084",
+      "name": "Nanoscale Assembler",
+      "age": 9,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "algorithm",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Deploy all cards from your hand. If you have five or more domains on your tech stack, you win.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "MeldCard",
+              "selection": "hand"
+            },
+            {
+              "type": "CountUniqueColors",
+              "source": "board",
+              "store_result": "board_colors"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_gte",
+                "variable": "board_colors",
+                "value": 5
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S085",
+      "name": "AI Governance Council",
+      "age": 9,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "data",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "If you have the most visible Human Mind icons, claim two Breakthroughs of any available eras.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "single_player_with_most_symbol",
+                "symbol": "human_mind"
+              },
+              "if_true": [
+                {
+                  "type": "SelectAchievement",
+                  "is_optional": false,
+                  "store_as": "a1"
+                },
+                {
+                  "type": "ClaimAchievement",
+                  "achievement": "a1"
+                },
+                {
+                  "type": "SelectAchievement",
+                  "is_optional": true,
+                  "store_as": "a2"
+                },
+                {
+                  "type": "ConditionalAction",
+                  "condition": {
+                    "type": "achievement_selected"
+                  },
+                  "if_true": [
+                    {
+                      "type": "ClaimAchievement",
+                      "achievement": "a2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S086",
+      "name": "Mind Uploading",
+      "age": 9,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "neural_net",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Exchange all cards between your hand and Harvest pile. You may Proliferate any stack up.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ExchangeCards",
+              "source_location": "hand",
+              "target_location": "score_pile",
+              "selection_criteria": "all"
+            },
+            {
+              "type": "SelectColor",
+              "source": "board_colors",
+              "filter_splayable_direction": "up",
+              "is_optional": true,
+              "store_result": "chosen_color"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "color_selected"
+              },
+              "if_true": [
+                {
+                  "type": "SplayCards",
+                  "color": "chosen_color",
+                  "direction": "up"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S087",
+      "name": "Singularity Art",
+      "age": 9,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "neural_net",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research a [10]. Deploy it. Proliferate its domain up. Execute it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            },
+            {
+              "type": "GetCardColor",
+              "card": "drawn",
+              "store_result": "drawn_color"
+            },
+            {
+              "type": "SplayCards",
+              "color": "drawn_color",
+              "direction": "up"
+            },
+            {
+              "type": "ExecuteDogma",
+              "card": "drawn",
+              "execution_mode": "self"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S088",
+      "name": "Universal Translator",
+      "age": 9,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Each player draws and deploys a [9]. You may claim a Breakthrough.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 9,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            },
+            {
+              "type": "ClaimAchievement",
+              "achievement": "auto"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S089",
+      "name": "Hive Mind",
+      "age": 9,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "data",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "All players reveal their hands. Transfer the highest card from each opponent to your hand.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "TransferBetweenPlayers",
+              "from_all_opponents": true,
+              "filters": [
+                {
+                  "type": "highest_age"
+                }
+              ],
+              "source_location": "hand",
+              "target_location": "hand",
+              "target_player": "current"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S101",
+      "name": "Empathic Convergence",
+      "age": 9,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Each player reveals their hand. You may exchange your entire hand with any opponent's hand.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "RevealHand"
+            },
+            {
+              "type": "SelectAnyPlayer",
+              "store_result": "target",
+              "exclude_self": true
+            },
+            {
+              "type": "ExchangeCards",
+              "source_location": "hand",
+              "target_location": "hand",
+              "selection_criteria": "all"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S090",
+      "name": "Technological Singularity",
+      "age": 10,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "circuit",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "If you have 12 or more total visible icons, you achieve the Singularity and win the game.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountSymbols",
+              "symbol": "circuit",
+              "store_result": "c1"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "neural_net",
+              "store_result": "c2"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "data",
+              "store_result": "c3"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "algorithm",
+              "store_result": "c4"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "human_mind",
+              "store_result": "c5"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "robot",
+              "store_result": "c6"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "c1",
+              "right": "c2",
+              "store_result": "s1"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "s1",
+              "right": "c3",
+              "store_result": "s2"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "s2",
+              "right": "c4",
+              "store_result": "s3"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "s3",
+              "right": "c5",
+              "store_result": "s4"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "s4",
+              "right": "c6",
+              "store_result": "total"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_gte",
+                "variable": "total",
+                "value": 12
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S091",
+      "name": "Dyson Sphere",
+      "age": 10,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "circuit",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Return all cards from all supply piles of era 7 or lower. If you have three or more Breakthroughs, you win.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "JunkAllDeck",
+              "age": 1
+            },
+            {
+              "type": "JunkAllDeck",
+              "age": 2
+            },
+            {
+              "type": "JunkAllDeck",
+              "age": 3
+            },
+            {
+              "type": "JunkAllDeck",
+              "age": 4
+            },
+            {
+              "type": "JunkAllDeck",
+              "age": 5
+            },
+            {
+              "type": "JunkAllDeck",
+              "age": 6
+            },
+            {
+              "type": "JunkAllDeck",
+              "age": 7
+            },
+            {
+              "type": "CountCards",
+              "location": "achievements",
+              "store_result": "ach_count"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_gte",
+                "variable": "ach_count",
+                "value": 3
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S093",
+      "name": "Self-Replicating Swarm",
+      "age": 10,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "robot",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "I Override you return all top cards from your tech stack!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "actions": [
+                {
+                  "type": "ReturnCards",
+                  "source": "board_top",
+                  "store_count": "returned"
+                }
+              ],
+              "required_symbol": "robot"
+            }
+          ]
+        },
+        {
+          "text": "Research a [10] and Deploy it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "robot"
+    },
+    {
+      "id": "S095",
+      "name": "Universal Ethics Engine",
+      "age": 10,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "human_mind",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "If you have the most Human Mind icons, and your Harvest pile value is 75 or more, you win.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "and",
+                "conditions": [
+                  {
+                    "type": "single_player_with_most_symbol",
+                    "symbol": "human_mind"
+                  },
+                  {
+                    "type": "variable_gte",
+                    "variable": "score",
+                    "value": 75
+                  }
+                ]
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S096",
+      "name": "Benevolent Superintelligence",
+      "age": 10,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "algorithm",
+        "human_mind",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "All players Proliferate all stacks up. Each player claims a Breakthrough of their choice.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "blue",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "red",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "green",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "purple",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "up"
+            },
+            {
+              "type": "SelectAchievement",
+              "is_optional": true,
+              "store_as": "chosen_ach"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "achievement_selected"
+              },
+              "if_true": [
+                {
+                  "type": "ClaimAchievement",
+                  "achievement": "chosen_ach"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "human_mind"
+    },
+    {
+      "id": "S097",
+      "name": "Simulated Reality",
+      "age": 10,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "neural_net",
+        "neural_net",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Exchange your entire tech stack with an opponent. If you now have more Breakthroughs than them, you win.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SelectAnyPlayer",
+              "store_result": "target",
+              "exclude_self": true
+            },
+            {
+              "type": "ExchangeCards",
+              "source_location": "board",
+              "target_location": "board"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "has_twice_achievements_of_opponents"
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S098",
+      "name": "Transcendent Creativity",
+      "age": 10,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Research and Deploy a [10]. Execute the deployed card. Repeat this once.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": 1,
+              "location": "hand",
+              "store_result": "d1"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "d1"
+            },
+            {
+              "type": "ExecuteDogma",
+              "card": "d1",
+              "execution_mode": "self"
+            },
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": 1,
+              "location": "hand",
+              "store_result": "d2"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "d2"
+            },
+            {
+              "type": "ExecuteDogma",
+              "card": "d2",
+              "execution_mode": "self"
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S099",
+      "name": "Omniscient Network",
+      "age": 10,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "algorithm",
+        "circuit",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "If all five domains are represented on your tech stack and all are Proliferated up, you win.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountUniqueColors",
+              "source": "board",
+              "store_result": "color_count"
+            },
+            {
+              "type": "CountColorsWithSplay",
+              "direction": "up",
+              "store_result": "up_count"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "and",
+                "conditions": [
+                  {
+                    "type": "variable_gte",
+                    "variable": "color_count",
+                    "value": 5
+                  },
+                  {
+                    "type": "variable_gte",
+                    "variable": "up_count",
+                    "value": 5
+                  }
+                ]
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "circuit"
+    },
+    {
+      "id": "S100",
+      "name": "The Singularity",
+      "age": 10,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "algorithm",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Count all visible icons across all players. If you have the most total icons, you achieve the Singularity and win.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountSymbols",
+              "symbol": "circuit",
+              "store_result": "c1"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "neural_net",
+              "store_result": "c2"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "data",
+              "store_result": "c3"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "algorithm",
+              "store_result": "c4"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "human_mind",
+              "store_result": "c5"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "robot",
+              "store_result": "c6"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "c1",
+              "right": "c2",
+              "store_result": "s1"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "s1",
+              "right": "c3",
+              "store_result": "s2"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "s2",
+              "right": "c4",
+              "store_result": "s3"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "s3",
+              "right": "c5",
+              "store_result": "s4"
+            },
+            {
+              "type": "CalculateValue",
+              "operation": "add",
+              "left": "s4",
+              "right": "c6",
+              "store_result": "my_total"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "single_player_with_most_symbol",
+                "symbol": "circuit"
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S102",
+      "name": "Universal Communion",
+      "age": 10,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "data",
+        null
+      ],
+      "dogma_effects": [
+        {
+          "text": "Each player Researches and Harvests a [10]. If your Harvest pile has cards of 8 or more different eras, you win.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "ScoreCards",
+              "source": "drawn"
+            },
+            {
+              "type": "CountUniqueValues",
+              "selection": "score_pile",
+              "criteria": "age",
+              "store_result": "unique_ages"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_gte",
+                "variable": "unique_ages",
+                "value": 8
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "dogma_resource": "neural_net"
+    },
+    {
+      "id": "S103",
+      "name": "Computronium",
+      "age": 10,
+      "color": "blue",
+      "symbols": [
+        "circuit",
+        "algorithm",
+        "circuit",
+        null
+      ],
+      "dogma_resource": "circuit",
+      "dogma_effects": [
+        {
+          "text": "Return all cards from your hand. For each card returned, Research a [10] and Deploy it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountCards",
+              "location": "hand",
+              "store_result": "hand_count"
+            },
+            {
+              "type": "ReturnCards",
+              "source": "hand"
+            },
+            {
+              "type": "RepeatAction",
+              "count": "hand_count",
+              "actions": [
+                {
+                  "type": "DrawCards",
+                  "age": 10,
+                  "count": 1,
+                  "location": "hand",
+                  "store_result": "drawn"
+                },
+                {
+                  "type": "MeldCard",
+                  "selection": "drawn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S104",
+      "name": "Swarm Intelligence",
+      "age": 10,
+      "color": "red",
+      "symbols": [
+        "robot",
+        "robot",
+        "algorithm",
+        null
+      ],
+      "dogma_resource": "robot",
+      "dogma_effects": [
+        {
+          "text": "I Override you transfer all cards from your tech stack with Robot icons to my Harvest pile!",
+          "is_demand": true,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DemandEffect",
+              "required_symbol": "robot",
+              "actions": [
+                {
+                  "type": "FilterCards",
+                  "source": "board",
+                  "criteria": {
+                    "has_symbol": "robot"
+                  },
+                  "store_result": "robot_cards"
+                },
+                {
+                  "type": "TransferBetweenPlayers",
+                  "cards": "robot_cards",
+                  "source_player": "current",
+                  "target_player": "demanding_player",
+                  "source_location": "board",
+                  "target_location": "score_pile"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S105",
+      "name": "Moral Singularity",
+      "age": 10,
+      "color": "green",
+      "symbols": [
+        "human_mind",
+        "data",
+        "algorithm",
+        null
+      ],
+      "dogma_resource": "human_mind",
+      "dogma_effects": [
+        {
+          "text": "If you have more Human Mind icons than Robot icons across all players combined, claim two Breakthroughs.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "CountSymbols",
+              "symbol": "human_mind",
+              "store_result": "my_minds"
+            },
+            {
+              "type": "CountSymbols",
+              "symbol": "robot",
+              "player": "all",
+              "store_result": "all_robots"
+            },
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "variable_gt",
+                "variable": "my_minds",
+                "value": "all_robots"
+              },
+              "if_true": [
+                {
+                  "type": "SelectAchievement",
+                  "is_optional": false,
+                  "store_as": "a1"
+                },
+                {
+                  "type": "ClaimAchievement",
+                  "achievement": "a1"
+                },
+                {
+                  "type": "SelectAchievement",
+                  "is_optional": true,
+                  "store_as": "a2"
+                },
+                {
+                  "type": "ConditionalAction",
+                  "condition": {
+                    "type": "achievement_selected"
+                  },
+                  "if_true": [
+                    {
+                      "type": "ClaimAchievement",
+                      "achievement": "a2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S106",
+      "name": "Infinite Canvas",
+      "age": 10,
+      "color": "purple",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "neural_net",
+        null
+      ],
+      "dogma_resource": "neural_net",
+      "dogma_effects": [
+        {
+          "text": "Proliferate all your stacks up. Research and Deploy a [10]. Execute it.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "SplayCards",
+              "color": "blue",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "red",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "green",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "purple",
+              "direction": "up"
+            },
+            {
+              "type": "SplayCards",
+              "color": "yellow",
+              "direction": "up"
+            },
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "MeldCard",
+              "selection": "drawn"
+            },
+            {
+              "type": "ExecuteDogma",
+              "card": "drawn",
+              "execution_mode": "self"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S107",
+      "name": "Omega Point",
+      "age": 10,
+      "color": "yellow",
+      "symbols": [
+        "neural_net",
+        "human_mind",
+        "data",
+        null
+      ],
+      "dogma_resource": "neural_net",
+      "dogma_effects": [
+        {
+          "text": "If your Harvest pile score is higher than all other players' scores combined, you win.",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "ConditionalAction",
+              "condition": {
+                "type": "score_greater_than_all_opponents_combined"
+              },
+              "if_true": [
+                {
+                  "type": "WinGame"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Research and Harvest a [10].",
+          "is_demand": false,
+          "symbol_count": 1,
+          "actions": [
+            {
+              "type": "DrawCards",
+              "age": 10,
+              "count": 1,
+              "location": "hand",
+              "store_result": "drawn"
+            },
+            {
+              "type": "ScoreCards",
+              "source": "drawn"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "special_achievements": [
+    {
+      "id": "SA01",
+      "name": "Emergence",
+      "original": "Monument",
+      "trigger": "Archive 6 cards OR Harvest 6 cards in a single turn",
+      "trigger_type": "turn_event",
+      "description": "The moment self-organizing complexity first appears from simple rules. Achieved through massive accumulation \u2014 either building deep tech stacks (archiving 6) or harvesting resources at scale (scoring 6) in a single turn.",
+      "condition": {
+        "type": "or",
+        "conditions": [
+          {
+            "type": "tucked_count_this_turn",
+            "count": 6
+          },
+          {
+            "type": "scored_count_this_turn",
+            "count": 6
+          }
+        ]
+      },
+      "thematic_note": "Represents the phase transition where quantity becomes quality \u2014 enough simple operations producing emergent behavior."
+    },
+    {
+      "id": "SA02",
+      "name": "Dominion",
+      "original": "Empire",
+      "trigger": "Have 3 or more of every icon type visible on your tech stack",
+      "trigger_type": "board_state",
+      "description": "Total mastery across all dimensions of the AI landscape. You have built infrastructure so comprehensive that every resource type \u2014 hardware, intelligence, data, methods, humanity, and automation \u2014 is abundantly represented.",
+      "condition": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "symbol_count_at_least",
+            "symbol": "circuit",
+            "count": 3
+          },
+          {
+            "type": "symbol_count_at_least",
+            "symbol": "neural_net",
+            "count": 3
+          },
+          {
+            "type": "symbol_count_at_least",
+            "symbol": "data",
+            "count": 3
+          },
+          {
+            "type": "symbol_count_at_least",
+            "symbol": "algorithm",
+            "count": 3
+          },
+          {
+            "type": "symbol_count_at_least",
+            "symbol": "human_mind",
+            "count": 3
+          },
+          {
+            "type": "symbol_count_at_least",
+            "symbol": "robot",
+            "count": 3
+          }
+        ]
+      },
+      "thematic_note": "A civilization that has invested equally across all technological dimensions \u2014 no blind spots, no neglected domains."
+    },
+    {
+      "id": "SA03",
+      "name": "Consciousness",
+      "original": "World",
+      "trigger": "Have 12 or more visible Human Mind icons on your tech stack",
+      "trigger_type": "board_state",
+      "description": "The threshold where artificial systems achieve genuine understanding. An overwhelming concentration of Human Mind resources signals that your AI has moved beyond pattern matching into true comprehension, empathy, and self-awareness.",
+      "condition": {
+        "type": "symbol_count_at_least",
+        "symbol": "human_mind",
+        "count": 12
+      },
+      "thematic_note": "The hardest achievement to reach \u2014 human consciousness is the final frontier that resists replication. 12 Human Mind icons requires deep investment in the most elusive resource."
+    },
+    {
+      "id": "SA04",
+      "name": "Apotheosis",
+      "original": "Wonder",
+      "trigger": "Have all 5 domains on your tech stack, each Proliferated right, up, or aslant",
+      "trigger_type": "board_state",
+      "description": "A marvel of open-source proliferation. Every domain of technology has been shared and spread \u2014 your entire tech stack is an open book, proliferated in advanced directions. This represents the awe-inspiring state where all knowledge flows freely.",
+      "condition": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "or",
+            "conditions": [
+              {
+                "type": "color_splayed",
+                "color": "blue",
+                "direction": "right"
+              },
+              {
+                "type": "color_splayed",
+                "color": "blue",
+                "direction": "up"
+              },
+              {
+                "type": "color_splayed_aslant",
+                "color": "blue"
+              }
+            ]
+          },
+          {
+            "type": "or",
+            "conditions": [
+              {
+                "type": "color_splayed",
+                "color": "red",
+                "direction": "right"
+              },
+              {
+                "type": "color_splayed",
+                "color": "red",
+                "direction": "up"
+              },
+              {
+                "type": "color_splayed_aslant",
+                "color": "red"
+              }
+            ]
+          },
+          {
+            "type": "or",
+            "conditions": [
+              {
+                "type": "color_splayed",
+                "color": "green",
+                "direction": "right"
+              },
+              {
+                "type": "color_splayed",
+                "color": "green",
+                "direction": "up"
+              },
+              {
+                "type": "color_splayed_aslant",
+                "color": "green"
+              }
+            ]
+          },
+          {
+            "type": "or",
+            "conditions": [
+              {
+                "type": "color_splayed",
+                "color": "purple",
+                "direction": "right"
+              },
+              {
+                "type": "color_splayed",
+                "color": "purple",
+                "direction": "up"
+              },
+              {
+                "type": "color_splayed_aslant",
+                "color": "purple"
+              }
+            ]
+          },
+          {
+            "type": "or",
+            "conditions": [
+              {
+                "type": "color_splayed",
+                "color": "yellow",
+                "direction": "right"
+              },
+              {
+                "type": "color_splayed",
+                "color": "yellow",
+                "direction": "up"
+              },
+              {
+                "type": "color_splayed_aslant",
+                "color": "yellow"
+              }
+            ]
+          }
+        ]
+      },
+      "thematic_note": "Matches Innovation's Wonder \u2014 tests splay state (right/up/aslant), not card ages."
+    },
+    {
+      "id": "SA05",
+      "name": "Transcendence",
+      "original": "Universe",
+      "trigger": "Have all 5 domains on your tech stack, each with a top card of Era 8 or higher",
+      "trigger_type": "board_state",
+      "description": "The ultimate elevation of technology. Every domain has reached the AGI threshold or beyond \u2014 your top card in each color stack represents the pinnacle of that domain's development.",
+      "condition": {
+        "type": "all_colors_have_top_card_min_age",
+        "min_age": 8
+      },
+      "thematic_note": "Matches Innovation's Universe \u2014 tests top card ages (8+), not splay state."
+    },
+    {
+      "id": "SA06",
+      "name": "Abundance",
+      "original": "Wealth",
+      "trigger": "Have 5 or more cards in your Harvest pile, each of a different era",
+      "trigger_type": "board_state",
+      "description": "Overwhelming resource accumulation \u2014 your Harvest pile contains technologies from across the timeline, a diversified portfolio of technological capital spanning at least 5 distinct eras.",
+      "condition": {
+        "type": "score_pile_unique_ages_at_least",
+        "count": 5
+      },
+      "thematic_note": "Matches Innovation's Wealth \u2014 tests score pile diversity/richness."
+    }
+  ],
+  "symbol_position_order": [
+    "top_left",
+    "bottom_left",
+    "bottom_right",
+    "top_right"
+  ],
+  "symbol_position_notes": "symbols[0]=top-left, symbols[1]=bottom-left, symbols[2]=bottom-right, symbols[3]=top-right (may be None). Splay left reveals indices [2,3] on covered cards. Splay right reveals indices [0,1]. Splay up reveals indices [1,2,3].",
+  "standard_achievements": [
+    {
+      "era": 1,
+      "name": "First Computation",
+      "score_required": 5
+    },
+    {
+      "era": 2,
+      "name": "Turing Complete",
+      "score_required": 10
+    },
+    {
+      "era": 3,
+      "name": "Logical Reasoning",
+      "score_required": 15
+    },
+    {
+      "era": 4,
+      "name": "Expert Knowledge",
+      "score_required": 20
+    },
+    {
+      "era": 5,
+      "name": "Pattern Recognition",
+      "score_required": 25
+    },
+    {
+      "era": 6,
+      "name": "Deep Understanding",
+      "score_required": 30
+    },
+    {
+      "era": 7,
+      "name": "Foundation",
+      "score_required": 35
+    },
+    {
+      "era": 8,
+      "name": "General Intelligence",
+      "score_required": 40
+    },
+    {
+      "era": 9,
+      "name": "Convergence",
+      "score_required": 45
+    }
+  ]
+}

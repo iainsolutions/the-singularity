@@ -1,5 +1,5 @@
 """
-Game-related API endpoints for Innovation game server.
+Game-related API endpoints for The Singularity game server.
 Handles game creation, joining, actions, and WebSocket connections.
 """
 
@@ -27,7 +27,6 @@ def safe_get(obj, attr, default=None):
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 
-from api.achievement_formatter import format_achievements_for_display
 from async_game_manager import AsyncGameManager
 from auth import auth_manager
 from logging_config import activity_logger, get_logger
@@ -103,7 +102,7 @@ async def broadcast_game_update(game_id: str, message_type: str, data: dict):
 async def create_game(request: CreateGameRequest = CreateGameRequest()):
     """Create a new game"""
     result = await game_manager.create_game(
-        request.created_by, enabled_expansions=request.enabled_expansions
+        request.created_by
     )
 
     # If a creator was provided, return full response with player_id and game_state
@@ -144,210 +143,6 @@ async def get_game(game_id: str):
     return game_manager._format_game_state_for_frontend(game.to_dict())
 
 
-@router.get("/games/{game_id}/safeguards")
-async def get_safeguards(game_id: str):
-    """
-    Get all active Safeguards for a game (Unseen expansion).
-
-    Returns:
-        Dictionary mapping achievement_id to list of player IDs who Safeguard it.
-        Example: {"age_4": ["player1", "player2"], "age_7": ["player1"]}
-    """
-    game = game_manager.get_game(game_id)
-    if not game:
-        raise HTTPException(status_code=404, detail="Game not found")
-
-    # Check if Unseen expansion is enabled
-    if not hasattr(game, "expansion_config") or not game.expansion_config.is_enabled("unseen"):
-        return {"safeguards": {}}
-
-    # Get Safeguard data from tracker
-    try:
-        from game_logic.unseen.safeguard_tracker import SafeguardTracker
-        tracker = SafeguardTracker(game)
-        tracker.rebuild_all_safeguards()  # Ensure up-to-date
-        safeguards = tracker.get_safeguarded_achievements()
-
-        return {"safeguards": safeguards}
-    except Exception as e:
-        logger.error(f"Error fetching Safeguards for game {game_id}: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to fetch Safeguards: {str(e)}")
-
-
-@router.get("/games/{game_id}/safe/limit")
-async def get_safe_limit(game_id: str, player_id: str = Query(..., description="ID of the player")):
-    """
-    Get Safe limit for a player (Unseen expansion).
-
-    Returns:
-        {
-            "limit": 5,  # Current Safe limit based on splay state
-            "count": 3,  # Current number of cards in Safe
-            "can_add": true  # Whether player can add more cards
-        }
-    """
-    game = game_manager.get_game(game_id)
-    if not game:
-        raise HTTPException(status_code=404, detail="Game not found")
-
-    player = game.get_player_by_id(player_id)
-    if not player:
-        raise HTTPException(status_code=404, detail="Player not found")
-
-    # Check if Unseen expansion is enabled
-    if not hasattr(game, "expansion_config") or not game.expansion_config.is_enabled("unseen"):
-        return {
-            "limit": 0,
-            "count": 0,
-            "can_add": False,
-            "message": "Unseen expansion not enabled"
-        }
-
-    # Get Safe data
-    try:
-        limit = player.get_safe_limit()
-        count = player.safe.get_card_count() if player.safe else 0
-        can_add = player.can_add_to_safe()
-
-        return {
-            "limit": limit,
-            "count": count,
-            "can_add": can_add
-        }
-    except Exception as e:
-        logger.error(f"Error fetching Safe limit for player {player_id}: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to fetch Safe limit: {str(e)}")
-
-
-@router.post("/games/{game_id}/players/{player_id}/safe/achieve")
-async def achieve_from_safe(game_id: str, player_id: str, secret_index: int = Query(..., description="Index of secret in Safe (0-based)")):
-    """
-    Achieve a secret card from the player's Safe (Unseen expansion).
-
-    Args:
-        game_id: ID of the game
-        player_id: ID of the player
-        secret_index: Index of secret in Safe to achieve (0-based)
-
-    Returns:
-        {
-            "success": true,
-            "achieved_card": {...},  # The achieved card details (age-only for privacy)
-            "achievement_age": 5,
-            "game_state": {...}
-        }
-    """
-    game = game_manager.get_game(game_id)
-    if not game:
-        raise HTTPException(status_code=404, detail="Game not found")
-
-    player = game.get_player_by_id(player_id)
-    if not player:
-        raise HTTPException(status_code=404, detail="Player not found")
-
-    # Check if Unseen expansion is enabled
-    if not hasattr(game, "expansion_config") or not game.expansion_config.is_enabled("unseen"):
-        raise HTTPException(status_code=400, detail="Unseen expansion not enabled")
-
-    # Check if player has a Safe
-    if not player.safe:
-        raise HTTPException(status_code=400, detail="Player has no Safe")
-
-    # Validate secret_index
-    if secret_index < 0 or secret_index >= player.safe.get_card_count():
-        raise HTTPException(
-            status_code=400,
-            detail=f"Invalid secret index {secret_index} (Safe has {player.safe.get_card_count()} cards)"
-        )
-
-    try:
-        # Get the secret card (for logging and response)
-        secret_card = player.safe.get_card_at_index(secret_index)
-        if not secret_card:
-            raise HTTPException(status_code=400, detail=f"No card at index {secret_index}")
-
-        # Check if achievement is available for this age
-        achievement_age = secret_card.age
-        if achievement_age not in game.deck_manager.achievement_cards or len(game.deck_manager.achievement_cards[achievement_age]) == 0:
-            raise HTTPException(
-                status_code=400,
-                detail=f"No achievements available for age {achievement_age}"
-            )
-
-        # Check if player meets achievement requirements
-        if player.score < player.required_score_for_achievement(achievement_age):
-            raise HTTPException(
-                status_code=400,
-                detail=f"Insufficient score to achieve age {achievement_age} (need {player.required_score_for_achievement(achievement_age)}, have {player.score})"
-            )
-
-        if player.board.get_highest_age() < achievement_age:
-            raise HTTPException(
-                status_code=400,
-                detail=f"No top card with age >= {achievement_age}"
-            )
-
-        # Check Safeguard protection
-        from game_logic.unseen.safeguard_tracker import SafeguardTracker
-        tracker = SafeguardTracker(game)
-        tracker.rebuild_all_safeguards()
-
-        # Get the specific achievement card
-        achievement_card = game.deck_manager.achievement_cards[achievement_age][0]
-        safeguarding_players = tracker.get_safeguarding_players(achievement_card.card_id)
-
-        if safeguarding_players and player_id not in safeguarding_players:
-            safeguarding_names = [game.get_player_by_id(pid).name for pid in safeguarding_players if game.get_player_by_id(pid)]
-            raise HTTPException(
-                status_code=409,
-                detail=f"Achievement age {achievement_age} is Safeguarded by: {', '.join(safeguarding_names)}"
-            )
-
-        # Remove secret from Safe
-        removed_card = player.safe.remove_card(secret_index)
-
-        # Remove achievement from available pool
-        claimed_achievement = game.deck_manager.achievement_cards[achievement_age].pop(0)
-
-        # Add achievement to player
-        player.achievements.append(claimed_achievement)
-
-        # Log achievement
-        activity_logger.info(
-            f"{player.name} achieved secret card (age {achievement_age}) from Safe"
-        )
-
-        # Check victory condition
-        if len(player.achievements) >= 6:
-            from models.game import GamePhase
-            game.winner = player
-            game.phase = GamePhase.FINISHED
-            activity_logger.info(f"🏆 {player.name} wins by achieving 6+ achievements!")
-
-        # Broadcast game state update
-        broadcast_service = get_broadcast_service()
-        if broadcast_service:
-            await broadcast_service.broadcast_game_state(game_id, game.to_dict())
-
-        # Return success response with privacy-filtered data
-        return {
-            "success": True,
-            "achievement_age": achievement_age,
-            "achieved_card": {
-                "age": removed_card.age,
-                "expansion": removed_card.expansion,
-                # Card identity hidden for security
-            },
-            "game_state": game.to_dict()
-        }
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error achieving from Safe for player {player_id}: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to achieve from Safe: {str(e)}")
-
-
 @router.get("/games/{game_id}/achievements")
 async def get_achievements(
     game_id: str, player_id: str = Query(..., description="ID of the viewing player")
@@ -375,10 +170,8 @@ async def get_achievements(
     if not player:
         raise HTTPException(status_code=404, detail="Player not found in game")
 
-    # Format achievements for display
-    achievement_data = format_achievements_for_display(game, player_id)
-
-    return achievement_data
+    # TODO: implement achievement display formatter
+    return {"regular": [], "special": [], "ui_hints": {}}
 
 
 @router.post("/games/{game_id}/join", response_model=JoinGameResponse)

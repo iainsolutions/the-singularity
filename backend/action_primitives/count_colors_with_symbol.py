@@ -17,7 +17,7 @@ class CountColorsWithSymbol(ActionPrimitive):
     Counts colors that have a specified symbol either from card list or board.
 
     Parameters:
-    - symbol: Symbol to look for ("castle", "leaf", "lightbulb", "crown", "factory", "clock")
+    - symbol: Symbol to look for ("circuit", "data", "algorithm", "neural_net", "robot", "human_mind")
     - cards: Variable name containing cards to check (optional)
     - store_result: Variable name to store count
     """
@@ -74,12 +74,12 @@ class CountColorsWithSymbol(ActionPrimitive):
         from models.card import Symbol
 
         symbol_map = {
-            "castle": Symbol.CASTLE,
-            "leaf": Symbol.LEAF,
-            "lightbulb": Symbol.LIGHTBULB,
-            "crown": Symbol.CROWN,
-            "factory": Symbol.FACTORY,
-            "clock": Symbol.CLOCK,
+            "circuit": Symbol.CIRCUIT,
+            "data": Symbol.DATA,
+            "algorithm": Symbol.ALGORITHM,
+            "neural_net": Symbol.NEURAL_NET,
+            "robot": Symbol.ROBOT,
+            "human_mind": Symbol.HUMAN_MIND,
         }
 
         target_symbol = symbol_map.get(self.symbol.lower())

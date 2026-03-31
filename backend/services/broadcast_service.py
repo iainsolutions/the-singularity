@@ -9,7 +9,6 @@ Architecture Pattern:
 - AI players (internal): Event Bus with minimal metadata
 """
 
-import asyncio
 import json
 from typing import Any, Optional
 
@@ -144,10 +143,7 @@ class BroadcastService:
         self, game_id: str, message_type: str, data: dict
     ) -> bool:
         """
-        Broadcast to WebSocket channel (human players) with per-player privacy filtering.
-
-        UNSEEN EXPANSION: When game_state is present in data, serializes it individually
-        for each player using viewer_id to maintain Safe privacy (hidden information).
+        Broadcast to WebSocket channel (human players).
 
         WebSocket messages include full game_state for UI rendering.
 
@@ -166,44 +162,14 @@ class BroadcastService:
             return False
 
         try:
-            # Check if we need per-player serialization (game_state with Unseen expansion)
-            game_state = data.get("game_state")
-            needs_privacy_filtering = False
+            message = json.dumps({"type": message_type, **data})
+            await self.connection_manager.broadcast_to_game(message, game_id)
 
-            if game_state is not None:
-                if isinstance(game_state, dict):
-                    enabled_expansions = game_state.get("expansion_config", {}).get(
-                        "enabled_expansions", []
-                    )
-                    # enabled_expansions can be a list or dict depending on format
-                    if isinstance(enabled_expansions, dict):
-                        needs_privacy_filtering = enabled_expansions.get("unseen", False)
-                    elif isinstance(enabled_expansions, list):
-                        needs_privacy_filtering = "unseen" in enabled_expansions
-                else:
-                    logger.warning(
-                        f"game_state is {type(game_state).__name__} instead of dict, "
-                        f"skipping privacy filtering"
-                    )
-
-            if needs_privacy_filtering:
-                # Per-player broadcast with privacy filtering
-                logger.debug(
-                    f"Using per-player serialization for game {game_id} (Unseen expansion enabled)"
-                )
-                return await self._broadcast_websocket_per_player(
-                    game_id, message_type, data
-                )
-            else:
-                # Standard broadcast (all players get identical message)
-                message = json.dumps({"type": message_type, **data})
-                await self.connection_manager.broadcast_to_game(message, game_id)
-
-                logger.debug(
-                    f"WebSocket broadcast successful: {message_type} for game {game_id}"
-                )
-                self.stats.record_websocket_success()
-                return True
+            logger.debug(
+                f"WebSocket broadcast successful: {message_type} for game {game_id}"
+            )
+            self.stats.record_websocket_success()
+            return True
 
         except Exception as e:
             logger.error(
@@ -217,110 +183,6 @@ class BroadcastService:
             )
             self.stats.record_websocket_failure()
             return False
-
-    async def _broadcast_websocket_per_player(
-        self, game_id: str, message_type: str, data: dict
-    ) -> bool:
-        """
-        Broadcast with per-player game state serialization for privacy.
-
-        Each player receives a game_state filtered for their viewer_id,
-        ensuring Safe secrets remain hidden per Unseen expansion rules.
-
-        Args:
-            game_id: Game identifier
-            message_type: Message type
-            data: Full message data including game_state
-
-        Returns:
-            True if successful, False otherwise
-        """
-        from async_game_manager import AsyncGameManager
-
-        # Get game instance to serialize per-player
-        game_manager = self.connection_manager._game_manager
-        if not game_manager:
-            logger.error(
-                "Game manager not available - cannot perform per-player serialization"
-            )
-            return False
-
-        game = game_manager.get_game(game_id)
-        if not game:
-            logger.error(f"Game {game_id} not found for per-player broadcast")
-            return False
-
-        # Get all active connections for this game
-        player_connections = self.connection_manager.get_game_player_connections(
-            game_id
-        )
-
-        if not player_connections:
-            logger.debug(
-                f"No connected players for per-player broadcast in game {game_id}"
-            )
-            return True  # No players to send to, but not an error
-
-        # Send individualized messages to each player
-        send_tasks = []
-        for player_id, websocket in player_connections.items():
-            # Serialize game state with viewer_id for privacy filtering
-            player_game_state = game.to_dict(viewer_id=player_id)
-
-            # Build player-specific message
-            player_data = {**data, "game_state": player_game_state}
-            player_message = json.dumps({"type": message_type, **player_data})
-
-            # Create send task
-            task = self._send_to_websocket(websocket, player_message, player_id)
-            send_tasks.append(task)
-
-        # Execute all sends concurrently
-        try:
-            results = await asyncio.gather(*send_tasks, return_exceptions=True)
-
-            # Count successes/failures
-            failures = sum(1 for r in results if isinstance(r, Exception))
-            successes = len(results) - failures
-
-            if failures > 0:
-                logger.warning(
-                    f"Per-player broadcast partial success: "
-                    f"{successes}/{len(results)} players reached in game {game_id}"
-                )
-
-            logger.debug(
-                f"Per-player WebSocket broadcast: {message_type} for game {game_id} "
-                f"({successes}/{len(results)} succeeded)"
-            )
-
-            self.stats.record_websocket_success()
-            return True
-
-        except Exception as e:
-            logger.error(
-                f"Per-player broadcast failed for game {game_id}: {e}",
-                exc_info=True,
-            )
-            self.stats.record_websocket_failure()
-            return False
-
-    async def _send_to_websocket(
-        self, websocket, message: str, player_id: str
-    ) -> None:
-        """
-        Send message to a single WebSocket.
-
-        Args:
-            websocket: WebSocket connection
-            message: JSON message to send
-            player_id: Player identifier (for logging)
-        """
-        try:
-            await websocket.send_text(message)
-        except Exception as e:
-            logger.error(f"Failed to send to player {player_id}: {e}")
-            raise  # Re-raise for gather to catch
 
     async def _broadcast_event_bus(
         self, game_id: str, message_type: str, data: dict

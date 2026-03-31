@@ -1,5 +1,5 @@
 """
-WebSocket connection manager service for Innovation game server.
+WebSocket connection manager service for The Singularity game server.
 Handles WebSocket connections, heartbeats, and message broadcasting.
 """
 

@@ -416,7 +416,7 @@ class SelectHighest(ActionPrimitive):
             # Sort by age
             return sorted(cards, key=lambda c: getattr(c, "age", 0), reverse=descending)
         elif self.criteria == "score_value":
-            # Score value is usually the age for Innovation
+            # Score value is usually the age for The Singularity
             return sorted(cards, key=lambda c: getattr(c, "age", 0), reverse=descending)
         elif self.criteria == "symbols":
             # Sort by total symbol count

@@ -165,9 +165,6 @@ class MeldCard(ActionPrimitive):
         # Add to board - PlayerBoard.add_card() determines color automatically
         context.player.board.add_card(card)
 
-        # Check for dig event (Artifacts expansion)
-        self._check_dig_event(context, card, covered_card)
-
         # Record state change
         color = None
         try:
@@ -183,18 +180,6 @@ class MeldCard(ActionPrimitive):
         )
 
         logger.info(f"Melded {get_card_name(card)} to board")
-
-        # UNSEEN EXPANSION: Rebuild Safeguards when melding from Safe
-        # Card may now be visible on board, affecting Safeguard status
-        if self.source == "safe" and hasattr(context.game, "expansion_config"):
-            if context.game.expansion_config.is_enabled("unseen"):
-                try:
-                    from game_logic.unseen.safeguard_tracker import SafeguardTracker
-                    tracker = SafeguardTracker(context.game)
-                    tracker.rebuild_all_safeguards()
-                    logger.debug("Rebuilt Safeguards after melding from Safe")
-                except Exception as e:
-                    logger.error(f"Failed to rebuild Safeguards: {e}")
 
         # Activity: card melded to board
         try:
@@ -222,48 +207,3 @@ class MeldCard(ActionPrimitive):
 
         return True
 
-    def _check_dig_event(self, context: ActionContext, melded_card, covered_card):
-        """
-        Check if a dig event should trigger (Artifacts expansion).
-
-        Args:
-            context: The action context
-            melded_card: The card that was just melded
-            covered_card: The card that was covered (None if first in stack)
-        """
-        # Only check if Artifacts expansion is enabled
-        if not context.game.expansion_config.is_enabled("artifacts"):
-            return
-
-        try:
-            from game_logic.artifacts.dig_event_detector import DigEventDetector
-
-            dig_age = DigEventDetector.check_dig_event(
-                game=context.game,
-                melded_card=melded_card,
-                covered_card=covered_card,
-                player_id=context.player.id,
-            )
-
-            if dig_age is not None:
-                # Store dig event for handling after action completes
-                # Multiple dig events can accumulate if multiple cards melded
-                dig_events = context.get_variable("pending_dig_events", [])
-                if not isinstance(dig_events, list):
-                    dig_events = []
-
-                dig_events.append(
-                    {
-                        "dig_age": dig_age,
-                        "player_id": context.player.id,
-                        "melded_card": melded_card.name,
-                        "covered_card": covered_card.name if covered_card else None,
-                    }
-                )
-
-                context.set_variable("pending_dig_events", dig_events)
-                logger.info(
-                    f"ARTIFACTS: Dig event detected (age {dig_age}) - stored for processing"
-                )
-        except Exception as e:
-            logger.error(f"ARTIFACTS: Error checking dig event: {e}", exc_info=True)

@@ -164,7 +164,7 @@ const FlagAnimation = memo(({ color = "red" }) => (
   </div>
 ));
 
-const FountainAnimation = memo(({ icon = "crown" }) => (
+const FountainAnimation = memo(({ icon = "neural_net" }) => (
   <div className={styles.fountainAnimation}>
     <div className={styles.fountain}>⛲</div>
     <div className={styles.fountainText}>

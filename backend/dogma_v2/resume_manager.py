@@ -94,12 +94,12 @@ class ResumeManager:
         declined = response.get("decline", False)
 
         if declined:
-            # CRITICAL FIX: Enforce mandatory demand compliance (Innovation Ultimate rules)
+            # CRITICAL FIX: Enforce mandatory demand compliance (The Singularity Ultimate rules)
             # IMPORTANT: Only DEMAND effects are mandatory - normal dogma actions can be declined if optional
             is_demand_target = context.get_variable("is_demand_target", False)
 
             if is_demand_target and interaction.type == InteractionType.SELECT_CARDS:
-                # This is a DEMAND interaction - demands are NEVER optional in Innovation Ultimate
+                # This is a DEMAND interaction - demands are NEVER optional in The Singularity Ultimate
                 # If a player can comply with a demand (has valid cards), they MUST comply
                 eligible_cards = safe_get(interaction.data, "eligible_cards", [])
                 if not eligible_cards:
@@ -111,12 +111,12 @@ class ResumeManager:
                         )
 
                 if eligible_cards:
-                    # Player has valid cards but is trying to decline a DEMAND - this violates Innovation rules
+                    # Player has valid cards but is trying to decline a DEMAND - this violates The Singularity rules
                     logger.error(
                         f"Player {interaction.player_id} attempted to decline DEMAND but has {len(eligible_cards)} valid cards - demands are mandatory!"
                     )
                     raise ValueError(
-                        f"Invalid decline: Demands are mandatory in Innovation Ultimate. "
+                        f"Invalid decline: Demands are mandatory in The Singularity Ultimate. "
                         f"Player has {len(eligible_cards)} eligible card(s) and must select one to comply with the demand."
                     )
                 else:

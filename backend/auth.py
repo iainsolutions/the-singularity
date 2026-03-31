@@ -1,5 +1,5 @@
 """
-JWT-based authentication for the Innovation game.
+JWT-based authentication for the The Singularity game.
 Uses PyJWT for token generation and validation.
 
 SECURITY WARNING: You MUST set JWT_SECRET_KEY environment variable in production!

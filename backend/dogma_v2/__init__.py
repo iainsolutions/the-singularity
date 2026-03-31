@@ -2,7 +2,7 @@
 Dogma System v2.0
 
 A phase-based, transaction-oriented system for executing dogma actions
-in the Innovation card game.
+in the The Singularity card game.
 
 This system replaces the monolithic state machine with a modular,
 testable architecture that properly implements all requirements from

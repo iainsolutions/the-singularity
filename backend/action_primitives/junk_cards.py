@@ -200,19 +200,6 @@ class JunkCards(ActionPrimitive):
             else:
                 context.add_result("No cards to junk")
 
-            # UNSEEN EXPANSION: Rebuild Safeguards when cards are junked
-            # Junked cards leave the board, affecting Safeguard status
-            if junked_count > 0 and hasattr(context.game, "expansion_config"):
-                if context.game.expansion_config.is_enabled("unseen"):
-                    try:
-                        from game_logic.unseen.safeguard_tracker import SafeguardTracker
-
-                        tracker = SafeguardTracker(context.game)
-                        tracker.rebuild_all_safeguards()
-                    except Exception:
-                        # Log but don't fail the action
-                        pass
-
             return ActionResult.SUCCESS
 
         except Exception as e:

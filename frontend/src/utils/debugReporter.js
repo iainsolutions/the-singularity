@@ -174,7 +174,7 @@ const debugReporter = new DebugReporter();
 
 // Expose to window for console access
 if (typeof window !== 'undefined') {
-  window.InnovationDebugReporter = debugReporter;
+  window.SingularityDebugReporter = debugReporter;
 }
 
 export default debugReporter;

@@ -39,7 +39,7 @@ class AIPromptBuilder:
         parts.append(self._format_game_state_xml(game_state))
         parts.append("</game_state>")
 
-        # Available actions with dogma symbol hints
+        # Available actions with execute symbol hints
         action_lines = []
         player_state = game_state.get("current_player_state", {})
         player_symbols = player_state.get("symbol_counts", {})
@@ -61,9 +61,9 @@ class AIPromptBuilder:
                         tags.append("SHARED")
                     if has_demand:
                         if max_opp >= my_count:
-                            tags.append("DEMAND BLOCKED")
+                            tags.append("OVERRIDE BLOCKED")
                         else:
-                            tags.append("DEMAND ACTIVE")
+                            tags.append("OVERRIDE ACTIVE")
                     hint = f" [{', '.join(tags)}, {resource}: you {my_count} vs opp {max_opp}]" if tags else f" [{resource}: you {my_count} vs opp {max_opp}]"
                     action_lines.append(f"{action}{hint}")
                 else:
@@ -165,12 +165,12 @@ class AIPromptBuilder:
 
         # Symbols
         lines.append("    <symbols>")
-        lines.append(f"      <castles>{symbols.get('castle', 0)}</castles>")
-        lines.append(f"      <crowns>{symbols.get('crown', 0)}</crowns>")
-        lines.append(f"      <leaves>{symbols.get('leaf', 0)}</leaves>")
-        lines.append(f"      <lightbulbs>{symbols.get('lightbulb', 0)}</lightbulbs>")
-        lines.append(f"      <factories>{symbols.get('factory', 0)}</factories>")
-        lines.append(f"      <clocks>{symbols.get('clock', 0)}</clocks>")
+        lines.append(f"      <circuits>{symbols.get('circuit', 0)}</circuits>")
+        lines.append(f"      <neural_nets>{symbols.get('neural_net', 0)}</neural_nets>")
+        lines.append(f"      <data>{symbols.get('data', 0)}</data>")
+        lines.append(f"      <algorithms>{symbols.get('algorithm', 0)}</algorithms>")
+        lines.append(f"      <robots>{symbols.get('robot', 0)}</robots>")
+        lines.append(f"      <human_minds>{symbols.get('human_mind', 0)}</human_minds>")
         lines.append("    </symbols>")
 
         # Achievement status (compact format for strategic planning)
@@ -238,15 +238,15 @@ class AIPromptBuilder:
                 lines.append(f"      <hand_count>{opp['hand_count']}</hand_count>")
                 lines.append("      <symbols>")
                 lines.append(
-                    f"        <castles>{opp_symbols.get('castle', 0)}</castles>"
+                    f"        <circuits>{opp_symbols.get('circuit', 0)}</circuits>"
                 )
-                lines.append(f"        <crowns>{opp_symbols.get('crown', 0)}</crowns>")
-                lines.append(f"        <leaves>{opp_symbols.get('leaf', 0)}</leaves>")
-                lines.append(f"        <lightbulbs>{opp_symbols.get('lightbulb', 0)}</lightbulbs>")
-                lines.append(f"        <factories>{opp_symbols.get('factory', 0)}</factories>")
-                lines.append(f"        <clocks>{opp_symbols.get('clock', 0)}</clocks>")
+                lines.append(f"        <neural_nets>{opp_symbols.get('neural_net', 0)}</neural_nets>")
+                lines.append(f"        <data>{opp_symbols.get('data', 0)}</data>")
+                lines.append(f"        <algorithms>{opp_symbols.get('algorithm', 0)}</algorithms>")
+                lines.append(f"        <robots>{opp_symbols.get('robot', 0)}</robots>")
+                lines.append(f"        <human_minds>{opp_symbols.get('human_mind', 0)}</human_minds>")
                 lines.append("      </symbols>")
-                # Opponent board (top cards and colors — needed for demand/sharing evaluation)
+                # Opponent board (top cards and colors — needed for override/sharing evaluation)
                 opp_board = opp.get("board", {})
                 opp_board_lines = []
                 for color in ["red", "blue", "green", "yellow", "purple"]:
@@ -290,8 +290,8 @@ class AIPromptBuilder:
         achieve_hint = ""
         if achieve_actions:
             achieve_hint = f"""
-## 🏆 ACHIEVEMENT AVAILABLE: {achieve_actions}
-STOP! Achievements win the game. Unless opponent wins THIS TURN, CLAIM IT NOW.
+## 🏆 BREAKTHROUGH AVAILABLE: {achieve_actions}
+STOP! Breakthroughs win the game. Unless opponent wins THIS TURN, CLAIM IT NOW.
 """
 
         return f"""
@@ -299,16 +299,16 @@ STOP! Achievements win the game. Unless opponent wins THIS TURN, CLAIM IT NOW.
 Choose ONE action from the annotated list above.
 {achieve_hint}
 ## DECISION PRIORITY:
-1. achieve → ALWAYS claim if available (6 achievements = WIN)
-2. dogma marked UNSHARED that draws/scores/melds for you → USE IT
-3. dogma with DEMAND VIABLE that hurts opponent → USE IT
-4. meld a card that enables a better dogma next turn → MELD
-5. draw → safe default
+1. achieve → ALWAYS claim if available (6 breakthroughs = WIN)
+2. execute marked UNSHARED that researches/harvests/deploys for you → USE IT
+3. execute with OVERRIDE VIABLE that hurts opponent → USE IT
+4. deploy a card that enables a better execute next turn → DEPLOY
+5. research → safe default
 
 ## KEY RULES:
-- SHARED means opponent executes the same non-demand effects - avoid unless YOUR benefit outweighs theirs
-- DEMAND BLOCKED means the demand effect does nothing - only use if non-demand effects are still good
-- Higher age cards are generally better - meld/draw to advance
+- SHARED means opponent executes the same non-override effects - avoid unless YOUR benefit outweighs theirs
+- OVERRIDE BLOCKED means the override effect does nothing - only use if non-override effects are still good
+- Higher age cards are generally better - deploy/research to advance
 
 </task>
 
@@ -339,22 +339,22 @@ Return ONLY JSON:
                             target = icon.parameters.get("target_icon", "unknown")
                             icon_descriptions.append(f"Search for {target} cards")
                         elif icon_type == "plus":
-                            icon_descriptions.append("Draw +1 age")
+                            icon_descriptions.append("Research +1 age")
                         elif icon_type == "arrow":
                             direction = icon.parameters.get("direction", "right")
-                            icon_descriptions.append(f"Splay {direction}")
+                            icon_descriptions.append(f"Proliferate {direction}")
                         elif icon_type == "junk":
-                            icon_descriptions.append("Junk achievement")
+                            icon_descriptions.append("Junk breakthrough")
                         elif icon_type == "uplift":
                             icon_descriptions.append("Uplift deck (+2 age)")
                         elif icon_type == "unsplay":
-                            icon_descriptions.append("Unsplay opponents")
+                            icon_descriptions.append("Un-proliferate opponents")
                         elif icon_type == "flag":
                             color = icon.parameters.get("target_color", "color")
-                            icon_descriptions.append(f"{color.capitalize()} Flag achievement")
+                            icon_descriptions.append(f"{color.capitalize()} Flag breakthrough")
                         elif icon_type == "fountain":
                             icon_param = icon.parameters.get("target_icon", "icon")
-                            icon_descriptions.append(f"{icon_param.capitalize()} Fountain achievement")
+                            icon_descriptions.append(f"{icon_param.capitalize()} Fountain breakthrough")
 
                     self._card_descriptions[card.name] = " | ".join(icon_descriptions) if icon_descriptions else "City card"
 
@@ -368,7 +368,7 @@ Return ONLY JSON:
                     if effects_text:
                         self._card_descriptions[card.name] = " | ".join(effects_text)
                     else:
-                        self._card_descriptions[card.name] = "No dogma effect"
+                        self._card_descriptions[card.name] = "No execute effect"
 
             logger.debug(
                 f"Loaded descriptions for {len(self._card_descriptions)} cards"
@@ -414,24 +414,24 @@ Return ONLY JSON:
             ]
 
             prompt_parts.append("\n" + "=" * 70)
-            prompt_parts.append("🏆 ACHIEVEMENT AVAILABLE - HIGH PRIORITY ACTION! 🏆")
+            prompt_parts.append("🏆 BREAKTHROUGH AVAILABLE - HIGH PRIORITY ACTION! 🏆")
             prompt_parts.append("=" * 70)
             prompt_parts.append(
-                f"You currently have {achievement_count}/6 achievements (need 6 to WIN!)"
+                f"You currently have {achievement_count}/6 breakthroughs (need 6 to WIN!)"
             )
             prompt_parts.append(f"Your score: {score} points")
             prompt_parts.append(f"Eligible to claim ages: {eligible_ages}")
             prompt_parts.append("")
             prompt_parts.append(
-                "⚠️  STRATEGIC PRIORITY: CLAIM ACHIEVEMENTS when available!"
+                "⚠️  STRATEGIC PRIORITY: CLAIM BREAKTHROUGHS when available!"
             )
             prompt_parts.append(
-                "   - Achievements are a PRIMARY win condition (6 achievements = instant win)"
+                "   - Breakthroughs are a PRIMARY win condition (6 breakthroughs = instant win)"
             )
             prompt_parts.append(
                 "   - If 'achieve' is offered, you meet ALL requirements"
             )
-            prompt_parts.append("   - Each achievement gets you closer to victory")
+            prompt_parts.append("   - Each breakthrough gets you closer to victory")
             prompt_parts.append("   - Opponent might claim it first if you wait!")
             prompt_parts.append("")
             prompt_parts.append(
@@ -474,17 +474,17 @@ Return ONLY JSON:
             # Minimal context - just current state
             prompt_parts.append(self._format_opponents_basic(game_state))
 
-            # Add critical dogma viability checks for novice players
+            # Add critical execute viability checks for novice players
             prompt_parts.append(
-                "\n⚠️ CRITICAL DOGMA CHECKS (Read BEFORE using dogma!):"
+                "\n⚠️ CRITICAL EXECUTE CHECKS (Read BEFORE using execute!):"
             )
             prompt_parts.append(self._get_dogma_viability_warnings(game_state))
 
             prompt_parts.append(
-                "\nREMEMBER: Only use DOGMA if the card effect will actually work! "
-                "Check the warnings above. If a dogma is marked as USELESS, just DRAW instead.\n\n"
-                "DEMAND MECHANICS: Demands ONLY affect opponents with FEWER of the required symbol than you. "
-                "If an opponent has >= your symbol count, they are NOT vulnerable and the demand does NOTHING to them!"
+                "\nREMEMBER: Only use EXECUTE if the card effect will actually work! "
+                "Check the warnings above. If an execute is marked as USELESS, just RESEARCH instead.\n\n"
+                "OVERRIDE MECHANICS: Overrides ONLY affect opponents with FEWER of the required symbol than you. "
+                "If an opponent has >= your symbol count, they are NOT vulnerable and the override does NOTHING to them!"
             )
 
         elif diff in ["intermediate", "skilled"]:
@@ -492,9 +492,9 @@ Return ONLY JSON:
             prompt_parts.append(self._format_opponents_detailed(game_state))
             prompt_parts.append(self._format_recent_actions(game_state, count=5))
             prompt_parts.append(
-                "\nPRIORITIZE DOGMA: Your default action should be dogma. "
-                "Only draw/meld when you need to set up better dogmas. "
-                "Dogma is how you score, draw efficiently, and gain advantage."
+                "\nPRIORITIZE EXECUTE: Your default action should be execute. "
+                "Only research/deploy when you need to set up better executes. "
+                "Execute is how you harvest, research efficiently, and gain advantage."
             )
 
         elif diff in ["advanced", "pro", "expert", "master"]:
@@ -505,13 +505,13 @@ Return ONLY JSON:
             prompt_parts.append(self._format_achievement_status(game_state))
             prompt_parts.append(self._format_sharing_analysis(game_state))
             prompt_parts.append(
-                "\nDOGMA-FIRST STRATEGY: Dogma should be 80-90% of your actions. "
-                "Plan dogma chains multiple turns ahead. Draw/meld only to enable "
-                "powerful dogma sequences. Every decision = which dogma to enable next."
+                "\nEXECUTE-FIRST STRATEGY: Execute should be 80-90% of your actions. "
+                "Plan execute chains multiple turns ahead. Research/deploy only to enable "
+                "powerful execute sequences. Every decision = which execute to enable next."
             )
             prompt_parts.append(
-                "\nDEMAND EFFECTS: Demands only affect opponents with FEWER of the required symbol than you. "
-                "Check symbol counts before using demands! If opponent has >= your symbol count, the demand won't work."
+                "\nOVERRIDE EFFECTS: Overrides only affect opponents with FEWER of the required symbol than you. "
+                "Check symbol counts before using overrides! If opponent has >= your symbol count, the override won't work."
             )
 
         # Response format instructions
@@ -562,17 +562,17 @@ Return ONLY JSON:
         )
 
         if is_demand_target or is_transfer_to_opponent:
-            prompt_parts.append(f"OPPONENT DEMAND: {message}")
+            prompt_parts.append(f"OPPONENT OVERRIDE: {message}")
             prompt_parts.append(
                 "Note: You are responding to an opponent's card effect. "
                 "Check the recent actions to see which card is being activated and review "
                 "that card's dogma_effects in the opponent's board to understand what happens to your selected cards.\n\n"
-                "STRATEGY: When forced to give cards to your opponent (transfer/demand effects), "
+                "STRATEGY: When forced to give cards to your opponent (transfer/override effects), "
                 "select your LEAST useful cards to minimize the loss. Consider:\n"
                 "- Cards that don't fit your current board strategy\n"
                 "- Cards with symbols you don't need\n"
-                "- Duplicate colors you already have splayed\n"
-                "Don't give away your best cards - save those for your own melds and dogmas!"
+                "- Duplicate colors you already have proliferated\n"
+                "Don't give away your best cards - save those for your own deploys and executes!"
             )
         else:
             prompt_parts.append(f"INTERACTION: {message}")
@@ -584,7 +584,7 @@ Return ONLY JSON:
             )
 
         # CRITICAL: Include current board state so AI can make informed decisions
-        # Without this, AI makes up facts like "duplicate color I already have splayed"
+        # Without this, AI makes up facts like "duplicate color I already have proliferated"
         if game_state:
             prompt_parts.append("\nYOUR CURRENT BOARD:")
             player_state = game_state.get("current_player_state", {})
@@ -877,31 +877,31 @@ Return ONLY JSON:
         ]
 
     def _get_rules_minimal(self) -> str:
-        """Concise Innovation rules — everything the AI needs, nothing it doesn't."""
-        return """You are playing Innovation, a card game. Win by claiming 6 achievements.
+        """Concise Singularity rules — everything the AI needs, nothing it doesn't."""
+        return """You are playing The Singularity, a card game. Win by claiming 6 breakthroughs.
 
 ACTIONS (2 per turn):
-- Draw: draw a card from the age deck matching your highest top card age (or age 1)
-- Meld: play a card from hand onto your board (on its color stack, covering the old top card)
-- Dogma: activate the top card's effect on a color stack
-- Achieve: claim an achievement (need score >= age*5 AND a top card of that age or higher)
+- Research: take a card from the age deck matching your highest top card age (or age 1)
+- Deploy: play a card from hand onto your board (on its color stack, covering the old top card)
+- Execute: activate the top card's effect on a color stack
+- Breakthrough: claim a breakthrough (need score >= age*5 AND a top card of that age or higher)
 
-DOGMA MECHANICS:
-- Each card has a dogma resource symbol (castle, crown, leaf, lightbulb, factory, clock)
-- Non-demand effects: opponents with >= your count of that symbol SHARE the effect (they benefit too)
-- "I demand" effects: only hit opponents with FEWER of that symbol than you
-- If sharing helps the opponent more than you, don't use that dogma — just draw
-- Read the effect text carefully: if you don't meet the requirements (e.g. need hand cards you don't have), the dogma does nothing
+EXECUTE MECHANICS:
+- Each card has an execute resource symbol (circuit, neural_net, data, algorithm, robot, human_mind)
+- Non-override effects: opponents with >= your count of that symbol SHARE the effect (they benefit too)
+- "I Override" effects: only hit opponents with FEWER of that symbol than you
+- If sharing helps the opponent more than you, don't use that execute — just research
+- Read the effect text carefully: if you don't meet the requirements (e.g. need hand cards you don't have), the execute does nothing
 
 SYMBOLS:
 - Symbols come from cards on your board (not hand)
-- Splaying a stack reveals extra symbols on covered cards
-- Symbol counts determine dogma sharing and demand eligibility
+- Proliferating a stack reveals extra symbols on covered cards
+- Symbol counts determine execute sharing and override eligibility
 
-SCORING & ACHIEVEMENTS:
+SCORING & BREAKTHROUGHS:
 - Score pile is separate from hand and board
-- To achieve age N: need score >= N*5 AND at least one top card of age >= N on your board
-- First to 6 achievements wins
+- To claim age N breakthrough: need score >= N*5 AND at least one top card of age >= N on your board
+- First to 6 breakthroughs wins
 
 RESPONSE FORMAT:
 Return ONLY valid JSON: {"reasoning": "brief explanation", "action_type": "exact action from available_actions list"}
@@ -931,17 +931,17 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
         else:
             parts.append("\n⚠️  Your hand: EMPTY (0 cards)")
             parts.append(
-                "    WARNING: Cannot use dogmas that require hand cards! (e.g., Code of Laws, Oars)"
+                "    WARNING: Cannot use executes that require hand cards! (e.g., Pascaline, age 1 cards)"
             )
 
-        # Board - show what cards you can dogma with (with effects)
+        # Board - show what cards you can execute with (with effects)
         board = player_state.get("board", {})
         has_board_cards = any(
             board.get(f"{color}_cards")
             for color in ["red", "blue", "green", "yellow", "purple"]
         )
         if has_board_cards:
-            parts.append("\nYOUR BOARD (cards you can dogma):")
+            parts.append("\nYOUR BOARD (cards you can execute):")
             for color in ["red", "blue", "green", "yellow", "purple"]:
                 color_cards = board.get(f"{color}_cards", [])
                 if color_cards:
@@ -963,9 +963,9 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
                             f"  {color.upper()}: {card_name} (age {top_card.get('age')}){hand_warning}"
                         )
         else:
-            parts.append("\nYour board: Empty (no cards to dogma!)")
+            parts.append("\nYour board: Empty (no cards to execute!)")
 
-        # Symbol counts for demand evaluation
+        # Symbol counts for override evaluation
         symbol_counts = player_state.get("symbol_counts", {})
         if symbol_counts:
             counts_str = ", ".join(
@@ -979,23 +979,17 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
         return "\n".join(parts)
 
     def _requires_hand_cards(self, card_name: str) -> bool:
-        """Check if a card's dogma effect requires cards in hand"""
-        # Common cards that need hand cards for their primary effects
-        hand_dependent_cards = {
-            "Code of Laws",  # Tuck from hand
-            "Oars",  # Meld from hand (I DEMAND)
-            "Clothing",  # Meld from hand
-            "Agriculture",  # Return from hand
-            "Masonry",  # Meld from hand (I DEMAND)
-            "City States",  # I DEMAND: transfer from hand
-            "Currency",  # Exchange hands
-            "Mathematics",  # Return from hand
-            "Philosophy",  # Meld/score from hand
-            "Alchemy",  # Reveal from hand
-            "Translation",  # Meld from hand
-            "Perspective",  # Return from hand (I DEMAND)
-        }
-        return card_name in hand_dependent_cards
+        """Check if a card's execute effect requires cards in hand.
+
+        Note: Uses intelligent card data analysis as primary check.
+        This hardcoded set is a fast-path fallback for known cards.
+        """
+        # Use intelligent analyzer if card data is available
+        card_data = self._get_card_data_cache().get(card_name)
+        if card_data:
+            reqs = self._analyze_card_requirements(card_data)
+            return reqs.get("needs_hand_cards", False)
+        return False
 
     def _analyze_card_requirements(self, card_data: dict) -> dict:
         """
@@ -1108,22 +1102,22 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
 
             if not any_opponent_vulnerable:
                 return (
-                    f"⚠️ {card_name}: {VIABILITY_USELESS} DEMAND - You have {player_count} {requirements['demand_symbol']}, "
+                    f"⚠️ {card_name}: {VIABILITY_USELESS} OVERRIDE - You have {player_count} {requirements['demand_symbol']}, "
                     f"but all opponents have >= {player_count}. "
-                    f"Demands only work on opponents with FEWER symbols than you! DRAW or MELD instead!"
+                    f"Overrides only work on opponents with FEWER symbols than you! RESEARCH or DEPLOY instead!"
                 )
 
         # Check hand card requirements
         if requirements["needs_hand_cards"]:
             if hand_count == 0:
-                return f"⚠️ {card_name}: {VIABILITY_USELESS} - needs hand cards, your hand is EMPTY. DRAW first!"
+                return f"⚠️ {card_name}: {VIABILITY_USELESS} - needs hand cards, your hand is EMPTY. RESEARCH first!"
             elif requirements["needs_hand_count"] > hand_count:
                 return (
                     f"⚠️ {card_name}: {VIABILITY_USELESS} - needs {requirements['needs_hand_count']} cards in hand, "
-                    f"you only have {hand_count}. DRAW first!"
+                    f"you only have {hand_count}. RESEARCH first!"
                 )
 
-        # Check board colors in hand requirement (e.g., Code of Laws tuck)
+        # Check board colors in hand requirement (e.g., Pascaline archive)
         if requirements["needs_board_colors_in_hand"] and hand_count > 0:
             board_colors = []
             for color in ["red", "blue", "green", "yellow", "purple"]:
@@ -1136,7 +1130,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
             if not matching_colors:
                 return (
                     f"⚠️ {card_name}: {VIABILITY_USELESS} - you have no cards in hand matching colors on your board. "
-                    f"Your board has: {', '.join(board_colors)}. DRAW or MELD instead!"
+                    f"Your board has: {', '.join(board_colors)}. RESEARCH or DEPLOY instead!"
                 )
 
         # Check splay targets (need 2+ cards to reveal anything)
@@ -1150,7 +1144,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
             if not splayable_colors:
                 return (
                     f"⚠️ {card_name}: {VIABILITY_LOW_VALUE} - none of your color stacks have 2+ cards, "
-                    f"so splaying won't reveal anything. Consider DRAWING or MELDING instead!"
+                    f"so proliferating won't reveal anything. Consider RESEARCHING or DEPLOYING instead!"
                 )
 
         # Check age deck availability
@@ -1159,13 +1153,13 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
             if not deck or len(deck) == 0:
                 return (
                     f"✅ {card_name}: BONUS - age {age} deck is empty! "
-                    f"You'll draw from age {age+1} instead - even better value!"
+                    f"You'll research from age {age+1} instead - even better value!"
                 )
             elif len(deck) < 2:
-                # Only note if card draws multiple cards - not necessarily bad
+                # Only note if card researches multiple cards - not necessarily bad
                 return (
                     f"ℹ️ {card_name}: NOTE - age {age} deck only has {len(deck)} cards left. "
-                    f"Additional draws will come from age {age+1} - potentially better!"
+                    f"Additional researches will come from age {age+1} - potentially better!"
                 )
 
         return None
@@ -1233,17 +1227,17 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
         if hand_count > 10:
             warnings.append(
                 f"🚨 CRITICAL: You have {hand_count} cards in hand! This is WAY TOO MANY! "
-                f"You should MELD cards to build your board, not hoard them! "
-                f"MELD at least {hand_count - 5} cards before using dogma again!"
+                f"You should DEPLOY cards to build your board, not hoard them! "
+                f"DEPLOY at least {hand_count - 5} cards before using execute again!"
             )
         elif hand_count > 6:
             warnings.append(
                 f"⚠️ WARNING: You have {hand_count} cards in hand. This is too many! "
-                f"Consider MELDING cards to build your board instead of drawing more. "
-                f"Cards in hand don't help you - cards on your board give you symbols and dogma effects!"
+                f"Consider DEPLOYING cards to build your board instead of researching more. "
+                f"Cards in hand don't help you - cards on your board give you symbols and execute effects!"
             )
 
-        # CRITICAL: Warn about draw-only dogmas when hand is already large
+        # CRITICAL: Warn about research-only executes when hand is already large
         draw_only_dogmas = {"The Wheel", "Sailing", "Canal Building"}
         for color in ["red", "blue", "green", "yellow", "purple"]:
             color_cards = board.get(f"{color}_cards", [])
@@ -1252,8 +1246,8 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
                 card_name = top_card.get("name")
                 if card_name in draw_only_dogmas and hand_count > 4:
                     warnings.append(
-                        f"🛑 STOP! {card_name} only draws cards - you already have {hand_count} cards in hand! "
-                        f"MELD your cards instead! Drawing more is USELESS - you need BOARD POWER, not more hand cards!"
+                        f"🛑 STOP! {card_name} only researches cards - you already have {hand_count} cards in hand! "
+                        f"DEPLOY your cards instead! Researching more is USELESS - you need BOARD POWER, not more hand cards!"
                     )
 
         # Check for action repetition (last 3 actions)
@@ -1272,7 +1266,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
                     warnings.append(
                         f"🔁 REPETITION WARNING: You've activated {card_name} {count} times in a row! "
                         f"This is usually a mistake. If the card isn't helping you win, try a different action! "
-                        f"Consider DRAWING to get better cards or MELDING to build your board."
+                        f"Consider RESEARCHING to get better cards or DEPLOYING to build your board."
                     )
 
         # INTELLIGENT CARD ANALYSIS: Check each card on board using action primitive analysis
@@ -1294,7 +1288,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
         # If no warnings, give positive feedback
         if not warnings:
             warnings.append(
-                "✅ Your hand size looks good and your board dogmas should work."
+                "✅ Your hand size looks good and your board executes should work."
             )
 
         return "\n".join(warnings)
@@ -1319,9 +1313,9 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
         card_descriptions = self._get_card_descriptions()
 
         if not board or not any(board.values()):
-            return "\nYour board: Empty (no cards to dogma!)"
+            return "\nYour board: Empty (no cards to execute!)"
 
-        parts = ["\nYOUR BOARD (cards you can dogma):"]
+        parts = ["\nYOUR BOARD (cards you can execute):"]
         for color in ["red", "blue", "green", "yellow", "purple"]:
             if color in board and board[color]:
                 top_card = board[color][0]  # Top card is first in list
@@ -1339,11 +1333,11 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
         return "\n".join(parts)
 
     def _format_achievement_status(self, game_state: dict) -> str:
-        """Format achievement progress"""
+        """Format breakthrough progress"""
         player_state = game_state.get("current_player_state", {})
         achievements = player_state.get("achievements", [])
 
-        return f"\nAchievements: {len(achievements)}/6 needed"
+        return f"\nBreakthroughs: {len(achievements)}/6 needed"
 
     def _format_sharing_analysis(self, game_state: dict) -> str:
         """
@@ -1367,7 +1361,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
         opp = opponents[0]
         opp_symbols = opp.get("symbol_counts", {})
 
-        for symbol in ["bulb", "castle", "crown", "leaf", "clock", "factory"]:
+        for symbol in ["algorithm", "circuit", "neural_net", "data", "human_mind", "robot"]:
             yours = player_symbols.get(symbol, 0)
             theirs = opp_symbols.get(symbol, 0)
             if theirs > 0 or yours > 0:  # Only show if either has any
@@ -1376,7 +1370,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
 
         lines.append("</sharing_risk>")
         lines.append("")
-        lines.append("TIP: Use dogmas where your symbol > opponent. Else DRAW.")
+        lines.append("TIP: Use executes where your symbol > opponent. Else RESEARCH.")
 
         return "\n".join(lines)
 
@@ -1413,10 +1407,10 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
         for opp in opponents:
             parts.append(f"\n{opp['name']}:")
             parts.append(f"  Score: {opp['score_total']}")
-            parts.append(f"  Achievements: {len(opp.get('achievements', []))}")
+            parts.append(f"  Breakthroughs: {len(opp.get('achievements', []))}")
             parts.append(f"  Hand: {opp['hand_count']} cards")
 
-            # Add symbol counts for demand evaluation
+            # Add symbol counts for override evaluation
             symbol_counts = opp.get("symbol_counts", {})
             if symbol_counts:
                 counts_str = ", ".join(
@@ -1424,7 +1418,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
                 )
                 parts.append(f"  Symbols: {counts_str}")
 
-            # Show opponent's board (what they can dogma with) - now with effects
+            # Show opponent's board (what they can execute with) - now with effects
             board = opp.get("board", {})
             has_board_cards = any(
                 board.get(f"{color}_cards")
@@ -1457,7 +1451,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
             "\n\nRespond with ONLY valid JSON (no comments or extra text):\n"
             "{\n"
             '  "action_type": "draw",\n'
-            '  "card_name": "Archery",\n'
+            '  "card_name": "Abacus",\n'
             '  "age": 1,\n'
             '  "reasoning": "Brief explanation of your strategy"\n'
             "}\n\n"
@@ -1471,7 +1465,7 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
 
     def _get_game_rules(self) -> str:
         """Get cached game rules"""
-        return """# Innovation Rules Summary
+        return """# The Singularity Rules Summary
 
 **CRITICAL: INTERACTION RESPONSE FORMAT**
 When responding to player interactions (card selections, color choices, etc.), you MUST:
@@ -1483,7 +1477,7 @@ When responding to player interactions (card selections, color choices, etc.), y
 - Example INCORRECT response: "I'll select this card: {"selected_cards": ["B 012"]}"
 
 **OPTIONAL SELECTIONS (decline pattern):**
-- Some selections are optional (e.g., "Select 1 achievement(s) or decline")
+- Some selections are optional (e.g., "Select 1 breakthrough(s) or decline")
 - To DECLINE an optional selection, respond with: {"decline": true}
 - DO NOT use null or empty arrays - use explicit decline flag
 - Example declining: {"decline": true}
@@ -1491,85 +1485,85 @@ When responding to player interactions (card selections, color choices, etc.), y
 
 ## Turn Structure:
 1. Player has 2 actions per turn
-2. Available actions: Draw, Meld, Dogma, Achieve
+2. Available actions: Research, Deploy, Execute, Breakthrough
 3. Actions decrease actions_remaining counter
 4. Turn ends when actions_remaining = 0 or player chooses "end_turn"
 
 ## Core Actions:
 
-### Draw
-- Draw one card from age deck
+### Research
+- Take one card from age deck into hand
 - Age = highest top card on board, or age 1 if empty
-- If deck empty, draw from next higher age
+- If deck empty, research from next higher age
 
-### Meld
+### Deploy
 - Play one card from hand to board
 - Goes on top of matching color stack
 - Card must match one of 5 colors (red, blue, green, yellow, purple)
 - **NO HAND LIMIT**: You can hold as many cards as you want
-- **Strategic Value of Melding:**
-  - Cards in your HAND provide NO symbols or dogma effects
-  - Cards on your BOARD give you symbols, dogma effects, and power
-  - Melding builds your board presence and unlocks dogma abilities
+- **Strategic Value of Deploying:**
+  - Cards in your HAND provide NO symbols or execute effects
+  - Cards on your BOARD give you symbols, execute effects, and power
+  - Deploying builds your board presence and unlocks execute abilities
   - Balance between holding cards for flexibility vs building board strength
-  - Consider melding when: (1) Need symbols for dogma effects, (2) Want to unlock new dogma abilities, (3) Building toward achievements
-  - Consider holding cards when: (1) Waiting for better meld targets, (2) Cards needed for specific dogma effects (like Code of Laws), (3) Strategic timing matters
+  - Consider deploying when: (1) Need symbols for execute effects, (2) Want to unlock new execute abilities, (3) Building toward breakthroughs
+  - Consider holding cards when: (1) Waiting for better deploy targets, (2) Cards needed for specific execute effects (like Pascaline), (3) Strategic timing matters
 
-### Dogma
-- Activate dogma effect of top card
-- **CRITICAL: READ THE CARD TEXT BEFORE USING DOGMA!**
+### Execute
+- Activate execute effect of top card
+- **CRITICAL: READ THE CARD TEXT BEFORE USING EXECUTE!**
   - Check if you meet the effect's requirements
-  - Example: "Meld cards with castle symbols" - Do you HAVE castle cards?
-  - If the effect requires something you don't have, the dogma DOES NOTHING (wasted action!)
-  - **DON'T waste actions on useless dogmas - DRAW instead!**
+  - Example: "Deploy cards with circuit symbols" - Do you HAVE circuit cards?
+  - If the effect requires something you don't have, the execute DOES NOTHING (wasted action!)
+  - **DON'T waste actions on useless executes - RESEARCH instead!**
 
 - **SHARING MECHANICS (CRITICAL):**
-  - Each dogma card has a resource symbol (castle, crown, leaf, lightbulb, factory, clock)
-  - Before executing I DEMAND effects: Check if opponents can SHARE
+  - Each execute card has a resource symbol (circuit, neural_net, data, algorithm, robot, human_mind)
+  - Before executing I Override effects: Check if opponents can SHARE
   - **Sharing is based on SYMBOL COUNTS, NOT card colors**
-  - If opponent has >= your count of the dogma's resource symbol, they SHARE the effect
-  - Example: You dogma Code of Laws (crown symbol). If opponent has >= crown symbols on their board, they share
+  - If opponent has >= your count of the execute's resource symbol, they SHARE the effect
+  - Example: You execute Pascaline (neural_net symbol). If opponent has >= neural_net symbols on their board, they share
   - **Card color is COMPLETELY IRRELEVANT to sharing** - only symbol counts matter
   - **SHARING = OPPONENT BENEFITS = BAD FOR YOU (usually)**
 
-  **HOW TO ANALYZE SHARING (CRITICAL FOR DOGMA DECISIONS):**
+  **HOW TO ANALYZE SHARING (CRITICAL FOR EXECUTE DECISIONS):**
   - Each player's board includes "symbol_counts" (precalculated for you!)
-  - Before using dogma: Check the card's "dogma_resource" field
+  - Before using execute: Check the card's "dogma_resource" field (the resource symbol)
   - Compare YOUR symbol count vs OPPONENT's symbol count for that resource
-  - If opponent has >= your count, they SHARE (benefit from your dogma!)
-  - Example: Tools has dogma_resource="lightbulb"
-    - Check your symbol_counts["lightbulb"] vs opponent's symbol_counts["lightbulb"]
+  - If opponent has >= your count, they SHARE (benefit from your execute!)
+  - Example: Abacus has dogma_resource="algorithm"
+    - Check your symbol_counts["algorithm"] vs opponent's symbol_counts["algorithm"]
     - If opponent >= you, they get the benefit too!
   - **If opponent shares, they get a FREE ACTION at your expense!**
-  - Even if dogma gives you a small benefit (like drawing 1 card), if opponent shares, just DRAW instead
-  - Why give opponent a free action when you can just draw yourself?
-  - Only use dogma when: (1) Effect is significantly better than drawing, AND (2) Opponent won't share
-  - **DEFEND AGAINST DEMANDS**: Look at opponent's top cards and their dogma_resource
-    - If you have >= symbols, you're SAFE from their I DEMAND effects
-    - If you have < symbols, they can demand from you!
+  - Even if execute gives you a small benefit (like researching 1 card), if opponent shares, just RESEARCH instead
+  - Why give opponent a free action when you can just research yourself?
+  - Only use execute when: (1) Effect is significantly better than researching, AND (2) Opponent won't share
+  - **DEFEND AGAINST OVERRIDES**: Look at opponent's top cards and their dogma_resource
+    - If you have >= symbols, you're SAFE from their I Override effects
+    - If you have < symbols, they can override you!
 
-- **IMPORTANT**: There are NO achievement points for dogma actions - only for claiming achievements!
+- **IMPORTANT**: There are NO breakthrough points for execute actions - only for claiming breakthroughs!
 - Effects execute in order: shares first, then non-cooperatives
 
-### Achieve
-- Claim achievement card
+### Breakthrough
+- Claim breakthrough card
 - Requirements:
   - Score >= (age * 5)
-  - **Top card age ≥ achievement age** (CRITICAL - see below!)
-- Achievements count toward victory
+  - **Top card age >= breakthrough age** (CRITICAL - see below!)
+- Breakthroughs count toward victory
 
-**CRITICAL ACHIEVEMENT STRATEGY:**
-- You CANNOT claim an achievement without a top card of that age or higher!
-- Example: To claim Age 3 achievement, you need:
-  - Score >= 15 points (3 × 5), AND
+**CRITICAL BREAKTHROUGH STRATEGY:**
+- You CANNOT claim a breakthrough without a top card of that age or higher!
+- Example: To claim Age 3 breakthrough, you need:
+  - Score >= 15 points (3 x 5), AND
   - At least one top card on your board of age 3+
 - If you have 50+ points but your highest top card is age 2, you can ONLY claim ages 1-2!
-- **FIX: MELD higher age cards to unlock higher achievements!**
-- **FIX: DRAW from higher ages to get cards you can meld!**
-- Your draw age = highest top card age on board (or 1 if empty)
+- **FIX: DEPLOY higher age cards to unlock higher breakthroughs!**
+- **FIX: RESEARCH from higher ages to get cards you can deploy!**
+- Your research age = highest top card age on board (or 1 if empty)
 
 ## Victory Conditions:
-1. Achievements: 6 achievements
+1. Breakthroughs: 6 breakthroughs
 2. Score: If highest age exhausted, highest score wins
 """
 

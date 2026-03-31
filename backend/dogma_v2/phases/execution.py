@@ -68,7 +68,7 @@ class EffectExecutionPhase(DogmaPhase):
                 # Done with activating player, check for sharing
                 return self._start_sharing_if_applicable(context)
 
-        # Note: In Innovation, non-demand effects still execute for the active player
+        # Note: In The Singularity, non-demand effects still execute for the active player
         # even if a demand had no compliance. The active player always gets their rewards.
 
         # Get current effect
@@ -639,7 +639,7 @@ class EffectExecutionPhase(DogmaPhase):
                         )
 
                 # CRITICAL FIX: Check for immediate victory conditions after each effect
-                # According to Innovation Ultimate rules, victory should be checked immediately
+                # According to The Singularity Ultimate rules, victory should be checked immediately
                 # when conditions are met, not just at end of dogma
                 from ..victory_checker import VictoryChecker
 

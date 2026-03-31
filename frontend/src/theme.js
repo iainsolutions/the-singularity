@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
-// Innovation game theme with cohesive color scheme
+// The Singularity game theme with cohesive color scheme
 const theme = createTheme({
   palette: {
     mode: "light",

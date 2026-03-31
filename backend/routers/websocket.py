@@ -1,4 +1,4 @@
-"""WebSocket endpoint for Innovation game server.
+"""WebSocket endpoint for The Singularity game server.
 
 Handles real-time game communication with authentication.
 """

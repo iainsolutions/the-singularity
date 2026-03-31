@@ -203,16 +203,4 @@ class ScoreCards(ActionPrimitive):
                 # Special achievements not available
                 pass
 
-        # UNSEEN EXPANSION: Rebuild Safeguards when cards are scored
-        # Scored cards leave the board, affecting Safeguard status
-        if scored_count > 0 and hasattr(context.game, "expansion_config"):
-            if context.game.expansion_config.is_enabled("unseen"):
-                try:
-                    from game_logic.unseen.safeguard_tracker import SafeguardTracker
-                    tracker = SafeguardTracker(context.game)
-                    tracker.rebuild_all_safeguards()
-                    logger.debug("Rebuilt Safeguards after scoring cards")
-                except Exception as e:
-                    logger.error(f"Failed to rebuild Safeguards: {e}")
-
         return ActionResult.SUCCESS

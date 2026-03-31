@@ -8,14 +8,12 @@ from pydantic import (
     BaseModel,
     Field,
     computed_field,
-    field_validator,
     model_serializer,
     model_validator,
 )
 
 from .card import Card
 from .deck_manager import DeckManager
-from .expansion import ExpansionConfig
 from .player import Player
 from .score_manager import ScoreManager
 
@@ -136,28 +134,11 @@ class PendingDogmaAction(BaseModel):
             seen.remove(obj_id)
 
 
-class PendingMeldInteraction(BaseModel):
-    """Represents a meld action waiting for player interaction (Cities expansion: Search icon)"""
-
-    player_id: str  # Player who melded the city
-    city_card_id: str  # City card that was melded
-    icon_index: int  # Which icon is pending interaction
-    icon_data: dict[str, Any] = Field(
-        default_factory=dict
-    )  # State needed to resume icon resolution
-    messages_so_far: list[str] = Field(
-        default_factory=list
-    )  # Messages from icons processed before suspension
-
-
 class GameState(BaseModel):
     current_player_index: int = 0
     actions_remaining: int = 2
     current_action: ActionType | None = None
     pending_dogma_action: PendingDogmaAction | None = None
-    pending_meld_interaction: PendingMeldInteraction | None = (
-        None  # Cities: Meld action waiting for icon interaction
-    )
     original_player_index: int | None = (
         None  # Backup of player before dogma interaction
     )
@@ -174,8 +155,6 @@ class GameState(BaseModel):
     actions_taken: int = 0  # Track total actions taken in game (for statistics)
     turn_number: int = 1  # Track the current turn number for action log
 
-    # Cities expansion state tracking
-    endorse_used_this_turn: bool = False  # Track if endorse has been used this turn
 
 
 class Game(BaseModel):
@@ -184,26 +163,8 @@ class Game(BaseModel):
     phase: GamePhase = GamePhase.WAITING_FOR_PLAYERS
     state: GameState = Field(default_factory=GameState)
 
-    # Expansion configuration
-    expansion_config: ExpansionConfig = Field(default_factory=ExpansionConfig)
-
     # Card piles managed by DeckManager
     deck_manager: DeckManager = Field(default_factory=DeckManager)
-
-    # Artifacts expansion: Artifact decks, museums, and dig events
-    artifact_decks: dict[int, list[Card]] = Field(
-        default_factory=dict
-    )  # Age -> artifact cards
-    museum_supply: list = Field(
-        default_factory=list
-    )  # Available museums (list[Museum])
-    pending_dig_events: list[dict] = Field(
-        default_factory=list
-    )  # Dig events waiting for player choice
-
-    # Figures expansion: Event bus for karma/auspice/echo events
-    _event_bus: Any = None  # GameEventBus instance (lazily initialized)
-
     # Action log with rotation settings
     action_log: list[ActionLogEntry] = Field(default_factory=list)
     MAX_ACTION_LOG_SIZE: int = 100  # Keep last 100 actions in memory
@@ -225,19 +186,6 @@ class Game(BaseModel):
     transaction_history: list[dict] = Field(default_factory=list)
     MAX_TRANSACTION_HISTORY: int = 50  # Keep last 50 transactions
 
-    # Pydantic validators
-    @field_validator("expansion_config", mode="before")
-    @classmethod
-    def validate_expansion_config(cls, v):
-        """Convert dict to ExpansionConfig if needed during deserialization.
-
-        This is critical for Redis loading where expansion_config is stored as dict.
-        Without this validator, Pydantic will fail to properly deserialize from Redis.
-        """
-        if isinstance(v, dict):
-            return ExpansionConfig.from_dict(v)
-        return v
-
     @model_validator(mode="before")
     @classmethod
     def deserialize_flattened_decks(cls, data: Any) -> Any:
@@ -246,8 +194,6 @@ class Game(BaseModel):
             # Check if deck fields exist at root level
             deck_fields = [
                 "age_decks",
-                "cities_decks",
-                "unseen_decks",
                 "achievement_cards",
                 "special_achievements",
                 "special_achievements_available",
@@ -310,19 +256,9 @@ class Game(BaseModel):
         return player.name if player else None
 
     @property
-    def event_bus(self):
-        """Get or create the event bus for karma effects (Figures expansion)"""
-        if self._event_bus is None and self.is_expansion_enabled("figures"):
-            from game_logic.events import GameEventBus
-
-            self._event_bus = GameEventBus()
-            logger.info("Initialized GameEventBus for Figures expansion")
-        return self._event_bus
-
-    @property
     def score_manager(self) -> ScoreManager:
         """Get the score manager instance"""
-        return ScoreManager(self.expansion_config)
+        return ScoreManager()
 
     @property
     def achievement_cards(self) -> dict[int, list[Card]]:
@@ -380,11 +316,7 @@ class Game(BaseModel):
         self.phase = GamePhase.SETUP_CARD_SELECTION
 
         # Set up the decks first (this loads all cards)
-        # Set up the decks first (this loads all cards)
         self.setup_decks()
-
-        # Initialize expansion zones for all players
-        self._initialize_player_expansion_zones()
 
         # Deal two cards from age 1 to each player for setup selection
         # Use the already-loaded age 1 deck
@@ -416,40 +348,8 @@ class Game(BaseModel):
         # Remove card from hand and meld it to board
         player.hand.remove(card_to_meld)
 
-        # ARTIFACTS EXPANSION: Check for dig events before melding
-        # Get the card that will be covered (if any)
-        color_stack = player.board.get_cards_by_color(str(card_to_meld.color.value))
-        covered_card = None
-        if color_stack:
-            # The top card of the stack will be covered by the new meld
-            covered_card = color_stack[-1]
-
         # Perform the meld
         player.board.add_card(card_to_meld)
-
-        # ARTIFACTS EXPANSION: Detect dig event after meld
-        if self.expansion_config.is_enabled("artifacts"):
-            from game_logic.artifacts.dig_event_detector import DigEventDetector
-
-            dig_age = DigEventDetector.check_dig_event(
-                game=self,
-                melded_card=card_to_meld,
-                covered_card=covered_card,
-                player_id=player.id,
-            )
-
-            if dig_age is not None:
-                # Store dig event for handling by async_game_manager
-                if not hasattr(self, "pending_dig_events"):
-                    self.pending_dig_events = []
-
-                dig_event = {
-                    "dig_age": dig_age,
-                    "player_id": player.id,
-                    "melded_card": card_to_meld.name,
-                    "covered_card": covered_card.name if covered_card else None,
-                }
-                self.pending_dig_events.append(dig_event)
 
         # Mark player as having made their selection
         player.setup_selection_made = True
@@ -515,49 +415,7 @@ class Game(BaseModel):
 
     def setup_decks(self):
         """Set up the age decks for the game"""
-        self.deck_manager.setup_decks(self.expansion_config)
-
-        # ARTIFACTS EXPANSION: Load artifact decks if enabled
-        if self.expansion_config.is_enabled("artifacts"):
-            from data.artifact_loader import load_artifacts_for_game
-            from models.museum import create_museum_supply
-
-            self.artifact_decks = load_artifacts_for_game(shuffle=True)
-            logger.info(
-                f"Loaded {sum(len(cards) for cards in self.artifact_decks.values())} "
-                f"artifact cards across {len(self.artifact_decks)} ages"
-            )
-
-            # Initialize museum supply
-            self.museum_supply = create_museum_supply()
-            logger.info(f"Initialized {len(self.museum_supply)} museums")
-
-    def _initialize_player_expansion_zones(self):
-        """Initialize expansion-specific zones for all players based on enabled expansions."""
-        for player in self.players:
-            # ARTIFACTS EXPANSION: Museums are in game.museum_supply (shared), not per-player
-            # Player museums list starts empty and gets populated when they claim museums
-            # No initialization needed here - museum_supply already initialized in setup_decks()
-
-            # UNSEEN EXPANSION: Initialize Safe
-            if self.expansion_config.is_enabled("unseen"):
-                if not player.safe:
-                    from models.safe import Safe
-
-                    player.safe = Safe(player_id=player.id)
-                    logger.debug(f"Initialized Safe for {player.name}")
-
-            # ECHOES EXPANSION: Initialize Forecast Zone
-            if self.expansion_config.is_enabled("echoes"):
-                if not player.forecast_zone:
-                    from models.forecast_zone import ForecastZone
-
-                    player.forecast_zone = ForecastZone(player_id=player.id)
-                    logger.debug(f"Initialized Forecast Zone for {player.name}")
-
-    def _setup_unseen_decks(self):
-        """Deprecated: Handled by DeckManager"""
-        pass
+        self.deck_manager.setup_decks()
 
     def next_turn(self):
         """Advance to the next player's turn"""
@@ -565,12 +423,6 @@ class Game(BaseModel):
             self.players
         )
         self.state.actions_remaining = 2  # Subsequent players get 2 actions per turn
-
-        # UNSEEN EXPANSION: Reset first draw tracking for all players
-        if self.expansion_config.is_enabled("unseen"):
-            for player in self.players:
-                player.reset_draw_tracking()
-            logger.debug("Reset first draw tracking for all players (Unseen expansion)")
 
     def draw_card(self, age: int) -> Card | None:
         """Draw a card from the specified age deck, skipping to higher ages if empty"""
@@ -593,21 +445,10 @@ class Game(BaseModel):
         """Return a card to the bottom of its age deck"""
         self.deck_manager.return_card(card, age)
 
-    def is_expansion_enabled(self, expansion: str) -> bool:
-        """Check if an expansion is enabled for this game.
-
-        Args:
-            expansion: Expansion name ("cities", "artifacts", etc.)
-
-        Returns:
-            bool: True if expansion is enabled
-        """
-        return self.expansion_config.is_enabled(expansion)
-
     def get_achievements_needed_for_victory(self) -> int:
-        """Calculate achievements needed for victory based on player count and expansions.
+        """Calculate achievements needed for victory based on player count.
 
-        Formula from official rules: 8 - (# of Players) + (# of Expansions), minimum 3
+        Formula: 8 - (# of Players), minimum 3
 
         Returns:
             int: Number of achievements needed to win
@@ -779,7 +620,6 @@ class Game(BaseModel):
 
         return {
             "players": [p.model_dump(mode="json") for p in self.players],
-            "expansion_config": self.expansion_config.to_dict(),
             "state": self.state.model_dump(mode="json"),
             "deck_manager": self.deck_manager.model_dump(mode="json"),
             "action_log": [entry.model_dump(mode="json") for entry in self.action_log],
@@ -822,18 +662,6 @@ class Game(BaseModel):
                 logger.warning(f"Failed to restore legacy deck state: {e}")
                 # Initialize empty if failed
                 self.deck_manager = DeckManager()
-
-        # Restore expansion config
-        if "expansion_config" in snapshot:
-            from .expansion import ExpansionConfig
-
-            self.expansion_config = ExpansionConfig.from_dict(
-                snapshot["expansion_config"]
-            )
-        else:
-            from .expansion import ExpansionConfig
-
-            self.expansion_config = ExpansionConfig()  # Default to no expansions
 
         # Restore action log
         if "action_log" in snapshot:
@@ -975,12 +803,7 @@ class Game(BaseModel):
             return state_changes
 
     def to_dict(self, viewer_id: str | None = None):
-        """
-        Serialize game state to dictionary.
-
-        Args:
-            viewer_id: Optional player ID for privacy filtering (Unseen expansion Safes)
-        """
+        """Serialize game state to dictionary."""
         logger.debug(
             f"Serializing game {self.game_id} with {len(self.action_log)} action log entries"
         )
@@ -1001,12 +824,10 @@ class Game(BaseModel):
                 player.to_dict(
                     include_computed=True,
                     achievement_cards=self.deck_manager.achievement_cards,
-                    viewer_id=viewer_id,  # UNSEEN: Pass viewer_id for Safe filtering
                 )
                 for player in self.players
             ],
             "phase": self.phase.value,
-            "expansion_config": self.expansion_config.to_dict(),
             "current_player_index": self.state.current_player_index,  # Root level for frontend
             "actions_remaining": self.state.actions_remaining,  # Root level for frontend
             "state": {
@@ -1039,7 +860,6 @@ class Game(BaseModel):
                 self.current_player.to_dict(
                     include_computed=True,
                     achievement_cards=self.deck_manager.achievement_cards,
-                    viewer_id=viewer_id,  # UNSEEN: Pass viewer_id for Safe filtering
                 )
                 if self.current_player
                 else None
@@ -1056,20 +876,16 @@ class Game(BaseModel):
             "age_deck_sizes": {
                 age: len(cards) for age, cards in self.deck_manager.age_decks.items()
             },
-            # UNSEEN EXPANSION: Include Unseen decks (hidden information - only sizes visible)
-            "unseen_deck_sizes": (
-                {
-                    age: len(cards)
-                    for age, cards in self.deck_manager.unseen_decks.items()
-                }
-                if hasattr(self.deck_manager, "unseen_decks")
-                and self.deck_manager.unseen_decks
-                else {}
-            ),
             "achievement_cards": {
                 str(age): [card.to_dict() for card in cards]
                 for age, cards in self.deck_manager.achievement_cards.items()
             },
+            "special_achievements": {
+                name: card.to_dict()
+                for name, card in self.deck_manager.special_achievements.items()
+            },
+            "special_achievements_available": self.deck_manager.special_achievements_available,
+            "special_achievements_junk": self.deck_manager.special_achievements_junk,
             "junk_pile": [card.to_dict() for card in self.deck_manager.junk_pile],
             "action_log": [
                 {
@@ -1105,28 +921,5 @@ class Game(BaseModel):
                 self.pending_transaction if self.pending_transaction else None
             ),
         }
-
-        # Artifacts expansion: Add artifact decks and museums
-        if self.artifact_decks:
-            result["artifact_deck_sizes"] = {
-                age: len(cards) for age, cards in self.artifact_decks.items()
-            }
-        else:
-            result["artifact_deck_sizes"] = {}
-
-        if self.museum_supply:
-            from .museum import Museum
-
-            result["museum_supply"] = [
-                museum.to_dict() if isinstance(museum, Museum) else museum
-                for museum in self.museum_supply
-            ]
-        else:
-            result["museum_supply"] = []
-
-        if self.pending_dig_events:
-            result["pending_dig_events"] = self.pending_dig_events
-        else:
-            result["pending_dig_events"] = []
 
         return result

@@ -199,7 +199,7 @@ function getIconTooltipContent(icon) {
       title: "🔍 Search Icon",
       description:
         "Reveal the top X cards of the base Age-X deck. Take all cards with the target icon into your hand. Return the rest in any order.",
-      example: "Search for crown cards → Reveal Age 1 deck, take all crown cards.",
+      example: "Search for neural_net cards → Reveal Age 1 deck, take all neural_net cards.",
     },
     plus: {
       title: "➕ Plus Icon",
@@ -244,7 +244,7 @@ function getIconTooltipContent(icon) {
       description:
         "While this city is visible, you have this fountain achievement. Simple and reliable!",
       example:
-        "Crown Fountain city on top of stack → Gain Crown Fountain achievement. Keep it visible to maintain it.",
+        "Neural Net Fountain city on top of stack → Gain Neural Net Fountain achievement. Keep it visible to maintain it.",
     },
   };
 

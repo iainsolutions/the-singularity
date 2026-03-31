@@ -282,7 +282,7 @@ class SelectLowest(ActionPrimitive):
                 cards, key=lambda c: getattr(c, "age", 0), reverse=not ascending
             )
         elif self.criteria == "score_value":
-            # Score value is usually the age for Innovation
+            # Score value is usually the age for The Singularity
             return sorted(
                 cards, key=lambda c: getattr(c, "age", 0), reverse=not ascending
             )

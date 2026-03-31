@@ -154,20 +154,6 @@ class CompletionPhase(DogmaPhase):
         # NOTE: Action decrement removed - this is handled by the game manager
         # The dogma v2 system should not modify game state directly, only through results
 
-        # ARTIFACTS EXPANSION: Transfer dig events from context to game state
-        if context.has_variable("pending_dig_events"):
-            dig_events = context.get_variable("pending_dig_events", [])
-            if dig_events:
-                # Initialize game.pending_dig_events if needed
-                if not hasattr(context.game, "pending_dig_events"):
-                    context.game.pending_dig_events = []
-
-                # Append dig events from this dogma execution
-                context.game.pending_dig_events.extend(dig_events)
-                logger.debug(
-                    f"ARTIFACTS: Transferred {len(dig_events)} dig events to game state"
-                )
-
         # Clear temporary variables that shouldn't persist
         temp_variables = {
             "selected_cards",
@@ -313,7 +299,7 @@ class CompletionPhase(DogmaPhase):
             ):
                 return f"{game.winner.name} wins"
 
-            # Simple score check fallback (standard Innovation rules)
+            # Simple score check fallback (standard The Singularity rules)
             for player in game.players:
                 total_score = sum(card.age for card in player.score_pile)
                 achievements_count = len(player.achievements)

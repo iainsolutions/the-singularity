@@ -3,7 +3,7 @@ Consolidated Phase System for Dogma v2.0 - Phase 2 Architecture Optimization
 
 This module implements the streamlined 8-phase architecture that consolidates
 the original 15+ phases while maintaining all transaction boundaries and
-suspension points required for Innovation's multiplayer turn-based gameplay.
+suspension points required for The Singularity's multiplayer turn-based gameplay.
 
 Key improvements over the original system:
 1. Reduced complexity: 15+ phases -> 8 core phases
@@ -49,17 +49,11 @@ from .phases.execution import EffectExecutionPhase
 
 logger = logging.getLogger(__name__)
 
-# Import ExecutionTracer for demand pipeline monitoring
-try:
-    from debug.execution_tracer import get_execution_tracer
+TRACER_AVAILABLE = False
 
-    TRACER_AVAILABLE = True
-except ImportError:
-    logger.warning("ExecutionTracer not available - tracing disabled")
-    TRACER_AVAILABLE = False
 
-    def get_execution_tracer():
-        return None
+def get_execution_tracer():
+    return None
 
 
 @dataclass
@@ -446,7 +440,7 @@ class ConsolidatedInitializationPhase(ConsolidatedPhase):
         )
 
         # Check each other player for BOTH sharing and vulnerability
-        # Per Innovation rules:
+        # Per The Singularity rules:
         # - Sharing: opponent has >= active player's count (for non-demand effects)
         # - Vulnerable: opponent has < active player's count (for demand effects)
         # These are mutually exclusive!
@@ -519,7 +513,7 @@ class ConsolidatedInitializationPhase(ConsolidatedPhase):
         visible_icons = []
 
         # Base game symbols (also defined in select_symbol.py VALID_SYMBOLS)
-        all_symbols = ["castle", "leaf", "lightbulb", "crown", "factory", "clock"]
+        all_symbols = ["circuit", "data", "algorithm", "neural_net", "robot", "human_mind"]
 
         for symbol in all_symbols:
             count = player.count_symbol(symbol)
@@ -540,7 +534,7 @@ class ConsolidatedInitializationPhase(ConsolidatedPhase):
                 )
 
             # CRITICAL FIX: Execute ALL dogma effects, not just one
-            # Innovation rules: All dogma effects on a card execute in order
+            # The Singularity rules: All dogma effects on a card execute in order
             # This fixes Bug #2 where Archery's second effect was skipped
 
             validated_effects = []
@@ -885,17 +879,6 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
         # Execute the plan using ActionScheduler.execute_plan()
         scheduler = ActionScheduler(trace_recorder=trace_recorder)
         result = scheduler.execute_plan(plan, context)
-
-        # Store trace if tracing was enabled
-        if trace_recorder and result.trace:
-            from routers.tracing import store_trace
-
-            game_id = context.get_variable("_game_id_for_tracing")
-            if game_id:
-                store_trace(game_id, result.trace)
-                logger.info(
-                    f"CONSOLIDATED SHARING: Stored trace {result.trace.trace_id} for game {game_id}"
-                )
 
         # Handle interaction suspension
         if result.requires_interaction:
@@ -1289,7 +1272,7 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
         """
         Check if a player actually did something with cards during this effect.
 
-        Per Innovation rules (p. 947-952), sharing occurs when an opponent's use of
+        Per The Singularity rules (p. 947-952), sharing occurs when an opponent's use of
         the shared effect causes them to "do something with a card." This includes:
         - splay, meld, tuck, exchange, transfer, draw, achieve, etc.
 
@@ -1362,7 +1345,7 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
         Get sharing players in clockwise order starting after the activating player.
 
         CRITICAL: This method ensures correct player ordering independent of
-        Game.players list order. Innovation rules require opponents to execute
+        Game.players list order. The Singularity rules require opponents to execute
         shared effects in clockwise order from the activating player.
 
         Args:
@@ -1549,16 +1532,6 @@ class ConsolidatedExecutionPhase(ConsolidatedPhase):
         result = scheduler.execute_plan(plan, context)
 
         # Store trace if tracing was enabled
-        if trace_recorder and result.trace:
-            from routers.tracing import store_trace
-
-            game_id = context.get_variable("_game_id_for_tracing")
-            if game_id:
-                store_trace(game_id, result.trace)
-                logger.info(
-                    f"CONSOLIDATED EXECUTION: Stored trace {result.trace.trace_id} for game {game_id}"
-                )
-
         # Handle interaction suspension
         if result.requires_interaction:
             logger.info(
@@ -2013,7 +1986,7 @@ class ConsolidatedCompletionPhase(ConsolidatedPhase):
         final_results = list(context.results)
         logger.info(f"CONSOLIDATED: Collected {len(final_results)} final results")
 
-        # Apply sharing bonus if applicable (Innovation rules Section 2.6)
+        # Apply sharing bonus if applicable (The Singularity rules Section 2.6)
         # If anyone shared and board state changed, activating player draws 1 card
         context = self._apply_sharing_bonus(context)
 
@@ -2022,9 +1995,6 @@ class ConsolidatedCompletionPhase(ConsolidatedPhase):
         if victory_context != context:
             logger.info("CONSOLIDATED: Victory condition detected during completion")
             context = victory_context
-
-        # ARTIFACTS EXPANSION: Transfer dig events from context to game state
-        context = self._process_dig_events(context)
 
         # Set completion metadata
         context = context.with_variable("completion_timestamp", time.time())
@@ -2041,7 +2011,7 @@ class ConsolidatedCompletionPhase(ConsolidatedPhase):
             # CRITICAL FIX: Check if anyone ACTUALLY shared by looking at state changes
             # Don't just check SharingContext.anyone_shared() which tracks per-effect state
             # but doesn't indicate whether the player actually performed card operations
-            # Per Innovation rules: sharing bonus ONLY if opponent "did something with a card"
+            # Per The Singularity rules: sharing bonus ONLY if opponent "did something with a card"
 
             # Get sharing player IDs
             sharing_player_ids = (
@@ -2183,39 +2153,6 @@ class ConsolidatedCompletionPhase(ConsolidatedPhase):
             logger.warning(f"CONSOLIDATED: Victory check placeholder failed: {e}")
             return context
 
-    def _process_dig_events(self, context: DogmaContext) -> DogmaContext:
-        """Transfer pending dig events from context to game state.
-
-        Dig events are detected during meld actions and stored in context.
-        This method transfers them to game state for AsyncGameManager to handle.
-
-        Multiple dig events can accumulate during a single action if multiple
-        cards are melded in sequence.
-        """
-        # Only process if Artifacts expansion is enabled
-        if not context.game.expansion_config.is_enabled("artifacts"):
-            return context
-
-        # Check for pending dig events
-        dig_events = context.get_variable("pending_dig_events", [])
-        if not dig_events:
-            return context
-
-        logger.info(
-            f"ARTIFACTS: Storing {len(dig_events)} dig event(s) for AsyncGameManager processing"
-        )
-
-        # Store dig events in game state for AsyncGameManager to handle
-        # They will be presented as interactions after dogma completes
-        if not hasattr(context.game, "pending_dig_events"):
-            context.game.pending_dig_events = []
-
-        context.game.pending_dig_events.extend(dig_events)
-
-        # Clear from context (now stored in game state)
-        context = context.without_variable("pending_dig_events")
-
-        return context
 
 
 class ConsolidatedLoggingPhase(ConsolidatedPhase):

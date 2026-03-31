@@ -41,22 +41,18 @@ const ActionLog = memo(
         });
     }, []);
 
-    // Map event types to main game actions
+    // Map event types to main game actions (Singularity terminology)
     const getMainAction = useCallback((eventType) => {
       const type = (eventType || "").toLowerCase();
 
-      // Main player actions
-      if (type.includes("action_draw") || type === "draw") return "Draw";
-      if (type.includes("action_meld") || type === "meld") return "Meld";
+      if (type.includes("action_draw") || type === "draw") return "Research";
+      if (type.includes("action_meld") || type === "meld") return "Deploy";
       if (type.includes("action_dogma") || type === "dogma" || type.startsWith("dogma_"))
-        return "Dogma";
-      if (type.includes("action_achieve") || type === "achieve") return "Achieve";
+        return "Execute";
+      if (type.includes("action_achieve") || type === "achieve") return "Breakthrough";
 
-      // Turn events
       if (type.includes("turn_started")) return "Turn Start";
       if (type.includes("turn_ended")) return "Turn End";
-
-      // Game events
       if (type.includes("game_")) return "Game";
       if (type.includes("player_")) return "Player";
 
@@ -185,13 +181,13 @@ const ActionLog = memo(
     // Helper function to get action color
     const getActionColor = useCallback((actionType) => {
       switch (actionType?.toLowerCase()) {
-        case "draw":
+        case "research":
           return "primary";
-        case "meld":
+        case "deploy":
           return "success";
-        case "dogma":
+        case "execute":
           return "warning";
-        case "achieve":
+        case "breakthrough":
           return "secondary";
         case "turn start":
         case "turn end":
@@ -223,18 +219,18 @@ const ActionLog = memo(
             return `${data.player} has ${data.count} ${data.symbol}`;
 
           case "meld":
-            return `${data.player} melded ${data.card} (${data.color})`;
+            return `${data.player} deployed ${data.card} (${data.color})`;
 
           case "draw":
             return data.revealed
-              ? `${data.player} drew ${data.card} (age ${data.age})`
-              : `${data.player} drew a card (age ${data.age})`;
+              ? `${data.player} researched ${data.card} (era ${data.age})`
+              : `${data.player} researched a card (era ${data.age})`;
 
           case "score":
-            return `${data.player} scored ${data.card}`;
+            return `${data.player} harvested ${data.card}`;
 
           case "splay":
-            return `${data.player} splayed ${data.color} ${data.direction}`;
+            return `${data.player} proliferated ${data.color} ${data.direction}`;
 
           case "transfer":
             return `${data.card} transferred from ${data.from_player || data.from_location} to ${
@@ -242,10 +238,10 @@ const ActionLog = memo(
             }`;
 
           case "return":
-            return `${data.player} returned ${data.card}`;
+            return `${data.player} recalled ${data.card}`;
 
           case "tuck":
-            return `${data.player} tucked ${data.card} to ${data.color}`;
+            return `${data.player} archived ${data.card} to ${data.color}`;
 
           default:
             // For unknown types, create a readable summary

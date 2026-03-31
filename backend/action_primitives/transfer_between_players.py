@@ -626,7 +626,7 @@ class TransferBetweenPlayers(ActionPrimitive):
         Returns a list of (card, source_player) tuples.
 
         Performance: O(n*m*f) where n=opponents, m=cards per opponent, f=filters.
-        This is acceptable for Innovation's typical game scale (2-4 players, small card pools).
+        This is acceptable for The Singularity's typical game scale (2-4 players, small card pools).
         """
         from .filter_cards import FilterCards
 

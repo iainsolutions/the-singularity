@@ -143,21 +143,6 @@ class ConsolidatedDogmaExecutor:
                     logger.info(f"CONSOLIDATED: Dogma endorsed - effects will be doubled")
                 logger.info(f"CONSOLIDATED: Started new transaction {transaction.id}")
 
-            # Check if execution tracing is enabled for this game
-            from routers.tracing import is_tracing_enabled
-
-            if is_tracing_enabled(game.game_id):
-                logger.info(
-                    f"CONSOLIDATED: Execution tracing ENABLED for game {game.game_id}"
-                )
-                # Store trace flag in context so phases can use it
-                context = context.with_variable("_tracing_enabled", True)
-                context = context.with_variable("_game_id_for_tracing", game.game_id)
-            else:
-                logger.debug(
-                    f"CONSOLIDATED: Execution tracing disabled for game {game.game_id}"
-                )
-
             # Execute consolidated phase system
             result = self._execute_consolidated_phases(context, transaction)
 

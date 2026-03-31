@@ -2,7 +2,7 @@
 Victory condition checking utility for dogma system.
 
 This module provides centralized victory checking that can be called
-immediately after any effect to enforce Innovation Ultimate rules.
+immediately after any effect to enforce The Singularity Ultimate rules.
 """
 
 import logging
@@ -19,7 +19,7 @@ class VictoryChecker:
         """
         Check if any victory conditions have been met and should trigger immediately.
 
-        According to Innovation Ultimate rules, victory conditions should be checked
+        According to The Singularity Ultimate rules, victory conditions should be checked
         immediately when conditions are met, not just at end of turn.
 
         Args:
@@ -109,7 +109,7 @@ class VictoryChecker:
             ):
                 return f"{game.winner.name} wins"
 
-            # Simple score check fallback (standard Innovation rules)
+            # Simple score check fallback (standard The Singularity rules)
             for player in game.players:
                 total_score = sum(card.age for card in player.score_pile)
                 achievements_count = len(player.achievements)
@@ -240,7 +240,7 @@ class VictoryChecker:
         """
         Check if the game should end due to age deck exhaustion.
 
-        According to Innovation Ultimate rules:
+        According to The Singularity Ultimate rules:
         - Game ends when all age decks 1-10 are empty
         - Player with highest score wins
         - In case of tie, tied players share victory

@@ -67,7 +67,7 @@ class CardSelectionData(InteractionData):
     @model_validator(mode="after")
     def validate_card_selection_constraints(self):
         """Validate CardSelectionData constraints after all fields are set"""
-        # Note: Duplicate card IDs are ALLOWED in Innovation - players can have multiple copies
+        # Note: Duplicate card IDs are ALLOWED in The Singularity - players can have multiple copies
         # of the same card (e.g., multiple Pottery cards from different draws)
         # The original validation was too strict and prevented valid game states
 
@@ -218,7 +218,7 @@ class SymbolSelectionData(InteractionData):
     @validator("available_symbols")
     def validate_symbols(cls, v):
         """Ensure all symbols are valid"""
-        valid_symbols = {"castle", "leaf", "lightbulb", "crown", "factory", "clock"}
+        valid_symbols = {"circuit", "data", "algorithm", "neural_net", "robot", "human_mind"}
         for symbol in v:
             if symbol not in valid_symbols:
                 raise ValueError(

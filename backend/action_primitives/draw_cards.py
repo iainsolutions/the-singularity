@@ -111,22 +111,6 @@ class DrawCards(ActionPrimitive):
         # Draw cards
         drawn_cards = []
         for i in range(count):
-            # UNSEEN EXPANSION: Check if this should draw from Unseen deck
-            # Only the FIRST draw per turn is replaced with Unseen card
-            unseen_card = None
-            if i == 0:  # Only check on first draw of this DrawCards action
-                unseen_card = self._try_draw_unseen(context, age)
-
-            if unseen_card:
-                # Unseen card was drawn and tucked to Safe
-                # Record it as drawn but note it went to Safe (not hand/score)
-                drawn_cards.append(unseen_card)
-                context.add_result(f"Drew Unseen card (Age {age}) - tucked to Safe")
-                # Store for variable access (card went to Safe, not hand)
-                continue  # Skip normal drawing logic
-
-            # Normal draw logic (base game or subsequent draws)
-            # Get card from game's age deck (with Echoes expansion support)
             card = self._draw_card_from_deck(context.game, age, context)
             if card:
                 # Place card in specified location
@@ -413,53 +397,3 @@ class DrawCards(ActionPrimitive):
                 return age
         return None
 
-    def _try_draw_unseen(self, context: ActionContext, age: int):
-        """
-        Try to draw an Unseen card (first draw replacement).
-
-        Returns the Unseen card if drawn, None otherwise.
-        """
-        # Check if Unseen expansion is enabled
-        if not hasattr(context.game, "expansion_config"):
-            return None
-
-        if not context.game.expansion_config.is_enabled("unseen"):
-            return None
-
-        # Check if this is the first draw for the player
-        if context.player.first_draw_used:
-            logger.debug("Not first draw - using normal deck")
-            return None
-
-        # Try to draw from Unseen deck
-        logger.debug(f"First draw detected - attempting Unseen draw for age {age}")
-
-        try:
-            from game_logic.unseen.unseen_draw_resolver import UnseenDrawResolver
-
-            resolver = UnseenDrawResolver(context.game)
-            unseen_card, destination = resolver.draw_unseen_card(context.player.id, age)
-
-            if unseen_card and destination == "safe":
-                logger.info(
-                    f"{context.player.name} drew Unseen card (first draw) "
-                    f"- tucked to Safe"
-                )
-                # Record state change
-                context.state_tracker.record_draw(
-                    player_name=context.player.name,
-                    card_name="Unseen Card",  # Hide card identity
-                    age=age,
-                    revealed=False,
-                    context=context.get_variable("current_effect_context", "draw"),
-                )
-                return unseen_card
-
-            # Fallback to normal draw if Unseen deck empty
-            logger.debug("Unseen deck empty, falling back to normal draw")
-            return None
-
-        except Exception as e:
-            logger.error(f"Error drawing Unseen card: {e}")
-            # On error, fallback to normal draw
-            return None

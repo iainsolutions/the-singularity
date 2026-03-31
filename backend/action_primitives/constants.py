@@ -122,7 +122,7 @@ class InteractionType(str, Enum):
 # Numeric constants
 DEFAULT_DRAW_COUNT: Final[int] = 1
 DEFAULT_SELECT_COUNT: Final[int] = 1
-MAX_HAND_SIZE: Final[int] = 99  # Effectively unlimited in Innovation
+MAX_HAND_SIZE: Final[int] = 99  # Effectively unlimited in The Singularity
 MIN_AGE: Final[int] = 1
 ACTIONS_PER_TURN: Final[int] = 2
 
@@ -131,12 +131,12 @@ ACTIONS_PER_TURN: Final[int] = 2
 class SymbolName(str, Enum):
     """Symbol names as strings."""
 
-    CASTLE = "castle"
-    LEAF = "leaf"
-    LIGHTBULB = "lightbulb"
-    CROWN = "crown"
-    FACTORY = "factory"
-    CLOCK = "clock"
+    CIRCUIT = "circuit"
+    DATA = "data"
+    ALGORITHM = "algorithm"
+    NEURAL_NET = "neural_net"
+    ROBOT = "robot"
+    HUMAN_MIND = "human_mind"
 
 
 # Color names (for consistency)
@@ -166,5 +166,5 @@ class ContextVariable(str, Enum):
     CHOSEN_COLOR = "chosen_color"
     CONDITION_MET = "condition_met"
     LOOP_COUNT = "loop_count"
-    CASTLE_CARDS = "castle_cards"  # Used by Masonry
+    CIRCUIT_CARDS = "circuit_cards"  # Used by Masonry
     ELIGIBLE_CARDS = "eligible_cards"

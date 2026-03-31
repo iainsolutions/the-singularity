@@ -1,5 +1,5 @@
 """
-Card-related API endpoints for Innovation game server.
+Card-related API endpoints for The Singularity game server.
 Handles card database access and caching functionality.
 """
 

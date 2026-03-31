@@ -1,0 +1,23 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Algorithm flowchart">
+  <!-- Top rectangle (start) -->
+  <rect x="22" y="8" width="20" height="12" rx="2" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Arrow down -->
+  <line x1="32" y1="20" x2="32" y2="28" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <polygon points="32,32 28,26 36,26" fill="#1B2A4A"/>
+
+  <!-- Middle diamond (decision) -->
+  <path d="M 32 32 L 42 40 L 32 48 L 22 40 Z" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Left arrow (false path) -->
+  <line x1="22" y1="40" x2="14" y2="40" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <polygon points="10,40 15,36 15,44" fill="#1B2A4A"/>
+
+  <!-- Right arrow (true path) -->
+  <line x1="42" y1="40" x2="50" y2="40" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <polygon points="54,40 49,36 49,44" fill="#1B2A4A"/>
+
+  <!-- Bottom arrow -->
+  <line x1="32" y1="48" x2="32" y2="54" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <polygon points="32,58 28,52 36,52" fill="#1B2A4A"/>
+</svg>

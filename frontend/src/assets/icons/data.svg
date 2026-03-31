@@ -1,0 +1,28 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Database data storage">
+  <!-- Cylinder top ellipse -->
+  <ellipse cx="32" cy="16" rx="16" ry="6" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Cylinder sides -->
+  <line x1="16" y1="16" x2="16" y2="48" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="48" y1="16" x2="48" y2="48" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Cylinder bottom ellipse -->
+  <ellipse cx="32" cy="48" rx="16" ry="6" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Data bands/rings inside cylinder -->
+  <ellipse cx="32" cy="28" rx="16" ry="4.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <ellipse cx="32" cy="38" rx="16" ry="4.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+
+  <!-- Small data points within -->
+  <circle cx="24" cy="22" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <circle cx="32" cy="20" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <circle cx="40" cy="22" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+
+  <circle cx="22" cy="32" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <circle cx="32" cy="30" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <circle cx="42" cy="32" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+
+  <circle cx="24" cy="42" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <circle cx="32" cy="40" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <circle cx="40" cy="42" r="1.5" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+</svg>

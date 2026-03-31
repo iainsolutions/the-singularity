@@ -83,7 +83,7 @@ function GameLayout({
 
   return (
     <Container maxWidth={false} sx={{ padding: { xs: 0.5, sm: 1 }, pb: isMyTurn ? 12 : 1 }}>
-      <title>Innovation - Game {gameId?.slice(0, 8)}</title>
+      <title>The Singularity - Game {gameId?.slice(0, 8)}</title>
 
       {/* Game Header */}
       <Paper elevation={1} sx={{ mb: 1, p: 1.5 }}>

@@ -91,9 +91,9 @@ function GameLobby() {
 
   return (
     <>
-      <title>Innovation - Lobby</title>
+      <title>The Singularity - Lobby</title>
       <div className={styles.lobby}>
-        <h1 className={styles["lobby__title"]}>Innovation</h1>
+        <h1 className={styles["lobby__title"]}>The Singularity</h1>
         <p>
           <a href="/rules.html" target="_blank" rel="noopener noreferrer">
             View Rules

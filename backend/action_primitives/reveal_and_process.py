@@ -112,23 +112,23 @@ class RevealAndProcess(ActionPrimitive):
         from models.card import Symbol
 
         for card in cards:
-            if condition_check == "has_castles":
-                if hasattr(card, "symbols") and Symbol.CASTLE in card.symbols:
+            if condition_check == "has_circuits":
+                if hasattr(card, "symbols") and Symbol.CIRCUIT in card.symbols:
                     return True
-            elif condition_check == "has_crowns":
-                if hasattr(card, "symbols") and Symbol.CROWN in card.symbols:
+            elif condition_check == "has_neural_nets":
+                if hasattr(card, "symbols") and Symbol.NEURAL_NET in card.symbols:
                     return True
-            elif condition_check == "has_leafs" or condition_check == "has_leaves":
-                if hasattr(card, "symbols") and Symbol.LEAF in card.symbols:
+            elif condition_check == "has_data":
+                if hasattr(card, "symbols") and Symbol.DATA in card.symbols:
                     return True
-            elif condition_check == "has_lightbulbs":
-                if hasattr(card, "symbols") and Symbol.LIGHTBULB in card.symbols:
+            elif condition_check == "has_algorithms":
+                if hasattr(card, "symbols") and Symbol.ALGORITHM in card.symbols:
                     return True
-            elif condition_check == "has_factories":
-                if hasattr(card, "symbols") and Symbol.FACTORY in card.symbols:
+            elif condition_check == "has_robots":
+                if hasattr(card, "symbols") and Symbol.ROBOT in card.symbols:
                     return True
-            elif condition_check == "has_clocks":
-                if hasattr(card, "symbols") and Symbol.CLOCK in card.symbols:
+            elif condition_check == "has_human_minds":
+                if hasattr(card, "symbols") and Symbol.HUMAN_MIND in card.symbols:
                     return True
             elif condition_check.startswith("color_"):
                 required_color = condition_check.split("_", 1)[1]

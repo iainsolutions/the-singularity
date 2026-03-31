@@ -137,7 +137,7 @@ class StateChangeTracker:
     ):
         """Record a symbol count check (always public)"""
         # CRITICAL FIX: Convert Symbol enum to string if needed
-        # Symbol enum objects print as "Symbol.LIGHTBULB" instead of "lightbulb"
+        # Symbol enum objects print as "Symbol.ALGORITHM" instead of "algorithm"
         # Symbol inherits from (str, Enum) so we can get the value directly
         if hasattr(symbol, "value"):
             symbol_str = symbol.value

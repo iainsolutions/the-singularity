@@ -173,6 +173,11 @@ def main():
 
     os.chdir(backend_dir)
 
+    # Ensure backend dir is on PYTHONPATH regardless of shell config
+    existing = os.environ.get('PYTHONPATH', '')
+    if backend_dir not in existing.split(os.pathsep):
+        os.environ['PYTHONPATH'] = backend_dir + (os.pathsep + existing if existing else '')
+
     # Check if virtual environment exists
     if not os.path.exists('../venv') and not os.path.exists('venv'):
         print("No virtual environment found. Creating one...")

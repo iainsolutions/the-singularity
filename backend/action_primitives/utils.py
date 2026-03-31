@@ -409,12 +409,12 @@ class CardFilterUtils:
         from models.card import Symbol
 
         symbol_map = {
-            SymbolName.CASTLE: Symbol.CASTLE,
-            SymbolName.LEAF: Symbol.LEAF,
-            SymbolName.LIGHTBULB: Symbol.LIGHTBULB,
-            SymbolName.CROWN: Symbol.CROWN,
-            SymbolName.FACTORY: Symbol.FACTORY,
-            SymbolName.CLOCK: Symbol.CLOCK,
+            SymbolName.CIRCUIT: Symbol.CIRCUIT,
+            SymbolName.DATA: Symbol.DATA,
+            SymbolName.ALGORITHM: Symbol.ALGORITHM,
+            SymbolName.NEURAL_NET: Symbol.NEURAL_NET,
+            SymbolName.ROBOT: Symbol.ROBOT,
+            SymbolName.HUMAN_MIND: Symbol.HUMAN_MIND,
         }
 
         required_symbol = symbol_map.get(symbol.lower())

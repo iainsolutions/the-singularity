@@ -17,7 +17,7 @@ class CountSymbols(ActionPrimitive):
     Primitive for counting symbols on a player's board.
 
     Parameters:
-    - symbol: Symbol to count ("leaf", "castle", "crown", "lightbulb", "factory", "clock")
+    - symbol: Symbol to count ("data", "circuit", "neural_net", "algorithm", "robot", "human_mind")
     - scope: How to count - "total_symbols" or "colors_with_symbol" (unique colors)
     - store_result: Variable name to store the count (default: "symbol_count")
     - player: Which player to count for ("self", "target", "all_opponents")
@@ -25,7 +25,7 @@ class CountSymbols(ActionPrimitive):
 
     def __init__(self, config: dict[str, Any]):
         super().__init__(config)
-        self.symbol = config.get("symbol", "leaf")
+        self.symbol = config.get("symbol", "data")
         self.scope = config.get("scope", "total_symbols")
         # Support both 'store_result' and 'store_as' parameter names for backward compatibility
         self.store_result = config.get(
@@ -39,7 +39,7 @@ class CountSymbols(ActionPrimitive):
         symbol_lower = self.symbol.lower()
 
         # Validate symbol name against known symbols
-        valid_symbols = ["castle", "leaf", "lightbulb", "crown", "factory", "clock"]
+        valid_symbols = ["circuit", "data", "algorithm", "neural_net", "robot", "human_mind"]
         if symbol_lower not in valid_symbols:
             context.add_result(f"Invalid symbol: {self.symbol}")
             return ActionResult.FAILURE
@@ -68,12 +68,12 @@ class CountSymbols(ActionPrimitive):
             from models.card import Symbol
 
             symbol_map = {
-                "castle": Symbol.CASTLE,
-                "leaf": Symbol.LEAF,
-                "lightbulb": Symbol.LIGHTBULB,
-                "crown": Symbol.CROWN,
-                "factory": Symbol.FACTORY,
-                "clock": Symbol.CLOCK,
+                "circuit": Symbol.CIRCUIT,
+                "data": Symbol.DATA,
+                "algorithm": Symbol.ALGORITHM,
+                "neural_net": Symbol.NEURAL_NET,
+                "robot": Symbol.ROBOT,
+                "human_mind": Symbol.HUMAN_MIND,
             }
             symbol_enum = symbol_map.get(symbol_lower, symbol_lower)
 
@@ -121,12 +121,12 @@ class CountSymbols(ActionPrimitive):
             from models.card import Symbol
 
             symbol_map = {
-                "castle": Symbol.CASTLE,
-                "leaf": Symbol.LEAF,
-                "lightbulb": Symbol.LIGHTBULB,
-                "crown": Symbol.CROWN,
-                "factory": Symbol.FACTORY,
-                "clock": Symbol.CLOCK,
+                "circuit": Symbol.CIRCUIT,
+                "data": Symbol.DATA,
+                "algorithm": Symbol.ALGORITHM,
+                "neural_net": Symbol.NEURAL_NET,
+                "robot": Symbol.ROBOT,
+                "human_mind": Symbol.HUMAN_MIND,
             }
             symbol_enum = symbol_map.get(symbol_lower, symbol_lower)
 

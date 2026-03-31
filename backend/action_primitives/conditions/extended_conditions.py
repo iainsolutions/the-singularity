@@ -1,4 +1,4 @@
-"""Additional condition evaluators for Unseen expansion cards."""
+"""Extended condition evaluators for card effects."""
 
 import logging
 from typing import Any
@@ -8,8 +8,8 @@ from .base import BaseConditionEvaluator
 logger = logging.getLogger(__name__)
 
 
-class UnseenConditions(BaseConditionEvaluator):
-    """Evaluates conditions specific to Unseen expansion and frequently-used missing types."""
+class ExtendedConditions(BaseConditionEvaluator):
+    """Evaluates extended conditions used by card effects."""
 
     @property
     def supported_conditions(self) -> set[str]:
@@ -40,11 +40,9 @@ class UnseenConditions(BaseConditionEvaluator):
             "greater_than_or_equal",  # 2 usages
             "greater_than",  # 2 usages
             "color_in_list",  # 2 usages
-            "coin_flip_result",  # 2 usages
             "cards_count_at_least",  # 2 usages
             "card_is_bottom",  # 2 usages
             # LOW PRIORITY (1 usage each but needed)
-            "tucked_yellow_or_expansion",
             "set_equals",
             "returned_card_age",
             "points_scored_less_than",
@@ -146,12 +144,12 @@ class UnseenConditions(BaseConditionEvaluator):
             if card and hasattr(card, "symbols"):
                 from models.card import Symbol
                 symbol_map = {
-                    "castle": Symbol.CASTLE,
-                    "leaf": Symbol.LEAF,
-                    "lightbulb": Symbol.LIGHTBULB,
-                    "crown": Symbol.CROWN,
-                    "factory": Symbol.FACTORY,
-                    "clock": Symbol.CLOCK,
+                    "circuit": Symbol.CIRCUIT,
+                    "data": Symbol.DATA,
+                    "algorithm": Symbol.ALGORITHM,
+                    "neural_net": Symbol.NEURAL_NET,
+                    "robot": Symbol.ROBOT,
+                    "human_mind": Symbol.HUMAN_MIND,
                 }
                 target_symbol = symbol_map.get(str(symbol).lower()) if isinstance(symbol, str) else symbol
                 return target_symbol in card.symbols
@@ -211,12 +209,12 @@ class UnseenConditions(BaseConditionEvaluator):
                 if cards:
                     from models.card import Symbol
                     symbol_map = {
-                        "castle": Symbol.CASTLE,
-                        "leaf": Symbol.LEAF,
-                        "lightbulb": Symbol.LIGHTBULB,
-                        "crown": Symbol.CROWN,
-                        "factory": Symbol.FACTORY,
-                        "clock": Symbol.CLOCK,
+                        "circuit": Symbol.CIRCUIT,
+                        "data": Symbol.DATA,
+                        "algorithm": Symbol.ALGORITHM,
+                        "neural_net": Symbol.NEURAL_NET,
+                        "robot": Symbol.ROBOT,
+                        "human_mind": Symbol.HUMAN_MIND,
                     }
                     target_symbol = symbol_map.get(str(symbol).lower())
                     for card in cards:
@@ -324,16 +322,11 @@ class UnseenConditions(BaseConditionEvaluator):
                 return item not in items
             return True
 
-        elif condition_type == "coin_flip_result":
-            result = context.get_variable("coin_flip_result", "")
-            expected = condition.get("result", "heads")
-            return result == expected
-
         elif condition_type == "is_current_turn":
             if hasattr(context.game_state, "current_turn_player"):
                 return context.game_state.current_turn_player == context.current_player.id
             return False
 
         # Return False for unhandled conditions
-        logger.debug(f"UnseenConditions: Unhandled condition type '{condition_type}'")
+        logger.debug(f"ExtendedConditions: Unhandled condition type '{condition_type}'")
         return False

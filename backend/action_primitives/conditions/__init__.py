@@ -18,11 +18,11 @@ from .game_state_conditions import GameStateConditions
 from .logical_conditions import LogicalConditions
 from .player_conditions import PlayerConditions
 from .variable_conditions import VariableConditions
-from .unseen_conditions import UnseenConditions
+from .extended_conditions import ExtendedConditions
 
 # Registry of all condition evaluators
 CONDITION_EVALUATORS = [
-    UnseenConditions(),  # Check Unseen conditions first (most specific)
+    ExtendedConditions(),
     CardConditions(),
     PlayerConditions(),
     GameStateConditions(),

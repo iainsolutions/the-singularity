@@ -7,10 +7,10 @@ import { enableDebug, disableDebug, isDebugEnabled } from "./logger";
 
 // Expose debug control to window object for browser console access
 if (typeof window !== "undefined") {
-  window.InnovationDebug = {
+  window.SingularityDebug = {
     /**
      * Enable debug logging
-     * Usage: InnovationDebug.enable()
+     * Usage: SingularityDebug.enable()
      */
     enable: () => {
       enableDebug();
@@ -19,7 +19,7 @@ if (typeof window !== "undefined") {
 
     /**
      * Disable debug logging
-     * Usage: InnovationDebug.disable()
+     * Usage: SingularityDebug.disable()
      */
     disable: () => {
       disableDebug();
@@ -28,7 +28,7 @@ if (typeof window !== "undefined") {
 
     /**
      * Check current debug status
-     * Usage: InnovationDebug.status()
+     * Usage: SingularityDebug.status()
      */
     status: () => {
       const enabled = isDebugEnabled();
@@ -38,17 +38,17 @@ if (typeof window !== "undefined") {
 
     /**
      * Help information
-     * Usage: InnovationDebug.help()
+     * Usage: SingularityDebug.help()
      */
     help: () => {
       console.log(`
-🎮 Innovation Debug Control
-===========================
+🎮 The Singularity Debug Control
+=================================
 Available commands:
-  InnovationDebug.enable()  - Turn on debug logging
-  InnovationDebug.disable() - Turn off debug logging
-  InnovationDebug.status()  - Check current status
-  InnovationDebug.help()    - Show this help
+  SingularityDebug.enable()  - Turn on debug logging
+  SingularityDebug.disable() - Turn off debug logging
+  SingularityDebug.status()  - Check current status
+  SingularityDebug.help()    - Show this help
 
 Debug mode persists across page reloads until disabled.
       `);
@@ -57,7 +57,7 @@ Debug mode persists across page reloads until disabled.
 
   // Show status on initial load in development
   if (import.meta.env.MODE === "development") {
-    console.log('💡 Debug controls available. Type "InnovationDebug.help()" for info.');
+    console.log('💡 Debug controls available. Type "SingularityDebug.help()" for info.');
   }
 }
 

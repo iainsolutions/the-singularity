@@ -1,5 +1,5 @@
 """
-Comprehensive logging and monitoring configuration for Innovation game.
+Comprehensive logging and monitoring configuration for The Singularity game.
 Combines activity logging, system monitoring, and game event tracking.
 """
 

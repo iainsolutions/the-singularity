@@ -24,8 +24,6 @@ class ClaimAchievement(ActionPrimitive):
     - achievement: Achievement name to claim, age number, or "auto" to determine
     - conditions: Additional conditions to check before claiming
     - age: Age of achievement to claim (if achievement is not a name)
-    - source: Where to achieve from ("auto", "board", or "safe" for Unseen expansion)
-    - safe_index: Index in Safe to achieve from (only used when source="safe")
     """
 
     def __init__(self, config: dict[str, Any]):
@@ -33,15 +31,9 @@ class ClaimAchievement(ActionPrimitive):
         self.achievement = config.get("achievement")
         self.age = config.get("age")
         self.conditions = config.get("conditions", [])
-        self.source = config.get("source", "auto")  # NEW: For Unseen expansion
-        self.safe_index = config.get("safe_index")  # NEW: For Unseen expansion
 
     def execute(self, context: ActionContext) -> ActionResult:
         """Claim an achievement for the player"""
-
-        # UNSEEN EXPANSION: Handle achieving from Safe
-        if self.source == "safe":
-            return self._achieve_from_safe(context)
 
         if not self.achievement and not self.age:
             context.add_result("No achievement specified")
@@ -163,36 +155,6 @@ class ClaimAchievement(ActionPrimitive):
 
     def _can_claim_achievement(self, context: ActionContext, achievement) -> bool:
         """Check if player meets requirements to claim the achievement"""
-        # UNSEEN EXPANSION: Check Safeguard restrictions first
-        if hasattr(context.game, "expansion_config") and context.game.expansion_config.is_enabled("unseen"):
-            try:
-                from game_logic.unseen.safeguard_tracker import SafeguardTracker
-
-                tracker = SafeguardTracker(context.game)
-                tracker.rebuild_all_safeguards()
-
-                # Build achievement ID
-                achievement_id = None
-                if hasattr(achievement, "age"):
-                    achievement_id = f"age_{achievement.age}"
-                elif hasattr(achievement, "name"):
-                    # Special achievements use name as ID
-                    achievement_id = f"special_{achievement.name.lower()}"
-
-                if achievement_id:
-                    can_claim, error_msg = tracker.can_claim_achievement(
-                        context.player.id, achievement_id
-                    )
-                    if not can_claim:
-                        logger.info(
-                            f"Achievement {achievement_id} blocked by Safeguard: {error_msg}"
-                        )
-                        context.add_result(f"Cannot claim: {error_msg}")
-                        return False
-            except Exception as e:
-                logger.error(f"Error checking Safeguard: {e}")
-                # On error, allow claim (fail open for backward compatibility)
-
         # For testing purposes, be more lenient with requirements
         # In a real game, you'd enforce stricter requirements
 
@@ -257,31 +219,13 @@ class ClaimAchievement(ActionPrimitive):
 
         # Special achievement metadata
         special_achievements = {
-            "Monument": {
-                "age": 1,
-                "description": "At least four top cards with a DEMAND effect",
-            },
-            "Empire": {
-                "age": 2,
-                "description": "At least three icons of each of these six types on your board",
-            },
-            "World": {
-                "age": 3,
-                "description": "At least twelve clock symbols on your board",
-            },
-            "Wonder": {
-                "age": 4,
-                "description": "Five colors splayed on your board, each splayed right, up, or aslant",
-            },
-            "Universe": {
-                "age": 5,
-                "description": "Five top cards, each of value at least 8",
-            },
-            "Wealth": {"age": 6, "description": "At least eight bonuses on your board"},
-            "win": {
-                "age": 999,  # Special marker for instant win
-                "description": "Instant victory via special achievement",
-            },
+            "Emergence": {"age": 1, "description": "Archive 6+ OR Harvest 6+ in a single turn"},
+            "Dominion": {"age": 2, "description": "3+ of every icon type visible on board"},
+            "Consciousness": {"age": 3, "description": "12+ visible Human Mind icons on board"},
+            "Apotheosis": {"age": 4, "description": "All 5 colors, each Proliferated right/up/aslant"},
+            "Transcendence": {"age": 5, "description": "All 5 colors, each top card Era 8+"},
+            "Abundance": {"age": 6, "description": "5+ Harvest cards from different eras"},
+            "win": {"age": 999, "description": "Instant victory via special achievement"},
         }
 
         # Check if already claimed
@@ -389,135 +333,3 @@ class ClaimAchievement(ActionPrimitive):
                 f"VICTORY TRIGGERED: {context.player.name} wins with {achievement_count} achievements in {player_count}-player game (needed {required_achievements})"
             )
 
-    def _achieve_from_safe(self, context: ActionContext) -> ActionResult:
-        """
-        Achieve using a secret from Safe (Unseen expansion).
-
-        Per official rules, players track the age of each secret (based on when drawn).
-        This allows achieving from Safe by index, knowing the age requirements are met.
-
-        Returns:
-            ActionResult indicating success or failure
-        """
-        # Validate Safe exists
-        if not hasattr(context.player, "safe") or not context.player.safe:
-            context.add_result("Player has no Safe (Unseen expansion not enabled)")
-            return ActionResult.FAILURE
-
-        # Get safe index
-        safe_idx = self.safe_index
-        if isinstance(safe_idx, str) and context.has_variable(safe_idx):
-            safe_idx = context.get_variable(safe_idx)
-
-        if safe_idx is None:
-            context.add_result("No safe_index specified for achieving from Safe")
-            return ActionResult.FAILURE
-
-        try:
-            safe_idx = int(safe_idx)
-        except (ValueError, TypeError):
-            context.add_result(f"Invalid safe_index: {safe_idx}")
-            return ActionResult.FAILURE
-
-        # Validate index is valid
-        if safe_idx < 0 or safe_idx >= context.player.safe.get_card_count():
-            context.add_result(
-                f"Invalid Safe index: {safe_idx} (Safe has {context.player.safe.get_card_count()} secrets)"
-            )
-            return ActionResult.FAILURE
-
-        # Get the secret's age (players track this for achievement validation)
-        secret_ages = context.player.safe.get_secret_ages()
-        secret_age = secret_ages[safe_idx]
-
-        logger.info(
-            f"Attempting to achieve from Safe: index {safe_idx}, age {secret_age}"
-        )
-
-        # Find the achievement for this age
-        achievement_card = None
-        if secret_age in context.game.deck_manager.achievement_cards:
-            achievements = context.game.deck_manager.achievement_cards[secret_age]
-            if achievements:
-                achievement_card = achievements[0]
-
-        if not achievement_card:
-            context.add_result(
-                f"No Age {secret_age} achievement available"
-            )
-            return ActionResult.FAILURE
-
-        # Validate player meets achievement requirements (score and board age)
-        if not self._can_claim_achievement(context, achievement_card):
-            context.add_result(
-                f"Player does not meet requirements for Age {secret_age} achievement"
-            )
-            return ActionResult.CONDITION_NOT_MET
-
-        # Remove secret from Safe (revealing it)
-        try:
-            secret_card = context.player.remove_from_safe(safe_idx)
-            logger.info(
-                f"Removed secret {secret_card.name} from Safe for achievement"
-            )
-        except (ValueError, IndexError) as e:
-            logger.error(f"Failed to remove secret from Safe: {e}")
-            context.add_result("Failed to remove secret from Safe")
-            return ActionResult.FAILURE
-
-        # Verify the card's age matches what we expected
-        if secret_card.age != secret_age:
-            logger.error(
-                f"Age mismatch: expected {secret_age}, got {secret_card.age}. "
-                "This indicates a bug in Safe age tracking."
-            )
-            # Continue anyway - the card is the source of truth
-
-        # Claim the achievement (standard logic)
-        achievement_name = achievement_card.name
-        if self._claim_age_based_achievement(context, achievement_card):
-            context.add_result(
-                f"Achieved {achievement_name} using secret {secret_card.name} from Safe"
-            )
-            logger.info(
-                f"Player {context.player.name} claimed {achievement_name} "
-                f"using secret from Safe (index {safe_idx})"
-            )
-
-            # UNSEEN EXPANSION: Remove Safeguards for claimed achievement
-            # Achievement is now claimed, so Safeguards no longer apply
-            if hasattr(context.game, "expansion_config"):
-                if context.game.expansion_config.is_enabled("unseen"):
-                    try:
-                        from game_logic.unseen.safeguard_tracker import SafeguardTracker
-                        tracker = SafeguardTracker(context.game)
-
-                        # Explicitly remove Safeguards for this achievement
-                        achievement_id = f"age_{achievement_card.age}"
-                        tracker.remove_safeguards_for_achievement(achievement_id)
-                        logger.debug(
-                            f"Removed Safeguards for {achievement_id} "
-                            f"(achievement claimed)"
-                        )
-
-                        # Rebuild all Safeguards (secret removed from Safe)
-                        tracker.rebuild_all_safeguards()
-                        logger.debug("Rebuilt Safeguards after achieving from Safe")
-                    except Exception as e:
-                        logger.error(f"Failed to update Safeguards: {e}")
-
-            self._check_victory(context)
-            return ActionResult.SUCCESS
-        else:
-            context.add_result(f"Failed to claim achievement: {achievement_name}")
-            # Put the secret back in Safe (at same index if possible)
-            try:
-                # Re-add to Safe (will go to end, not original position)
-                context.player.add_to_safe(secret_card)
-                logger.warning(
-                    "Achievement claim failed, returned secret to Safe (at end)"
-                )
-            except Exception as e:
-                logger.error(f"Failed to return secret to Safe: {e}")
-
-            return ActionResult.FAILURE

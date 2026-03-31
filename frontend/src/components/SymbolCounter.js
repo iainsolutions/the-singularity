@@ -3,21 +3,21 @@ import ScorePileCounter from "./ScorePileCounter";
 import styles from "./SymbolCounter.module.css";
 
 // Import symbol images
-import castleIcon from "../assets/symbols/castle.png";
-import leafIcon from "../assets/symbols/leaf.png";
-import lightbulbIcon from "../assets/symbols/lightbulb.png";
-import crownIcon from "../assets/symbols/crown.png";
-import factoryIcon from "../assets/symbols/factory.png";
-import clockIcon from "../assets/symbols/clock.png";
+import circuitIcon from "../assets/icons/circuit.svg";
+import dataIcon from "../assets/icons/data.svg";
+import algorithmIcon from "../assets/icons/algorithm.svg";
+import neuralNetIcon from "../assets/icons/neural_net.svg";
+import robotIcon from "../assets/icons/robot.svg";
+import humanMindIcon from "../assets/icons/human_mind.svg";
 
 // Move constants outside to prevent recreation on each render
 const SYMBOLS = [
-  { key: "castle", icon: castleIcon, name: "Castle" },
-  { key: "leaf", icon: leafIcon, name: "Leaf" },
-  { key: "lightbulb", icon: lightbulbIcon, name: "Lightbulb" },
-  { key: "crown", icon: crownIcon, name: "Crown" },
-  { key: "factory", icon: factoryIcon, name: "Factory" },
-  { key: "clock", icon: clockIcon, name: "Clock" },
+  { key: "circuit", icon: circuitIcon, name: "Circuit" },
+  { key: "data", icon: dataIcon, name: "Data" },
+  { key: "algorithm", icon: algorithmIcon, name: "Algorithm" },
+  { key: "neural_net", icon: neuralNetIcon, name: "Neural Net" },
+  { key: "robot", icon: robotIcon, name: "Robot" },
+  { key: "human_mind", icon: humanMindIcon, name: "Human Mind" },
 ];
 
 const STACK_KEYS = ["blue_cards", "red_cards", "green_cards", "yellow_cards", "purple_cards"];

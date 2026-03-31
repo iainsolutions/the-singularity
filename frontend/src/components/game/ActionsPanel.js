@@ -34,21 +34,21 @@ import { useGame } from "../../context/GameContext";
 import EndorseButton from "../EndorseButton";
 
 // Import symbol images for symbol selection
-import castleIcon from "../../assets/symbols/castle.png";
-import leafIcon from "../../assets/symbols/leaf.png";
-import lightbulbIcon from "../../assets/symbols/lightbulb.png";
-import crownIcon from "../../assets/symbols/crown.png";
-import factoryIcon from "../../assets/symbols/factory.png";
-import clockIcon from "../../assets/symbols/clock.png";
+import circuitIcon from "../../assets/icons/circuit.svg";
+import dataIcon from "../../assets/icons/data.svg";
+import algorithmIcon from "../../assets/icons/algorithm.svg";
+import neuralNetIcon from "../../assets/icons/neural_net.svg";
+import robotIcon from "../../assets/icons/robot.svg";
+import humanMindIcon from "../../assets/icons/human_mind.svg";
 
 // Symbol icon mapping
 const SYMBOL_ICONS = {
-  castle: castleIcon,
-  leaf: leafIcon,
-  lightbulb: lightbulbIcon,
-  crown: crownIcon,
-  factory: factoryIcon,
-  clock: clockIcon,
+  circuit: circuitIcon,
+  data: dataIcon,
+  algorithm: algorithmIcon,
+  neural_net: neuralNetIcon,
+  robot: robotIcon,
+  human_mind: humanMindIcon,
 };
 
 function ActionsPanel({
@@ -135,12 +135,12 @@ function ActionsPanel({
 
   const getDrawButtonText = () => {
     if (actualDrawAge === null) {
-      return isMobile ? "Draw" : "Draw (All ages exhausted)";
+      return isMobile ? "Research" : "Research (All eras exhausted)";
     }
     if (playerDrawAge === actualDrawAge) {
-      return `Draw (${playerDrawAge})`;
+      return `Research (${playerDrawAge})`;
     }
-    return isMobile ? `Draw (${actualDrawAge})` : `Draw (${playerDrawAge} → ${actualDrawAge})`;
+    return isMobile ? `Research (${actualDrawAge})` : `Research (${playerDrawAge} → ${actualDrawAge})`;
   };
 
   // Get eligible achievement ages for the current player - memoized
@@ -156,11 +156,10 @@ function ActionsPanel({
 
   const getAchieveButtonText = useCallback(() => {
     if (eligibleAges.length === 0) {
-      return "Achieve";
+      return "Breakthrough";
     }
 
-    // Show instruction to select an achievement first
-    return isMobile ? "Select Achievement" : "Select Achievement";
+    return isMobile ? "Select Breakthrough" : "Select Breakthrough";
   }, [eligibleAges, isMobile]);
 
   const getActionButtonProps = (
@@ -399,7 +398,7 @@ function ActionsPanel({
   });
 
   // Check if this is a symbol choice (symbols sent as choose_option with symbol names)
-  const validSymbols = ["castle", "leaf", "lightbulb", "crown", "factory", "clock"];
+  const validSymbols = ["circuit", "data", "algorithm", "neural_net", "robot", "human_mind"];
   const isSymbolChoice =
     isOptionChoice &&
     options.length > 0 &&
@@ -1143,7 +1142,7 @@ function ActionsPanel({
                   !canMeld,
                 )}
               >
-                {isMobile ? "Meld" : `Meld ${selectedCard?.name}`}
+                {isMobile ? "Deploy" : `Deploy ${selectedCard?.name}`}
               </Button>
             )}
 
@@ -1157,7 +1156,7 @@ function ActionsPanel({
                     handleDogma,
                   )}
                 >
-                  {isMobile ? "Dogma" : `Dogma ${selectedCard?.name}`}
+                  {isMobile ? "Execute" : `Execute ${selectedCard?.name}`}
                 </Button>
 
                 {/* ENDORSE BUTTON - Cities Expansion */}

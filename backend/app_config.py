@@ -1,5 +1,5 @@
 """
-Application Configuration for Innovation Game Server
+Application Configuration for The Singularity Game Server
 
 Centralizes all configuration values to eliminate hardcoded constants.
 Provides environment-specific defaults and validation.
@@ -48,7 +48,7 @@ class CORSConfig:
         """Get default CORS origins based on environment."""
         environment = os.getenv("INNOVATION_ENV", "development").lower()
         origins_map = {
-            "development": ["http://localhost:3000", "http://localhost:3001"],
+            "development": ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"],
             "staging": ["https://staging.innovation.example.com"],
             "production": [],  # Production origins should be configured explicitly
         }

@@ -9,8 +9,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from action_primitives.base import ActionContext
-from action_primitives.claim_achievement import ClaimAchievement
 from logging_config import EventType, activity_logger, get_logger
 from models.game import ActionType, GamePhase
 from services.game_helpers import (
@@ -223,36 +221,3 @@ async def claim_achievement(game: Game, player: Player, age: int) -> dict[str, A
     }
 
 
-async def claim_achievement_from_safe(
-    game: Game, player: Player, safe_index: int
-) -> dict[str, Any]:
-    """Claim achievement using a secret from Safe (Unseen expansion)."""
-    if not hasattr(game, "expansion_config") or not game.expansion_config.is_enabled("unseen"):
-        return {"success": False, "error": "Unseen expansion not enabled"}
-
-    if not player.safe or player.safe.get_card_count() == 0:
-        return {"success": False, "error": "Safe is empty"}
-
-    if safe_index < 0 or safe_index >= player.safe.get_card_count():
-        return {"success": False, "error": f"Invalid Safe index: {safe_index}"}
-
-    context = ActionContext(game=game, player=player, card=None)
-    primitive = ClaimAchievement({"source": "safe", "safe_index": safe_index})
-    result = primitive.execute(context)
-
-    if result.is_success():
-        if game.state.actions_remaining > 0:
-            game.state.actions_remaining -= 1
-
-        advance_turn_if_needed(game)
-
-        await _check_and_apply_victory(game, player)
-
-        return {
-            "success": True,
-            "action": "achieve_from_safe",
-            "game_state": format_game_state_for_frontend(game.to_dict()),
-        }
-
-    error_msg = context.results[-1] if context.results else "Failed to achieve from Safe"
-    return {"success": False, "error": error_msg}

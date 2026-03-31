@@ -14,7 +14,6 @@ from action_primitives.utils import (
     TARGET_PLAYER_FIELDS,
 )
 from dogma_v2.consolidated_executor import ConsolidatedDogmaExecutor
-from game_logic.cities import CityDrawTriggerDetector
 from logging_config import EventType, activity_logger, get_logger
 from models.game import ActionType, Game, GamePhase
 from models.player import Player
@@ -125,12 +124,7 @@ class AsyncGameManager:
             ("players", "*", "board", "purple_cards"),
             ("players", "*", "score_pile"),
             ("players", "*", "achievements"),
-            ("players", "*", "safe", "cards"),  # Artifacts expansion safe
-            ("players", "*", "safe", "secret_ages"),  # Artifacts expansion safe
-            ("players", "*", "museums"),  # Artifacts expansion museums
             ("junk_pile",),
-            ("museum_supply",),  # Artifacts expansion museum supply
-            ("pending_dig_events",),  # Artifacts expansion dig events
             ("action_log",),
             (
                 "state",
@@ -143,7 +137,6 @@ class AsyncGameManager:
         card_list_fields = [
             "symbols",
             "dogma_effects",
-            "special_icons",
             "symbol_positions",
         ]
 
@@ -553,21 +546,9 @@ class AsyncGameManager:
     async def create_game(
         self,
         creator_name: str | None = None,
-        enabled_expansions: list[str] | None = None,
     ) -> dict[str, Any]:
-        """Create a new game with optional expansion configuration"""
-        from models.expansion import Expansion, ExpansionConfig
-
-        # Create expansion config if expansions are specified
-        expansion_config = ExpansionConfig()
-        if enabled_expansions:
-            for exp_name in enabled_expansions:
-                try:
-                    expansion_config.enable(Expansion(exp_name))
-                except ValueError:
-                    logger.warning(f"Invalid expansion name: {exp_name}, ignoring")
-
-        game = Game(expansion_config=expansion_config)
+        """Create a new game."""
+        game = Game()
         self.games[game.game_id] = game
 
         # Save to Redis
@@ -946,34 +927,17 @@ class AsyncGameManager:
                             "error": "Card name required for dogma",
                         }
                     else:
-                        # Extract endorse parameters (Cities expansion)
-                        endorse_city_id = action_data.get("endorse_city_id")
-                        endorse_junk_id = action_data.get("endorse_junk_id")
                         result = await self._execute_dogma(
-                            game, player, card_name, endorse_city_id, endorse_junk_id
+                            game, player, card_name
                         )
                 elif action_type == "achieve":
                     age = action_data.get("age")
-                    source = action_data.get(
-                        "source", "auto"
-                    )  # Default to auto (from board)
-                    safe_index = action_data.get("safe_index")
 
-                    if age is None and source != "safe":
+                    if age is None:
                         result = {
                             "success": False,
                             "error": "Age required for achievement",
                         }
-                    elif source == "safe" and safe_index is None:
-                        result = {
-                            "success": False,
-                            "error": "Safe index required when achieving from Safe",
-                        }
-                    elif source == "safe":
-                        # UNSEEN EXPANSION: Achieve from Safe
-                        result = await self._claim_achievement_from_safe(
-                            game, player, safe_index
-                        )
                     else:
                         result = await self._claim_achievement(game, player, age)
                 elif action_type == "dogma_response":
@@ -1195,16 +1159,8 @@ class AsyncGameManager:
         game: Game,
         player: Player,
         card_name: str,
-        endorse_city_id: str | None = None,
-        endorse_junk_id: str | None = None,
     ) -> dict[str, Any]:
-        """Execute dogma using dogma v2 executor
-
-        Args:
-            card_name: Card identifier (can be card_id or card name for backwards compatibility)
-            endorse_city_id: Optional city card ID to use for endorse (Cities expansion)
-            endorse_junk_id: Optional junk card ID to use for endorse (Cities expansion)
-        """
+        """Execute dogma using dogma v2 executor."""
         logger.error(
             f"_execute_dogma ENTRY: Starting dogma for {card_name} by {player.name}"
         )
@@ -1235,11 +1191,10 @@ class AsyncGameManager:
         if not card:
             return {"success": False, "error": "Card not on your board"}
 
-        # CITIES EXPANSION: Prevent dogma on city cards (they have no dogma effects)
-        if card.is_city():
+        if not card.has_dogma():
             return {
                 "success": False,
-                "error": "Cannot dogma a city card - cities have no dogma effects",
+                "error": "Card has no dogma effects",
             }
 
         # Add to action log
@@ -1288,57 +1243,10 @@ class AsyncGameManager:
             except Exception:
                 pass
 
-            # Execute dogma using v2 system with tracing
-            from debug.execution_tracer import get_execution_tracer
-
-            tracer = get_execution_tracer()
-            trace_id = None
-
-            try:
-                # Start execution trace
-                if tracer:
-                    trace_id = tracer.start_dogma_trace(
-                        card_name=card.name,
-                        player_id=player.id,
-                        context={"game_id": game.game_id, "player_name": player.name},
-                    )
-
-                # Cities expansion: Handle endorse if requested
-                endorsed = False
-                if game.expansion_config.is_enabled("cities") and (
-                    endorse_city_id or endorse_junk_id
-                ):
-                    from game_logic.cities import EndorseHandler
-
-                    endorse_handler = EndorseHandler(game)
-                    success, message, city_used, card_junked = (
-                        endorse_handler.execute_endorse(
-                            player, card, endorse_city_id, endorse_junk_id
-                        )
-                    )
-
-                    if success:
-                        endorsed = True
-                        logger.info(
-                            f"Endorse successful for {card.name} by {player.name}"
-                        )
-                    else:
-                        # Endorse failed - return error without executing dogma
-                        return {"success": False, "error": f"Endorse failed: {message}"}
-
-                result = self.dogma_executor.execute_dogma(
-                    game, player, card, endorsed=endorsed
-                )
-
-                # End trace on success
-                if trace_id and tracer:
-                    tracer.end_dogma_trace(trace_id, success=result.success)
-
-            except Exception:
-                # End trace on error
-                if trace_id and tracer:
-                    tracer.end_dogma_trace(trace_id, success=False)
-                raise
+            # Execute dogma
+            result = self.dogma_executor.execute_dogma(
+                game, player, card
+            )
 
             # AsyncGameManager Hook: Log sharing decisions and activity
             try:
@@ -1708,135 +1616,6 @@ class AsyncGameManager:
             )
             return True
         return False
-
-    async def _handle_meld_interaction_response(
-        self, game: Game, player: Player, response_data: dict
-    ) -> dict[str, Any]:
-        """Handle meld interaction response (Cities: Search icon card ordering)"""
-
-        pending_meld = game.state.pending_meld_interaction
-        if not pending_meld:
-            return {"success": False, "error": "No pending meld interaction"}
-
-        # Validate response has ordered_card_ids
-        if "ordered_card_ids" not in response_data:
-            return {"success": False, "error": "Response missing ordered_card_ids"}
-
-        logger.info(
-            f"Resuming meld for {player.name}: processing ordered_card_ids response"
-        )
-
-        # Find the city card by ID
-        city_card = None
-        for card in player.board.get_all_cards():
-            card_id = card.card_id if card.card_id else card.name
-            if card_id == pending_meld.city_card_id:
-                city_card = card
-                break
-
-        if not city_card:
-            logger.error(f"City card {pending_meld.city_card_id} not found on board")
-            return {"success": False, "error": "City card not found"}
-
-        # Prepare resume data with player's ordered cards
-        resume_data = {
-            "ordered_card_ids": response_data["ordered_card_ids"],
-            **pending_meld.icon_data,  # Includes non_matching_cards, matching_count, etc.
-        }
-
-        # Resume icon resolution from where we left off
-        from game_logic.cities import SpecialIconResolver
-
-        icon_resolver = SpecialIconResolver(game)
-        icon_result = await icon_resolver.resolve_immediate_icons(
-            player,
-            city_card,
-            resume_from_index=pending_meld.icon_index,
-            resume_data=resume_data,
-        )
-
-        # Check if another interaction is needed (unlikely but possible with multiple icons)
-        if not icon_result.completed:
-            # Update pending state for next interaction
-            game.state.pending_meld_interaction.icon_index = (
-                icon_result.pending_icon_index
-            )
-            game.state.pending_meld_interaction.icon_data = (
-                icon_result.pending_icon_data or {}
-            )
-            game.state.pending_meld_interaction.messages_so_far.extend(
-                icon_result.messages
-            )
-
-            logger.info("Meld still suspended: another icon interaction needed")
-
-            return {
-                "success": True,
-                "action": "meld_response",
-                "interaction_required": True,
-                "interaction": icon_result.interaction_request.model_dump(),
-                "game_state": self._format_game_state_for_frontend(game.to_dict()),
-            }
-
-        # All icons resolved - clear pending state and complete meld
-        all_messages = pending_meld.messages_so_far + icon_result.messages
-        game.state.pending_meld_interaction = None
-
-        # Add icon results to log
-        for message in icon_result.messages:
-            game.add_log_entry(
-                player_name=player.name,
-                action_type=ActionType.MELD,
-                description=message,
-            )
-
-        # Continue with post-icon-resolution meld flow (city draws, achievements, etc.)
-        # Note: The city card was already melded before suspension, so we just need
-        # to handle the triggers that happen after icon resolution
-
-        result = {
-            "success": True,
-            "action": "meld_response",
-            "special_icon_results": all_messages,
-        }
-
-        # Cities expansion: Check for city draw triggers
-        if game.expansion_config.is_enabled("cities"):
-            from game_logic.cities import CityDrawTriggerDetector
-
-            trigger_detector = CityDrawTriggerDetector(game)
-
-            # Note: We can't check new color trigger here as the card was already melded
-            # But we can check splay triggers in case Arrow icon changed splay
-            # We'll check all colors since we don't have splay_directions_before saved
-            for color in ["red", "blue", "green", "yellow", "purple"]:
-                current_direction = player.board.splay_directions.get(color)
-                if current_direction:
-                    # Check if this splay might trigger a city draw
-                    # We use None for old_direction to be conservative
-                    if trigger_detector.check_splay_trigger(
-                        player, color, current_direction, None
-                    ):
-                        city_drawn = trigger_detector.execute_city_draw(player)
-                        if city_drawn:
-                            result["cascade_city_drawn"] = city_drawn.to_dict()
-                            game.add_log_entry(
-                                player_name=player.name,
-                                action_type=ActionType.MELD,
-                                description=f"drew city {city_drawn.name} (cascade after icon resolution)",
-                            )
-                            break  # Only one cascade draw
-
-        # Update special achievements
-        self._update_special_achievements(game)
-
-        # Don't decrement actions_remaining - it was already decremented when meld was initiated
-
-        # Auto-advance turn if needed
-        self._advance_turn_if_needed(game)
-
-        result["game_state"] = self._format_game_state_for_frontend(game.to_dict())
-        return result
 
     async def _handle_dogma_response(
         self, game: Game, player: Player, response_data: dict
@@ -2257,10 +2036,6 @@ class AsyncGameManager:
         """Auto-advance turn. Delegates to services.game_helpers."""
         game_helpers.advance_turn_if_needed(game)
 
-    def _update_special_achievements(self, game: Game):
-        """Update special achievements. Delegates to services.game_helpers."""
-        game_helpers.update_special_achievements(game)
-
     async def _draw_card(self, game: Game, player: Player) -> dict[str, Any]:
         """Draw card. Delegates to services.game_actions."""
         return await game_actions.draw_card(game, player)
@@ -2277,9 +2052,6 @@ class AsyncGameManager:
             card = player.remove_from_hand_by_name(card_identifier)
 
         if card:
-            # Cities expansion: Record colors before meld for trigger detection
-            colors_before = player.get_colors_on_board()
-
             player.meld_card(card)
 
             # Add to action log
@@ -2298,145 +2070,11 @@ class AsyncGameManager:
                 message=f"{player.name} melded {card.name}",
             )
 
-            # Cities expansion: Check if new color triggers city draw
             result = {
                 "success": True,
                 "action": "meld",
                 "card_melded": card.to_dict(),
             }
-
-            if game.expansion_config.is_enabled("cities"):
-                from game_logic.cities import SpecialIconResolver
-                from models.game import PendingMeldInteraction
-
-                # Track splay directions before icon resolution (for Arrow cascade check)
-                splay_directions_before = player.board.splay_directions.copy()
-
-                # If melded card is a city, resolve immediate special icons
-                if card.is_city():
-                    icon_resolver = SpecialIconResolver(game)
-                    icon_result = await icon_resolver.resolve_immediate_icons(
-                        player, card
-                    )
-
-                    # Check if icon resolution requires player interaction
-                    if not icon_result.completed:
-                        # Save pending meld state
-                        game.state.pending_meld_interaction = PendingMeldInteraction(
-                            player_id=player.id,
-                            city_card_id=card.card_id if card.card_id else card.name,
-                            icon_index=icon_result.pending_icon_index,
-                            icon_data=icon_result.pending_icon_data or {},
-                            messages_so_far=icon_result.messages,
-                        )
-
-                        logger.info(
-                            f"Meld suspended: {player.name} needs to respond to {card.name} icon interaction"
-                        )
-
-                        # Return interaction request to player
-                        return {
-                            "success": True,
-                            "action": "meld",
-                            "card_melded": card.to_dict(),
-                            "interaction_required": True,
-                            "interaction": icon_result.interaction_request.model_dump(),
-                            "game_state": self._format_game_state_for_frontend(
-                                game.to_dict()
-                            ),
-                        }
-
-                    # Icon resolution completed - process results
-                    if icon_result.messages:
-                        result["special_icon_results"] = icon_result.messages
-                        for message in icon_result.messages:
-                            game.add_log_entry(
-                                player_name=player.name,
-                                action_type=ActionType.MELD,
-                                description=message,
-                            )
-
-                # CITIES EXPANSION: Check for city draw triggers
-                if game.expansion_config.is_enabled("cities"):
-                    # Check new color trigger (happens after icon resolution)
-                    trigger_detector = CityDrawTriggerDetector(game)
-                    if trigger_detector.check_new_color_trigger(
-                        player, card, colors_before
-                    ):
-                        city_drawn = trigger_detector.execute_city_draw(player)
-                        if city_drawn:
-                            result["city_drawn"] = city_drawn.to_dict()
-                            game.add_log_entry(
-                                player_name=player.name,
-                                action_type=ActionType.MELD,
-                                description="drew a city (new color)",
-                            )
-
-                    # Check splay direction trigger (Arrow icon might have changed splay)
-                    # This enables cascading city draws: Arrow changes direction → draw another city
-                    for color in ["red", "blue", "green", "yellow", "purple"]:
-                        old_direction = splay_directions_before.get(color)
-                        new_direction = player.board.splay_directions.get(color)
-
-                        # If direction changed, check if should trigger city draw
-                        if new_direction and new_direction != old_direction:
-                            if trigger_detector.check_splay_trigger(
-                                player, color, new_direction, old_direction
-                            ):
-                                city_drawn = trigger_detector.execute_city_draw(player)
-                                if city_drawn:
-                                    result["cascade_city_drawn"] = city_drawn.to_dict()
-                                    game.add_log_entry(
-                                        player_name=player.name,
-                                        action_type=ActionType.MELD,
-                                        description="drew a city (Arrow cascade - new splay direction)",
-                                    )
-                                    break  # Only one cascade draw per meld
-
-                # Update flag and fountain achievements after board state change
-                self._update_special_achievements(game)
-
-            # ARTIFACTS EXPANSION: Check for dig events after meld
-            if game.expansion_config.is_enabled("artifacts"):
-                from game_logic.artifacts.dig_event_detector import DigEventDetector
-
-                # Get the covered card (the card that was on top before melding)
-                color_stack = player.board.get_cards_by_color(str(card.color.value))
-                covered_card = None
-                if len(color_stack) >= 2:
-                    # color_stack[-1] is the newly melded card, color_stack[-2] is covered
-                    covered_card = color_stack[-2]
-
-                # Check if dig event should trigger
-                dig_age = DigEventDetector.check_dig_event(
-                    game=game,
-                    melded_card=card,
-                    covered_card=covered_card,
-                    player_id=player.id,
-                )
-
-                if dig_age is not None:
-                    # Store dig event for handling
-                    if not hasattr(game, "pending_dig_events"):
-                        game.pending_dig_events = []
-
-                    dig_event = {
-                        "dig_age": dig_age,
-                        "player_id": player.id,
-                        "melded_card": card.name,
-                        "covered_card": covered_card.name if covered_card else None,
-                    }
-                    game.pending_dig_events.append(dig_event)
-
-                    logger.info(
-                        f"ARTIFACTS: Dig event detected (age {dig_age}) - presenting to player"
-                    )
-
-                    # Present dig interaction to player immediately
-                    dig_data = await self._check_dig_events(game, player)
-                    if dig_data:
-                        result["dig_event_required"] = True
-                        result["dig_interaction"] = dig_data
 
             if game.state.actions_remaining > 0:
                 game.state.actions_remaining -= 1
@@ -2454,351 +2092,6 @@ class AsyncGameManager:
     ) -> dict[str, Any]:
         """Claim achievement. Delegates to services.game_actions."""
         return await game_actions.claim_achievement(game, player, age)
-
-    async def _claim_achievement_from_safe(
-        self, game: Game, player: Player, safe_index: int
-    ) -> dict[str, Any]:
-        """Claim from safe. Delegates to services.game_actions."""
-        return await game_actions.claim_achievement_from_safe(game, player, safe_index)
-
-    # ==================== ARTIFACTS EXPANSION METHODS ====================
-
-    async def _handle_turn_start(self, game: Game, player: Player) -> dict[str, Any]:
-        """
-        Handle turn start, checking for dig events and showcase requirement.
-
-        Artifacts Expansion:
-        1. First check for pending dig events (must be resolved before any actions)
-        2. Then check if player has artifact on display (showcase required)
-        """
-        if game.state.current_player_index != game.players.index(player):
-            return {"success": False, "error": "Not your turn"}
-
-        # ARTIFACTS EXPANSION: Check for pending dig events first
-        if game.expansion_config.is_enabled("artifacts"):
-            if hasattr(game, "pending_dig_events") and game.pending_dig_events:
-                # Check if current player has a pending dig event
-                current_dig = game.pending_dig_events[0]
-                if current_dig.get("player_id") == player.id:
-                    logger.info(
-                        f"ARTIFACTS: Turn start for {player.name} - dig event pending (age {current_dig.get('dig_age')})"
-                    )
-                    dig_data = await self._check_dig_events(game, player)
-                    if dig_data:
-                        return {
-                            "success": True,
-                            "dig_event_required": True,
-                            "dig_interaction": dig_data,
-                            "game_state": self._format_game_state_for_frontend(
-                                game.to_dict()
-                            ),
-                        }
-
-        if not game.expansion_config.is_enabled("artifacts"):
-            return {
-                "success": True,
-                "showcase_required": False,
-                "game_state": self._format_game_state_for_frontend(game.to_dict()),
-            }
-
-        if not player.has_artifact_on_display():
-            return {
-                "success": True,
-                "showcase_required": False,
-                "game_state": self._format_game_state_for_frontend(game.to_dict()),
-            }
-
-        artifact = player.display
-        logger.info(
-            f"ARTIFACTS: Turn start for {player.name} - showcase required for {artifact.name}"
-        )
-
-        from game_logic.artifacts.showcase_manager import ShowcaseManager
-        from models.game import PendingDogmaAction
-
-        showcase_mgr = ShowcaseManager(game)
-        showcase_data = await showcase_mgr.execute_showcase_phase(player.id)
-
-        if not showcase_data.get("showcase_required"):
-            return {
-                "success": True,
-                "showcase_required": False,
-                "game_state": self._format_game_state_for_frontend(game.to_dict()),
-            }
-
-        game.state.pending_dogma_action = PendingDogmaAction(
-            card_name=artifact.name,
-            effect_index=0,
-            original_player_id=player.id,
-            target_player_id=player.id,
-            action_type="showcase_choice",
-            context={
-                "artifact_name": artifact.name,
-                "artifact": artifact.to_dict(),
-                "player_id": player.id,
-                "player_name": player.name,
-            },
-        )
-
-        return {
-            "success": True,
-            "showcase_required": True,
-            "showcase_data": showcase_data,
-            "interaction_request": {
-                "type": "showcase_choice",
-                "player_id": player.id,
-                "artifact": artifact.to_dict(),
-                "message": f"Showcase {artifact.name}: choose dogma or skip",
-            },
-            "game_state": self._format_game_state_for_frontend(game.to_dict()),
-        }
-
-    async def _handle_showcase_response(
-        self, game: Game, player: Player, response_data: dict
-    ) -> dict[str, Any]:
-        """Handle showcase choice response (Artifacts expansion)."""
-        pending_action = game.state.pending_dogma_action
-        if not pending_action or pending_action.action_type != "showcase_choice":
-            return {"success": False, "error": "No pending showcase interaction"}
-
-        take_dogma = response_data.get("take_dogma", False)
-        logger.info(
-            f"ARTIFACTS: {player.name} showcase choice: take_dogma={take_dogma}"
-        )
-
-        from game_logic.artifacts.showcase_manager import ShowcaseManager
-
-        showcase_mgr = ShowcaseManager(game)
-        result = {}
-
-        if take_dogma:
-            artifact_name = pending_action.context.get("artifact_name")
-            dogma_result = await self._execute_dogma(game, player, artifact_name)
-            if not dogma_result.get("success"):
-                return {
-                    "success": False,
-                    "error": f"Dogma failed: {dogma_result.get('error')}",
-                }
-            result["dogma_executed"] = True
-            result["dogma_result"] = dogma_result
-
-        game.state.pending_dogma_action = None
-        rotation_result = await showcase_mgr.process_showcase_choice(
-            player.id, take_dogma
-        )
-
-        if not rotation_result:
-            return {"success": False, "error": "Showcase processing failed"}
-
-        result.update(rotation_result)
-        return {
-            "success": True,
-            "showcase_result": result,
-            "game_state": self._format_game_state_for_frontend(game.to_dict()),
-        }
-
-    async def _handle_dig_response(
-        self, game: Game, player: Player, response_data: dict
-    ) -> dict[str, Any]:
-        """Handle dig event choice response (Artifacts expansion)."""
-        pending_action = game.state.pending_dogma_action
-        if not pending_action or pending_action.action_type != "dig_choice":
-            return {"success": False, "error": "No pending dig event"}
-
-        choice = response_data.get("choice")
-        dig_age = pending_action.context.get("dig_age")
-
-        if not choice or not dig_age:
-            return {"success": False, "error": "Invalid dig response data"}
-
-        # VALIDATION: Check dig_age is within valid range (1-11)
-        if not isinstance(dig_age, int) or not (1 <= dig_age <= 11):
-            logger.warning(f"Invalid dig_age {dig_age} (must be integer 1-11)")
-            return {"success": False, "error": f"Invalid dig_age {dig_age}"}
-
-        # VALIDATION: Check seize target if provided
-        if choice == "seize":
-            target_player_id = response_data.get("target_player_id")
-
-            # Validate target_player_id is provided
-            if not target_player_id:
-                return {
-                    "success": False,
-                    "error": "Seize choice requires target_player_id",
-                }
-
-            # Validate target player exists in game
-            target_player = game.get_player_by_id(target_player_id)
-            if not target_player:
-                logger.warning(
-                    f"Invalid seize target: player {target_player_id} not found in game"
-                )
-                return {"success": False, "error": "Invalid target player"}
-
-            # Validate target player has artifacts in museums
-            if (
-                not target_player.museums
-                or target_player.get_museum_artifact_count() == 0
-            ):
-                logger.warning(
-                    f"Invalid seize target: {target_player.name} has no artifacts in museums"
-                )
-                return {
-                    "success": False,
-                    "error": "Target player has no artifacts to seize",
-                }
-
-        logger.info(f"ARTIFACTS: {player.name} dig choice: {choice} (age {dig_age})")
-
-        from game_logic.artifacts.dig_event_resolver import DigEventResolver
-
-        resolver = DigEventResolver(game)
-
-        if choice == "draw":
-            result = await resolver.draw_artifact(player.id, dig_age)
-        elif choice == "seize":
-            target_player_id = response_data.get("target_player_id")
-            if not target_player_id:
-                return {"success": False, "error": "Target player required for seize"}
-            result = await resolver.seize_artifact(player.id, target_player_id, dig_age)
-        else:
-            return {"success": False, "error": f"Invalid choice: {choice}"}
-
-        if hasattr(game, "pending_dig_events") and game.pending_dig_events:
-            game.pending_dig_events.pop(0)
-
-        game.state.pending_dogma_action = None
-
-        if not result.get("success"):
-            return {"success": False, "error": result.get("error", "Dig event failed")}
-
-        artifact = result.get("artifact")
-        if artifact and hasattr(player, "display"):
-            if player.display:
-                player.hand.append(player.display)
-            player.display = artifact
-            logger.info(f"ARTIFACTS: Placed {artifact.name} on {player.name}'s display")
-
-        return {
-            "success": True,
-            "dig_result": result,
-            "game_state": self._format_game_state_for_frontend(game.to_dict()),
-        }
-
-    async def _meld_from_museum(
-        self, game: Game, player: Player, museum_id: str
-    ) -> dict[str, Any]:
-        """Meld artifact from museum (Artifacts expansion)."""
-        logger.info(f"ARTIFACTS: {player.name} melding from museum {museum_id}")
-
-        try:
-            from game_logic.artifacts.museum_manager import MuseumManager
-
-            museum_mgr = MuseumManager(game)
-            result = museum_mgr.meld_from_museum(player.id, museum_id)
-
-            if not result:
-                return {"success": False, "error": "Failed to meld from museum"}
-
-            artifact_name = result.get("artifact", {}).get("name", "artifact")
-            game.add_log_entry(
-                player_name=player.name,
-                action_type=ActionType.MELD,
-                description=f"melded {artifact_name} from museum",
-            )
-
-            if game.state.actions_remaining > 0:
-                game.state.actions_remaining -= 1
-
-            self._advance_turn_if_needed(game)
-
-            return {
-                "success": True,
-                "action": "meld_from_museum",
-                "meld_result": result,
-                "game_state": self._format_game_state_for_frontend(game.to_dict()),
-            }
-
-        except Exception as e:
-            logger.error(f"Error melding from museum: {e}", exc_info=True)
-            return {"success": False, "error": f"Meld from museum failed: {e!s}"}
-
-    async def _check_showcase_phase(
-        self, game: Game, player: Player
-    ) -> dict[str, Any] | None:
-        """Check if showcase phase needed at turn start (Artifacts expansion)."""
-        if not game.expansion_config.is_enabled("artifacts"):
-            return None
-
-        if not player.has_artifact_on_display():
-            return None
-
-        artifact = player.display
-        logger.info(
-            f"ARTIFACTS: {player.name} must showcase {artifact.name} at turn start"
-        )
-
-        from game_logic.artifacts.showcase_manager import ShowcaseManager
-        from models.game import PendingDogmaAction
-
-        showcase_mgr = ShowcaseManager(game)
-        showcase_data = await showcase_mgr.execute_showcase_phase(player.id)
-
-        showcase_action = PendingDogmaAction(
-            card_name=artifact.name,
-            effect_index=0,
-            original_player_id=player.id,
-            target_player_id=player.id,
-            action_type="showcase_choice",
-            context={
-                "artifact_name": artifact.name,
-                "artifact_id": (
-                    artifact.card_id if hasattr(artifact, "card_id") else None
-                ),
-                "showcase_data": showcase_data,
-            },
-        )
-        game.state.pending_dogma_action = showcase_action
-
-        return showcase_data
-
-    async def _check_dig_events(
-        self, game: Game, player: Player
-    ) -> dict[str, Any] | None:
-        """Check for pending dig events (Artifacts expansion)."""
-        if not game.expansion_config.is_enabled("artifacts"):
-            return None
-
-        if not hasattr(game, "pending_dig_events") or not game.pending_dig_events:
-            return None
-
-        dig_event = game.pending_dig_events[0]
-        dig_age = dig_event.get("dig_age")
-
-        logger.info(f"ARTIFACTS: {player.name} triggered dig event for age {dig_age}")
-
-        from game_logic.artifacts.dig_event_resolver import DigEventResolver
-        from models.game import PendingDogmaAction
-
-        resolver = DigEventResolver(game)
-        dig_data = await resolver.present_dig_choice(player.id, dig_age)
-
-        dig_action = PendingDogmaAction(
-            card_name="Dig Event",
-            effect_index=0,
-            original_player_id=player.id,
-            target_player_id=player.id,
-            action_type="dig_choice",
-            context={
-                "dig_age": dig_age,
-                "dig_event": dig_event,
-            },
-        )
-        game.state.pending_dogma_action = dig_action
-
-        return dig_data
-
-    # ==================== END ARTIFACTS EXPANSION METHODS ====================
 
     async def _end_turn(self, game: Game, player: Player) -> dict[str, Any]:
         """End turn. Delegates to services.game_actions."""
@@ -2970,14 +2263,6 @@ class AsyncGameManager:
             return {
                 "success": True,
                 "actions": [],
-                "game_state": self._format_game_state_for_frontend(game.to_dict()),
-            }
-
-        # Check for pending meld interaction (Cities: Search icon card ordering)
-        if game.state.pending_meld_interaction:
-            return {
-                "success": True,
-                "actions": ["meld_response"],
                 "game_state": self._format_game_state_for_frontend(game.to_dict()),
             }
 

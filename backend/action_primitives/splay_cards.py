@@ -124,38 +124,6 @@ class SplayCards(ActionPrimitive):
                     context=context.get_variable("current_effect_context", "splay"),
                 )
 
-                # Cities expansion: Check if splay in new direction triggers city draw
-                self._check_city_draw_trigger(context, color_str, old_direction)
-
-                # UNSEEN EXPANSION: Rebuild Safeguards and emit Safe limit event when splay changes
-                # Splay changes affect Safe limit and may affect card visibility
-                if hasattr(context.game, "expansion_config"):
-                    if context.game.expansion_config.is_enabled("unseen"):
-                        try:
-                            from game_logic.unseen.safeguard_tracker import SafeguardTracker
-                            tracker = SafeguardTracker(context.game)
-                            tracker.rebuild_all_safeguards()
-                            logger.debug("Rebuilt Safeguards after splay change")
-
-                            # Emit Safe limit changed event
-                            if hasattr(context.player, "safe") and context.player.safe:
-                                from logging_config import EventType, activity_logger
-                                new_limit = context.player.get_safe_limit()
-                                activity_logger.log_game_event(
-                                    event_type=EventType.SAFE_LIMIT_CHANGED,
-                                    game_id=context.game.game_id,
-                                    player_id=context.player.id,
-                                    data={
-                                        "new_limit": new_limit,
-                                        "splay_color": color_str,
-                                        "splay_direction": self.direction,
-                                        "safe_count": context.player.safe.get_card_count(),
-                                    },
-                                    message=f"{context.player.name}'s Safe limit now {new_limit} (splayed {color_str} {self.direction})"
-                                )
-                        except Exception as e:
-                            logger.error(f"Failed to rebuild Safeguards: {e}")
-
                 return ActionResult.SUCCESS
             except Exception as e:
                 logger.error(f"🎴 SplayCards: Exception in board.splay: {e}, is_optional={self.is_optional}")
@@ -189,18 +157,6 @@ class SplayCards(ActionPrimitive):
             f"✅ Splayed {color_str} cards {self.direction} for player {getattr(context.player, 'name', 'Player')}"
         )
 
-        # UNSEEN EXPANSION: Rebuild Safeguards when splay changes
-        # Splay changes affect Safe limit and may affect card visibility
-        if hasattr(context.game, "expansion_config"):
-            if context.game.expansion_config.is_enabled("unseen"):
-                try:
-                    from game_logic.unseen.safeguard_tracker import SafeguardTracker
-                    tracker = SafeguardTracker(context.game)
-                    tracker.rebuild_all_safeguards()
-                    logger.debug("Rebuilt Safeguards after splay change")
-                except Exception as e:
-                    logger.error(f"Failed to rebuild Safeguards: {e}")
-
         # Activity: record splay action
         try:
             from logging_config import activity_logger
@@ -220,48 +176,4 @@ class SplayCards(ActionPrimitive):
         except Exception:
             pass
 
-        # Cities expansion: Check if splay in new direction triggers city draw
-        self._check_city_draw_trigger(context, color_str, old_direction)
-
         return ActionResult.SUCCESS
-
-    def _check_city_draw_trigger(self, context: ActionContext, color: str, old_direction: str | None) -> None:
-        """Check and execute city draw trigger after splay (Cities expansion).
-
-        Args:
-            context: The action context
-            color: The color that was splayed
-            old_direction: The old splay direction (None if not previously splayed)
-        """
-        try:
-            # Only check if Cities expansion is enabled
-            if not hasattr(context.game, "expansion_config") or not context.game.expansion_config.is_enabled("cities"):
-                return
-
-            from game_logic.cities import CityDrawTriggerDetector
-
-            trigger_detector = CityDrawTriggerDetector(context.game)
-
-            # Check if splay in new direction triggers city draw
-            if trigger_detector.check_splay_trigger(
-                context.player, color, self.direction, old_direction
-            ):
-                city_drawn = trigger_detector.execute_city_draw(context.player)
-                if city_drawn:
-                    context.add_result(f"Drew city {city_drawn.name} (new splay direction)")
-                    logger.info(
-                        f"🏙️ {context.player.name} drew city {city_drawn.name} after splaying {color} {self.direction}"
-                    )
-
-            # Update flag and fountain achievements after splay (visibility changed)
-            from game_logic.cities import FlagAchievementTracker, FountainAchievementTracker
-
-            flag_tracker = FlagAchievementTracker(context.game)
-            flag_tracker.update_all_flags()
-
-            fountain_tracker = FountainAchievementTracker(context.game)
-            fountain_tracker.update_all_fountains()
-
-        except Exception as e:
-            # Don't fail the splay if achievement tracking fails
-            logger.warning(f"Cities expansion processing failed: {e}")

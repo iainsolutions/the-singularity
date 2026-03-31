@@ -1,0 +1,33 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Circuit board microchip">
+  <!-- Central square chip -->
+  <rect x="20" y="20" width="24" height="24" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Inner grid pattern -->
+  <line x1="26" y1="20" x2="26" y2="44" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <line x1="32" y1="20" x2="32" y2="44" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <line x1="38" y1="20" x2="38" y2="44" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+
+  <line x1="20" y1="26" x2="44" y2="26" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <line x1="20" y1="32" x2="44" y2="32" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+  <line x1="20" y1="38" x2="44" y2="38" stroke="#1B2A4A" stroke-width="1.5" fill="none"/>
+
+  <!-- Top pins -->
+  <line x1="26" y1="20" x2="26" y2="10" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="32" y1="20" x2="32" y2="10" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="38" y1="20" x2="38" y2="10" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Bottom pins -->
+  <line x1="26" y1="44" x2="26" y2="54" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="32" y1="44" x2="32" y2="54" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="38" y1="44" x2="38" y2="54" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Left pins -->
+  <line x1="20" y1="26" x2="10" y2="26" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="20" y1="32" x2="10" y2="32" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="20" y1="38" x2="10" y2="38" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+
+  <!-- Right pins -->
+  <line x1="44" y1="26" x2="54" y2="26" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="44" y1="32" x2="54" y2="32" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+  <line x1="44" y1="38" x2="54" y2="38" stroke="#1B2A4A" stroke-width="2.5" fill="none"/>
+</svg>

@@ -98,10 +98,6 @@ def sync_game_state_safely(target_game: Game, source_game: Game):
 
 def advance_turn_if_needed(game: Game):
     """Auto-advance turn if no actions remaining."""
-    if hasattr(game, "pending_dig_events") and game.pending_dig_events:
-        logger.debug(f"Turn advancement blocked - {len(game.pending_dig_events)} pending dig events")
-        return
-
     if game.state.actions_remaining == 0:
         if (
             game.state.current_player_index
@@ -116,9 +112,6 @@ def advance_turn_if_needed(game: Game):
             game.state.current_player_index + 1
         ) % len(game.players)
         game.state.turn_number += 1
-
-        if game.expansion_config.is_enabled("cities"):
-            game.state.endorse_used_this_turn = False
 
         logger.info(
             f"Turn change: {game.players[old_player_index].name} -> "
@@ -136,20 +129,6 @@ def advance_turn_if_needed(game: Game):
                 game.state.actions_remaining = 2
         else:
             game.state.actions_remaining = 2
-
-
-def update_special_achievements(game: Game):
-    """Update flag and fountain achievements for Cities expansion."""
-    if not game.expansion_config.is_enabled("cities"):
-        return
-    try:
-        from game_logic.cities import FlagAchievementTracker, FountainAchievementTracker
-
-        FlagAchievementTracker(game).update_all_flags()
-        FountainAchievementTracker(game).update_all_fountains()
-        logger.debug("Updated special achievements (flags & fountains)")
-    except Exception as e:
-        logger.error(f"Failed to update special achievements: {e}")
 
 
 def player_in_game(game: Game, player_id: str | None) -> bool:

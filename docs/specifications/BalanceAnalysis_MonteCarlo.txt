@@ -1,0 +1,154 @@
+================================================================================
+MONTE CARLO SIMULATION RESULTS: THE SINGULARITY
+================================================================================
+
+
+================================================================================
+2-PLAYER GAMES (N=5000)
+================================================================================
+
+1. GAME LENGTH (TURNS):
+   Average: 156.1
+   Min: 38, Max: 200
+   Distribution:
+      0-20    :     0 (  0.0%)
+      100+    :  4329 ( 86.6%)
+      21-40   :     2 (  0.0%)
+      41-60   :    49 (  1.0%)
+      61-80   :   224 (  4.5%)
+      81-100  :   396 (  7.9%)
+
+2. HIGHEST ERA REACHED:
+   Average: 6.60
+
+3. HOW GAMES END:
+   achievement         :  3500 ( 70.0%)
+   max_turns           :  1500 ( 30.0%)
+
+4. FIRST PLAYER WIN RATE: 52.8%
+
+5. ACHIEVEMENTS AT GAME END (ALL PLAYERS):
+   Average: 2.49
+
+6. SCORE AT GAME END (ALL PLAYERS):
+   Average: 5.51
+
+7. SUPPLY PILE EXHAUSTION (how often each era runs out):
+   Era  1:  5000 (100.0%)
+   Era  2:  4992 ( 99.8%)
+   Era  3:  4831 ( 96.6%)
+   Era  4:  4373 ( 87.5%)
+   Era  5:  3675 ( 73.5%)
+   Era  6:  2848 ( 57.0%)
+   Era  7:  2013 ( 40.3%)
+   Era  8:   746 ( 14.9%)
+   Era  9:    37 (  0.7%)
+   Era 10:     0 (  0.0%)
+
+8. WINNING PLAYER ACHIEVEMENT COUNT DISTRIBUTION:
+   0 achievements:   790 ( 15.8%)
+   1 achievements:   143 (  2.9%)
+   2 achievements:   141 (  2.8%)
+   3 achievements:   143 (  2.9%)
+   4 achievements:   140 (  2.8%)
+   5 achievements:   143 (  2.9%)
+   6 achievements:  3500 ( 70.0%)
+
+================================================================================
+3-PLAYER GAMES (N=2000)
+================================================================================
+
+1. GAME LENGTH (TURNS):
+   Average: 134.3
+   Min: 32, Max: 200
+   Distribution:
+      0-20    :     0 (  0.0%)
+      100+    :  1472 ( 73.6%)
+      21-40   :     7 (  0.3%)
+      41-60   :    57 (  2.9%)
+      61-80   :   194 (  9.7%)
+      81-100  :   270 ( 13.5%)
+
+2. HIGHEST ERA REACHED:
+   Average: 5.83
+
+3. HOW GAMES END:
+   achievement         :  1707 ( 85.3%)
+   max_turns           :   293 ( 14.7%)
+
+4. FIRST PLAYER WIN RATE: 33.5%
+
+5. ACHIEVEMENTS AT GAME END (ALL PLAYERS):
+   Average: 1.80
+
+6. SCORE AT GAME END (ALL PLAYERS):
+   Average: 5.89
+
+7. SUPPLY PILE EXHAUSTION (how often each era runs out):
+   Era  1:  2000 (100.0%)
+   Era  2:  1988 ( 99.4%)
+   Era  3:  1865 ( 93.2%)
+   Era  4:  1537 ( 76.8%)
+   Era  5:  1111 ( 55.5%)
+   Era  6:   747 ( 37.4%)
+   Era  7:   451 ( 22.6%)
+   Era  8:   168 (  8.4%)
+   Era  9:     7 (  0.3%)
+   Era 10:     0 (  0.0%)
+
+8. WINNING PLAYER ACHIEVEMENT COUNT DISTRIBUTION:
+   0 achievements:   106 (  5.3%)
+   1 achievements:    42 (  2.1%)
+   2 achievements:    50 (  2.5%)
+   3 achievements:    39 (  1.9%)
+   4 achievements:    56 (  2.8%)
+   5 achievements:  1707 ( 85.3%)
+
+================================================================================
+4-PLAYER GAMES (N=2000)
+================================================================================
+
+1. GAME LENGTH (TURNS):
+   Average: 117.0
+   Min: 34, Max: 200
+   Distribution:
+      0-20    :     0 (  0.0%)
+      100+    :  1201 ( 60.0%)
+      21-40   :    11 (  0.6%)
+      41-60   :   115 (  5.8%)
+      61-80   :   280 ( 14.0%)
+      81-100  :   393 ( 19.6%)
+
+2. HIGHEST ERA REACHED:
+   Average: 5.28
+
+3. HOW GAMES END:
+   achievement         :  1865 ( 93.2%)
+   max_turns           :   135 (  6.8%)
+
+4. FIRST PLAYER WIN RATE: 27.3%
+
+5. ACHIEVEMENTS AT GAME END (ALL PLAYERS):
+   Average: 1.20
+
+6. SCORE AT GAME END (ALL PLAYERS):
+   Average: 5.53
+
+7. SUPPLY PILE EXHAUSTION (how often each era runs out):
+   Era  1:  2000 (100.0%)
+   Era  2:  1983 ( 99.2%)
+   Era  3:  1807 ( 90.3%)
+   Era  4:  1349 ( 67.5%)
+   Era  5:   843 ( 42.1%)
+   Era  6:   468 ( 23.4%)
+   Era  7:   247 ( 12.3%)
+   Era  8:    81 (  4.0%)
+   Era  9:     3 (  0.1%)
+   Era 10:     0 (  0.0%)
+
+8. WINNING PLAYER ACHIEVEMENT COUNT DISTRIBUTION:
+   0 achievements:    52 (  2.6%)
+   1 achievements:    22 (  1.1%)
+   2 achievements:    33 (  1.6%)
+   3 achievements:    28 (  1.4%)
+   4 achievements:  1865 ( 93.2%)

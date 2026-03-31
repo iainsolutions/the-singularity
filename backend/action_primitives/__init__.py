@@ -1,7 +1,7 @@
 """
 Action Primitives Package
 
-This package contains all action primitive implementations for the Innovation game.
+This package contains all action primitive implementations for the The Singularity game.
 Action primitives are the building blocks for card effects, providing a declarative
 way to define game actions without hardcoding card-specific logic.
 """
@@ -155,69 +155,21 @@ def create_action_primitive(config):
         "CalculateValue": lambda: __import__(
             "action_primitives.calculate_value", fromlist=["CalculateValue"]
         ).CalculateValue,
-        # Echoes Expansion
-        "Foreshadow": lambda: __import__(
-            "action_primitives.foreshadow", fromlist=["Foreshadow"]
-        ).Foreshadow,
-        "PromoteForecast": lambda: __import__(
-            "action_primitives.promote_forecast", fromlist=["PromoteForecast"]
-        ).PromoteForecast,
-        # Unseen Expansion Mechanics
-        "FlipCoin": lambda: __import__(
-            "action_primitives.flip_coin", fromlist=["FlipCoin"]
-        ).FlipCoin,
         "WinGame": lambda: __import__(
             "action_primitives.win_game", fromlist=["WinGame"]
         ).WinGame,
-        "LoseGame": lambda: __import__(
-            "action_primitives.win_game", fromlist=["LoseGame"]
-        ).LoseGame,
-        "AchieveSecret": lambda: __import__(
-            "action_primitives.achieve_secret", fromlist=["AchieveSecret"]
-        ).AchieveSecret,
         "RepeatEffect": lambda: __import__(
             "action_primitives.repeat_effect", fromlist=["RepeatEffect"]
         ).RepeatEffect,
-        "SafeguardAchievement": lambda: __import__(
-            "action_primitives.safeguard_achievement", fromlist=["SafeguardAchievement"]
-        ).SafeguardAchievement,
-        "SafeguardCard": lambda: __import__(
-            "action_primitives.safeguard_card", fromlist=["SafeguardCard"]
-        ).SafeguardCard,
-        "UnsplayCards": lambda: __import__(
-            "action_primitives.unsplay_cards", fromlist=["UnsplayCards"]
-        ).UnsplayCards,
         "SelectAnyPlayer": lambda: __import__(
             "action_primitives.select_any_player", fromlist=["SelectAnyPlayer"]
         ).SelectAnyPlayer,
-        "SelfExecute": lambda: __import__(
-            "action_primitives.self_execute", fromlist=["SelfExecute"]
-        ).SelfExecute,
-        "TransferSecret": lambda: __import__(
-            "action_primitives.transfer_secret", fromlist=["TransferSecret"]
-        ).TransferSecret,
-        "RevealAndChoose": lambda: __import__(
-            "action_primitives.reveal_and_choose", fromlist=["RevealAndChoose"]
-        ).RevealAndChoose,
         "NoOp": lambda: __import__(
             "action_primitives.no_op", fromlist=["NoOp"]
         ).NoOp,
-        "AddToSafe": lambda: __import__(
-            "action_primitives.add_to_safe", fromlist=["AddToSafe"]
-        ).AddToSafe,
-        "TransferAchievementToSafe": lambda: __import__(
-            "action_primitives.transfer_achievement_to_safe", fromlist=["TransferAchievementToSafe"]
-        ).TransferAchievementToSafe,
-        # Advanced Unseen Primitives
         "RevealTopCard": lambda: __import__(
             "action_primitives.reveal_top_card", fromlist=["RevealTopCard"]
         ).RevealTopCard,
-        "SelfExecute": lambda: __import__(
-            "action_primitives.self_execute", fromlist=["SelfExecute"]
-        ).SelfExecute,
-        "ScoreExcess": lambda: __import__(
-            "action_primitives.score_excess", fromlist=["ScoreExcess"]
-        ).ScoreExcess,
         # Utility Primitives
         "SetVariable": lambda: __import__(
             "action_primitives.set_variable", fromlist=["SetVariable"]

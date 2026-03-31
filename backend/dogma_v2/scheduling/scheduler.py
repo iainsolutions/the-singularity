@@ -520,7 +520,7 @@ class ActionScheduler:
         """
         Check if player actually did something with cards during this effect.
 
-        Per Innovation rules, sharing occurs when an opponent's use of the
+        Per The Singularity rules, sharing occurs when an opponent's use of the
         shared effect causes them to "do something with a card."
 
         Args:

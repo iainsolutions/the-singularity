@@ -6,72 +6,23 @@ import styles from "./AchievementRow.module.css";
 import { useGame } from "../../context/GameContext";
 import { getApiBase } from "../../utils/config";
 
-// Move constants outside component to prevent recreation
-const AGES = Array.from({ length: 10 }, (_, i) => i + 1);
+const AGES = Array.from({ length: 9 }, (_, i) => i + 1);
 
-// Special achievements with their corresponding PNG images and colors
+const ERA_COLORS = {
+  1: "#0066CC", 2: "#0066CC",
+  3: "#339933", 4: "#339933",
+  5: "#CC9900", 6: "#CC9900",
+  7: "#7733AA", 8: "#7733AA",
+  9: "#CC3333",
+};
+
 const SPECIAL_ACHIEVEMENTS = {
-  Monument: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements2.png",
-    color: "#8B4513",
-    description: "At least four top cards with a DEMAND effect",
-  },
-  Empire: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements3.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements4.png",
-    color: "#FFD700",
-    description: "At least three icons of each of these six types on your board",
-  },
-  World: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements5.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements6.png",
-    color: "#4169E1",
-    description: "At least twelve clock symbols on your board",
-  },
-  Wonder: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements7.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements8.png",
-    color: "#9932CC",
-    description: "Five colors splayed on your board, each splayed right, up, or aslant",
-  },
-  Universe: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements9.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements10.png",
-    color: "#1E90FF",
-    description: "Five top cards, each of value at least 8",
-  },
-  Wealth: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements11.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements12.png",
-    color: "#228B22",
-    description: "At least eight bonuses on your board",
-  },
-  // Echoes Expansion Special Achievements
-  Supremacy: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements15.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements16.png",
-    color: "#C41E3A", // Cardinal red
-    description: "All non-purple top cards share a common icon (not crown)",
-  },
-  Destiny: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements13.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements14.png",
-    color: "#00CED1", // Dark turquoise
-    description: "Return blue cards from your forecast",
-  },
-  Heritage: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements17.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements18.png",
-    color: "#DAA520", // Goldenrod
-    description: "At least five crowns on your board in one color",
-  },
-  History: {
-    frontImage: "/cards/Specials/InnoUlt_SpecialAchievements19.png",
-    backImage: "/cards/Specials/InnoUlt_SpecialAchievements20.png",
-    color: "#8B008B", // Dark magenta
-    description: "At least three echo effects in one color",
-  },
+  Emergence: { color: "#CC3333", description: "Archive 6+ OR Harvest 6+ in a single turn" },
+  Dominion: { color: "#FFD700", description: "3+ of every icon type visible on board" },
+  Consciousness: { color: "#4169E1", description: "12+ visible Human Mind icons" },
+  Apotheosis: { color: "#9932CC", description: "All 5 colors Proliferated right/up/aslant" },
+  Transcendence: { color: "#1E90FF", description: "All 5 colors, each top card Era 8+" },
+  Abundance: { color: "#228B22", description: "5+ Harvest cards from different eras" },
 };
 
 const AchievementRow = memo(
@@ -149,21 +100,8 @@ const AchievementRow = memo(
       fetchAchievements();
     }, [gameState?.game_id, currentPlayer?.id, gameState?.players]); // Re-fetch when players change (achievements earned)
 
-    // Get card back image path for the age
-    const getCardBackPath = (age) => {
-      // Map age to card back image number (1-10 for ages 1-10)
-      return `/cards/CardBacks/InnoUlt_CardBacks_PRODUCTION${age}.png`;
-    };
-
-    // Fallback image path
-    const getFallbackImage = (age) => {
-      return `/cards/card_backgrounds/age${age}_background.png`;
-    };
-
-    // Handle image load error
-    const handleImageError = (age) => {
-      setImageErrors((prev) => new Set([...prev, age]));
-    };
+    // Era-based tile color for achievements
+    const getEraColor = (age) => ERA_COLORS[age] || "#666";
 
     // Use backend data for special achievements (no more frontend logic!)
     const specialAchievements = achievementData?.special || [];
@@ -214,43 +152,29 @@ const AchievementRow = memo(
                   onMouseEnter={() => setHoveredAchievement(specialName)}
                   onMouseLeave={() => setHoveredAchievement(null)}
                 >
-                  <img
-                    src={isClaimed ? specialConfig.frontImage : specialConfig.backImage}
-                    alt={`${specialName} achievement`}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: "4px",
-                      objectFit: "cover",
-                      border: isEarnedByYou
-                        ? "2px solid rgba(255, 215, 0, 0.6)"
-                        : isEarnedByOther
-                          ? "2px solid rgba(128, 128, 128, 0.6)"
-                          : "2px solid transparent",
-                      filter: isEarnedByOther ? "grayscale(70%) opacity(0.7)" : "none",
-                    }}
-                    onError={(e) => {
-                      // Fallback to solid color block if image fails
-                      e.target.style.display = "none";
-                      e.target.nextSibling.style.display = "block";
-                    }}
-                  />
                   <div
                     style={{
-                      display: "none",
                       width: "100%",
                       height: "100%",
-                      backgroundColor: isClaimed ? specialConfig.color : "#ccc",
+                      backgroundColor: specialConfig?.color || "#666",
                       borderRadius: "4px",
-                      transition: "background-color 0.3s ease",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontFamily: "'Orbitron', sans-serif",
+                      fontSize: "7px",
+                      fontWeight: 700,
+                      color: "white",
+                      textAlign: "center",
+                      padding: "2px",
+                      opacity: isEarnedByOther ? 0.5 : 1,
                       border: isEarnedByYou
-                        ? "2px solid rgba(255, 215, 0, 0.6)"
-                        : isEarnedByOther
-                          ? "2px solid rgba(128, 128, 128, 0.6)"
-                          : "2px solid transparent",
-                      filter: isEarnedByOther ? "grayscale(70%) opacity(0.7)" : "none",
+                        ? "2px solid rgba(255, 215, 0, 0.8)"
+                        : "2px solid transparent",
                     }}
-                  />
+                  >
+                    {specialName}
+                  </div>
                   {isClaimed && (
                     <Chip
                       label={claimedBy || "Earned"}
@@ -349,25 +273,15 @@ const AchievementRow = memo(
                   }
                 >
                   {hasUnclaimed ? (
-                    <>
-                      <img
-                        src={imageErrors.has(age) ? getFallbackImage(age) : getCardBackPath(age)}
-                        alt={`Age ${age} achievement`}
-                        className={styles.achievementCardBack}
-                        onError={() => handleImageError(age)}
-                        loading="lazy"
-                      />
-                      {/* Safeguard Badge - Unseen Expansion */}
-                      {achievementInfo?.safeguard_owners && achievementInfo.safeguard_owners.length > 0 && (
-                        <SafeguardBadge
-                          achievementAge={age}
-                          safeguardOwners={achievementInfo.safeguard_owners}
-                          currentPlayerId={currentPlayer?.id}
-                          currentPlayerName={currentPlayer?.name}
-                          canClaim={achievementInfo.can_claim}
-                        />
-                      )}
-                    </>
+                    <div
+                      className={styles.achievementTile}
+                      style={{
+                        background: `linear-gradient(135deg, #1B2A4A 0%, ${getEraColor(age)}33 100%)`,
+                        borderColor: getEraColor(age),
+                      }}
+                    >
+                      <span className={styles.achievementEraNum}>{age}</span>
+                    </div>
                   ) : (
                     <div className={styles.achievementEmpty}>
                       <span className={styles.achievementEmptyText}>✓</span>
@@ -379,19 +293,23 @@ const AchievementRow = memo(
           </div>
         </div>
 
-        {/* Hover overlay for special achievements */}
-        {hoveredAchievement && (
+        {/* Hover tooltip for special achievements */}
+        {hoveredAchievement && SPECIAL_ACHIEVEMENTS[hoveredAchievement] && (
           <div className={`${styles.specialAchievementHover} ${styles.visible}`}>
-            <img
-              src={SPECIAL_ACHIEVEMENTS[hoveredAchievement].frontImage}
-              alt={`${hoveredAchievement} achievement large view`}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "6px",
-              }}
-            />
+            <div style={{
+              padding: "8px",
+              background: SPECIAL_ACHIEVEMENTS[hoveredAchievement].color,
+              color: "white",
+              borderRadius: "6px",
+              fontFamily: "'Orbitron', sans-serif",
+              fontSize: "11px",
+              textAlign: "center",
+            }}>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>{hoveredAchievement}</div>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "9px", opacity: 0.9 }}>
+                {SPECIAL_ACHIEVEMENTS[hoveredAchievement].description}
+              </div>
+            </div>
           </div>
         )}
       </Box>

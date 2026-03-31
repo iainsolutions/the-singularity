@@ -25,12 +25,12 @@ class SelectSymbol(ActionPrimitive):
     """
 
     VALID_SYMBOLS: ClassVar[list[str]] = [
-        "castle",
-        "leaf",
-        "lightbulb",
-        "crown",
-        "factory",
-        "clock",
+        "circuit",
+        "data",
+        "algorithm",
+        "neural_net",
+        "robot",
+        "human_mind",
     ]
 
     def __init__(self, config: dict[str, Any]):

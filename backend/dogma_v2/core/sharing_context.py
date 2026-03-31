@@ -114,7 +114,7 @@ class SharingContext:
         """
         Clear the completed_sharing set for processing the next effect.
 
-        Innovation rules: Sharing players execute EVERY effect on a card.
+        The Singularity rules: Sharing players execute EVERY effect on a card.
         Between effects, we clear who has completed sharing so they can
         participate in the next effect.
 

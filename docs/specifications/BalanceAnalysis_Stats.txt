@@ -1,0 +1,267 @@
+================================================================================
+THE SINGULARITY - CARD BALANCE ANALYSIS REPORT
+================================================================================
+
+1. ICON DISTRIBUTION
+--------------------------------------------------------------------------------
+
+Per Era:
+  Era 1:
+    algorithm: 3 (10.0%) [FLAG: >30% from average]
+    circuit: 7 (23.3%) [FLAG: >30% from average]
+    data: 7 (23.3%) [FLAG: >30% from average]
+    human_mind: 3 (10.0%) [FLAG: >30% from average]
+    neural_net: 6 (20.0%)
+    robot: 4 (13.3%)
+  Era 2:
+    algorithm: 7 (23.3%) [FLAG: >30% from average]
+    circuit: 4 (13.3%)
+    data: 7 (23.3%) [FLAG: >30% from average]
+    human_mind: 3 (10.0%) [FLAG: >30% from average]
+    neural_net: 5 (16.7%)
+    robot: 4 (13.3%)
+  Era 3:
+    algorithm: 6 (20.0%)
+    circuit: 4 (13.3%)
+    data: 7 (23.3%) [FLAG: >30% from average]
+    human_mind: 3 (10.0%) [FLAG: >30% from average]
+    neural_net: 6 (20.0%)
+    robot: 4 (13.3%)
+  Era 4:
+    algorithm: 6 (20.0%)
+    circuit: 5 (16.7%)
+    data: 6 (20.0%)
+    human_mind: 3 (10.0%) [FLAG: >30% from average]
+    neural_net: 6 (20.0%)
+    robot: 4 (13.3%)
+  Era 5:
+    algorithm: 6 (20.0%)
+    circuit: 3 (10.0%) [FLAG: >30% from average]
+    data: 6 (20.0%)
+    human_mind: 4 (13.3%)
+    neural_net: 6 (20.0%)
+    robot: 5 (16.7%)
+  Era 6:
+    algorithm: 5 (16.7%)
+    circuit: 4 (13.3%)
+    data: 5 (16.7%)
+    human_mind: 5 (16.7%)
+    neural_net: 6 (20.0%)
+    robot: 5 (16.7%)
+  Era 7:
+    algorithm: 6 (20.0%)
+    circuit: 4 (13.3%)
+    data: 6 (20.0%)
+    human_mind: 3 (10.0%) [FLAG: >30% from average]
+    neural_net: 6 (20.0%)
+    robot: 5 (16.7%)
+  Era 8:
+    algorithm: 4 (13.3%)
+    circuit: 4 (13.3%)
+    data: 4 (13.3%)
+    human_mind: 7 (23.3%) [FLAG: >30% from average]
+    neural_net: 7 (23.3%) [FLAG: >30% from average]
+    robot: 4 (13.3%)
+  Era 9:
+    algorithm: 4 (13.3%)
+    circuit: 5 (16.7%)
+    data: 3 (10.0%) [FLAG: >30% from average]
+    human_mind: 6 (20.0%)
+    neural_net: 8 (26.7%) [FLAG: >30% from average]
+    robot: 4 (13.3%)
+  Era 10:
+    algorithm: 7 (15.6%)
+    circuit: 8 (17.8%)
+    data: 4 (8.9%) [FLAG: >30% from average]
+    human_mind: 10 (22.2%) [FLAG: >30% from average]
+    neural_net: 9 (20.0%)
+    robot: 7 (15.6%)
+
+Per Domain:
+  Blue:
+    algorithm: 22 (34.9%)
+    circuit: 36 (57.1%)
+    data: 3 (4.8%)
+    neural_net: 1 (1.6%)
+    robot: 1 (1.6%)
+  Green:
+    algorithm: 16 (25.4%)
+    data: 26 (41.3%)
+    human_mind: 19 (30.2%)
+    neural_net: 2 (3.2%)
+  Purple:
+    algorithm: 7 (11.1%)
+    data: 2 (3.2%)
+    human_mind: 21 (33.3%)
+    neural_net: 32 (50.8%)
+    robot: 1 (1.6%)
+  Red:
+    algorithm: 7 (11.1%)
+    circuit: 12 (19.0%)
+    human_mind: 1 (1.6%)
+    robot: 43 (68.3%)
+  Yellow:
+    algorithm: 2 (3.2%)
+    data: 24 (38.1%)
+    human_mind: 6 (9.5%)
+    neural_net: 30 (47.6%)
+    robot: 1 (1.6%)
+
+2. DEMAND VS COOPERATIVE BALANCE
+--------------------------------------------------------------------------------
+
+Demands by Era:
+  Era 1: 2 demands
+  Era 2: 2 demands
+  Era 3: 2 demands
+  Era 4: 1 demands
+  Era 5: 3 demands
+  Era 6: 1 demands
+  Era 7: 3 demands
+  Era 8: 2 demands
+  Era 9: 1 demands
+  Era 10: 2 demands
+
+Demands by Domain:
+  Blue: 1 demands
+  Green: 3 demands
+  Purple: 3 demands
+  Red: 9 demands [FLAG: >5 demands]
+  Yellow: 3 demands
+
+3. ACTION TYPE FREQUENCY
+--------------------------------------------------------------------------------
+
+  DrawCards: 69
+  SplayCards: 47
+  ConditionalAction: 41
+  MeldCard: 28
+  SelectCards: 26
+  CountSymbols: 26
+  ScoreCards: 24
+  ReturnCards: 22
+  CalculateValue: 22
+  DemandEffect: 19
+  TransferBetweenPlayers: 15
+  FilterCards: 9
+  WinGame: 9
+  SelectHighest: 8
+  SelectColor: 8
+  ClaimAchievement: 8
+  SelectAnyPlayer: 7
+  JunkAllDeck: 7
+  RevealHand: 6
+  GetCardAge: 6
+  ExecuteDogma: 6
+  ExchangeCards: 5
+  SelectAchievement: 5
+  CountCards: 4
+  GetCardColor: 4
+  CountUniqueColors: 4
+  RepeatAction: 3
+  RepeatEffect: 3
+  RevealCard: 2
+  SelectLowest: 2
+  RevealTopCard: 1
+  TuckCard: 1
+  TransferCards: 1
+  SelectSymbol: 1
+  CountColorsWithSplay: 1
+  CountUniqueValues: 1
+
+4. POWER CURVE ANALYSIS
+--------------------------------------------------------------------------------
+
+Era | Total | Draw | Score | Transfer | Splay | Win | Complex
+----------------------------------------------------------------------
+  1 |    10 |    5 |     2 |        2 |     1 |   0 |      10
+  2 |    10 |    7 |     2 |        1 |     2 |   0 |      10
+  3 |    10 |    8 |     3 |        2 |     2 |   0 |      10
+  4 |    10 |    8 |     4 |        1 |     3 |   0 |      10
+  5 |    10 |    4 |     4 |        2 |     3 |   0 |      10
+  6 |    10 |    9 |     4 |        2 |     4 |   0 |      10
+  7 |    10 |    6 |     2 |        1 |     4 |   0 |      10
+  8 |    10 |    5 |     1 |        1 |     5 |   0 |      10
+  9 |    10 |    5 |     0 |        1 |     2 |   1 |      10
+ 10 |    15 |    6 |     2 |        1 |     2 |   8 |      15
+
+5. DOMAIN ARCHETYPE ANALYSIS
+--------------------------------------------------------------------------------
+
+Blue:
+  Cards: 21, Demands: 1
+  Top actions: DrawCards(18), ReturnCards(10), CalculateValue(10), ConditionalAction(8), CountSymbols(8)
+  Personality: card-draw-heavy
+
+Green:
+  Cards: 21, Demands: 3
+  Top actions: ConditionalAction(16), SplayCards(15), DrawCards(10), SelectColor(6), ClaimAchievement(6)
+  Personality: spread-focused/splay-heavy
+
+Purple:
+  Cards: 21, Demands: 3
+  Top actions: DrawCards(18), MeldCard(12), SplayCards(11), ConditionalAction(8), SelectCards(4)
+  Personality: spread-focused/splay-heavy
+
+Red:
+  Cards: 21, Demands: 9
+  Top actions: DrawCards(10), DemandEffect(9), MeldCard(8), TransferBetweenPlayers(7), ScoreCards(7)
+  Personality: interactive/transfer-focused
+
+Yellow:
+  Cards: 21, Demands: 3
+  Top actions: SplayCards(16), DrawCards(13), TransferBetweenPlayers(8), CountSymbols(7), ConditionalAction(7)
+  Personality: interactive/transfer-focused
+
+6. WIN CONDITION ANALYSIS
+--------------------------------------------------------------------------------
+
+Found 9 card(s) with WinGame actions:
+  S084: Nanoscale Assembler (Era 9, red)
+  S090: Technological Singularity (Era 10, red)
+  S091: Dyson Sphere (Era 10, blue)
+  S095: Universal Ethics Engine (Era 10, green)
+  S097: Simulated Reality (Era 10, purple)
+  S099: Omniscient Network (Era 10, blue)
+  S100: The Singularity (Era 10, yellow)
+  S102: Universal Communion (Era 10, yellow)
+  S107: Omega Point (Era 10, yellow)
+
+7. CARD COMPLEXITY SCORE
+--------------------------------------------------------------------------------
+
+Average complexity score: 4.30 actions per card
+Complexity distribution:
+  0-4 actions: 69 cards
+  5-9 actions: 32 cards
+  10-14 actions: 4 cards
+
+No complexity outliers found.
+
+8. POTENTIAL BALANCE FLAGS
+--------------------------------------------------------------------------------
+
+  - Domain red: 9 demand cards (>5 threshold)
+  - Era 10: 15 cards (avg 10.5, 42.9% deviation)
+  - Era 10: Icon 'data' is 46.7% from average frequency
+  - Era 10: Icon 'human_mind' is 33.3% from average frequency
+  - Era 1: Icon 'algorithm' is 40.0% from average frequency
+  - Era 1: Icon 'circuit' is 40.0% from average frequency
+  - Era 1: Icon 'data' is 40.0% from average frequency
+  - Era 1: Icon 'human_mind' is 40.0% from average frequency
+  - Era 2: Icon 'algorithm' is 40.0% from average frequency
+  - Era 2: Icon 'data' is 40.0% from average frequency
+  - Era 2: Icon 'human_mind' is 40.0% from average frequency
+  - Era 3: Icon 'data' is 40.0% from average frequency
+  - Era 3: Icon 'human_mind' is 40.0% from average frequency
+  - Era 4: Icon 'human_mind' is 40.0% from average frequency
+  - Era 5: Icon 'circuit' is 40.0% from average frequency
+  - Era 7: Icon 'human_mind' is 40.0% from average frequency
+  - Era 8: Icon 'human_mind' is 40.0% from average frequency
+  - Era 8: Icon 'neural_net' is 40.0% from average frequency
+  - Era 9: Icon 'data' is 40.0% from average frequency
+  - Era 9: Icon 'neural_net' is 60.0% from average frequency
+
+================================================================================
+END OF REPORT
+================================================================================

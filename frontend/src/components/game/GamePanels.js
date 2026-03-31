@@ -10,11 +10,6 @@ function GamePanels({
   selectedAge,
   setSelectedAge,
   ageDeckSizes,
-  citiesDeckSizes,
-  echoesDeckSizes,
-  figuresDeckSizes,
-  artifactsDeckSizes,
-  unseenDeckSizes,
   achievementCards,
   junkPile,
   isMyTurn,
@@ -39,11 +34,6 @@ function GamePanels({
           <AgeSelector
             selectedAge={isSelectAchievementPending ? null : selectedAge}
             ageDeckSizes={ageDeckSizes}
-            citiesDeckSizes={citiesDeckSizes}
-            echoesDeckSizes={echoesDeckSizes}
-            figuresDeckSizes={figuresDeckSizes}
-            artifactsDeckSizes={artifactsDeckSizes}
-            unseenDeckSizes={unseenDeckSizes}
             onSelectAge={isSelectAchievementPending ? () => {} : setSelectedAge}
             isMyTurn={isMyTurn && !isSelectAchievementPending}
             junkPile={junkPile}

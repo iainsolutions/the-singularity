@@ -1,4 +1,4 @@
-// Centralized card database for the Innovation game
+// Centralized card database for The Singularity game
 // This mirrors the backend BaseCards.json for frontend components that only have card names
 // (like ActionLog when parsing log text)
 

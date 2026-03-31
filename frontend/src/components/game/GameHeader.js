@@ -76,7 +76,7 @@ const GameHeader = memo(
             variant={isMobile ? "h5" : "h4"}
             sx={{ fontWeight: 600, color: "primary.main" }}
           >
-            Innovation
+            The Singularity
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

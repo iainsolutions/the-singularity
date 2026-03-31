@@ -2,28 +2,21 @@ from typing import TYPE_CHECKING, Optional
 
 
 if TYPE_CHECKING:
-    from .expansion import ExpansionConfig
     from .player import Player
 
 
 class ScoreManager:
-    """
-    Manages scoring and victory conditions.
-    """
-
-    def __init__(self, expansion_config: "ExpansionConfig"):
-        self.expansion_config = expansion_config
+    """Manages scoring and victory conditions."""
 
     def get_achievements_needed_for_victory(self, num_players: int) -> int:
-        """Calculate achievements needed for victory based on player count and expansions.
+        """Calculate achievements needed for victory based on player count.
 
-        Formula from official rules: 8 - (# of Players) + (# of Expansions), minimum 3
+        Base game formula: 8 - (# of Players), minimum 3
 
         Returns:
             int: Number of achievements needed to win
         """
-        num_expansions = self.expansion_config.get_expansion_count()
-        return max(3, 8 - num_players + num_expansions)
+        return max(3, 8 - num_players)
 
     def check_achievement_victory(self, players: list["Player"]) -> Optional["Player"]:
         """Check if an achievement victory has been met.

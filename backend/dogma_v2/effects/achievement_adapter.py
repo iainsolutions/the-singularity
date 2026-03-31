@@ -33,7 +33,7 @@ class AchievementEffectAdapter(Effect):
     1. Validates achievement requirements before claims
     2. Checks victory conditions after achievement changes
     3. Synchronizes achievement state across players
-    4. Ensures compliance with Innovation achievement rules
+    4. Ensures compliance with The Singularity achievement rules
     """
 
     # Effects that this adapter handles

@@ -204,13 +204,12 @@ class PlayerBoard(BaseModel):
     def get_highest_age(self) -> int:
         """Get the highest age card on the board.
 
-        For cards with special_value (e.g., Battleship Yamato), uses the
-        special value instead of base age when the card is on the board.
+        Returns the highest era number among top cards on the board.
         """
         top_cards = self.get_top_cards()
         if not top_cards:
             return 0
-        return max(card.get_display_age() for card in top_cards)
+        return max(card.age for card in top_cards)
 
     def get_total_cards(self) -> int:
         """Get the total number of cards on the board"""
@@ -435,12 +434,12 @@ class Player(BaseModel):
         # Handle both string and Symbol enum
         if isinstance(symbol, str):
             symbol_map = {
-                "castle": Symbol.CASTLE,
-                "leaf": Symbol.LEAF,
-                "lightbulb": Symbol.LIGHTBULB,
-                "crown": Symbol.CROWN,
-                "factory": Symbol.FACTORY,
-                "clock": Symbol.CLOCK,
+                "circuit": Symbol.CIRCUIT,
+                "data": Symbol.DATA,
+                "algorithm": Symbol.ALGORITHM,
+                "neural_net": Symbol.NEURAL_NET,
+                "robot": Symbol.ROBOT,
+                "human_mind": Symbol.HUMAN_MIND,
             }
             symbol_enum = symbol_map.get(symbol.lower())
             if not symbol_enum:
@@ -457,12 +456,12 @@ class Player(BaseModel):
         # Handle both string and Symbol enum
         if isinstance(symbol, str):
             symbol_map = {
-                "castle": Symbol.CASTLE,
-                "leaf": Symbol.LEAF,
-                "lightbulb": Symbol.LIGHTBULB,
-                "crown": Symbol.CROWN,
-                "factory": Symbol.FACTORY,
-                "clock": Symbol.CLOCK,
+                "circuit": Symbol.CIRCUIT,
+                "data": Symbol.DATA,
+                "algorithm": Symbol.ALGORITHM,
+                "neural_net": Symbol.NEURAL_NET,
+                "robot": Symbol.ROBOT,
+                "human_mind": Symbol.HUMAN_MIND,
             }
             symbol_enum = symbol_map.get(symbol.lower())
             if not symbol_enum:
@@ -475,181 +474,10 @@ class Player(BaseModel):
 
         return count
 
-    # Cities expansion helper methods
-    def has_city_in_hand(self) -> bool:
-        """Check if player has any city cards in hand (Cities expansion).
-
-        Returns True if at least one city card is in hand, preventing
-        automatic city draws per Cities rules.
-        """
-        return any(card.is_city() for card in self.hand)
-
-    def get_colors_on_board(self) -> set[str]:
-        """Get set of colors with at least one card on board.
-
-        Used for detecting when a new color is added (triggers city draw).
-        Returns: Set of color strings like {"blue", "red", "purple"}
-        """
-        colors = set()
-        if self.board.blue_cards:
-            colors.add("blue")
-        if self.board.red_cards:
-            colors.add("red")
-        if self.board.green_cards:
-            colors.add("green")
-        if self.board.yellow_cards:
-            colors.add("yellow")
-        if self.board.purple_cards:
-            colors.add("purple")
-        return colors
-
-    def get_highest_top_card_age(self) -> int:
-        """Get age of highest top card on board.
-
-        Used to determine which age city to draw. Returns 1 if board is empty.
-        """
-        return max(1, self.board.get_highest_age())
-
-    def get_visible_cards_by_color(self) -> dict[str, int]:
-        """Count visible cards by color for Flag achievement calculations.
-
-        Returns: Dict mapping color -> count of visible cards
-        Example: {"blue": 3, "red": 5, "green": 2, "yellow": 0, "purple": 1}
-        """
-        from models.board_utils import BoardColorIterator
-
-        counts = {"blue": 0, "red": 0, "green": 0, "yellow": 0, "purple": 0}
-
-        for color, color_stack in BoardColorIterator.iterate_color_stacks(self.board):
-            if not color_stack:
-                continue
-
-            splay_direction = self.board.splay_directions.get(color)
-
-            # Top card always visible
-            counts[color] = 1
-
-            # Splayed cards also visible
-            if len(color_stack) > 1 and splay_direction:
-                # All cards below top are visible when splayed
-                counts[color] += len(color_stack) - 1
-
-        return counts
-
-    # Unseen expansion methods
-    def reset_draw_tracking(self):
-        """Reset first draw tracking at start of player's turn (Unseen expansion)"""
-        self.first_draw_used = False
-
-    def get_safe_limit(self) -> int:
-        """
-        Calculate current Safe limit based on splay state (Unseen expansion).
-
-        Returns:
-            Maximum number of cards allowed in Safe
-        """
-        if not self.safe:
-            return 5  # Default if Safe not initialized
-        return self.safe.calculate_safe_limit(self.board.splay_directions)
-
-    def can_add_to_safe(self) -> bool:
-        """
-        Check if player can add more cards to Safe (Unseen expansion).
-
-        Returns:
-            True if Safe has room for more cards
-        """
-        if not self.safe:
-            return False
-        return not self.safe.is_at_or_over_limit(self.board.splay_directions)
-
-    def add_to_safe(self, card: Card) -> bool:
-        """
-        Add an Unseen card to Safe (Unseen expansion).
-
-        Args:
-            card: The Unseen card to add
-
-        Returns:
-            True if card was added successfully, False if Safe is at/over limit
-
-        Raises:
-            ValueError: If card is not an Unseen card
-        """
-        if not self.safe:
-            from .safe import Safe
-
-            self.safe = Safe(player_id=self.id)
-
-        # Check Safe limit before adding
-        if self.safe.is_at_or_over_limit(self.board.splay_directions):
-            logger.warning(
-                f"Cannot add to {self.name}'s Safe: at/over limit "
-                f"({self.safe.get_card_count()}/{self.get_safe_limit()})"
-            )
-            return False
-
-        return self.safe.add_card(card)
-
-    def remove_from_safe(self, card_index: int) -> Card:
-        """
-        Remove a card from Safe by index (Unseen expansion).
-
-        Args:
-            card_index: Position in Safe (0-based)
-
-        Returns:
-            The removed card
-
-        Raises:
-            ValueError: If index is invalid or Safe not initialized
-        """
-        if not self.safe:
-            raise ValueError("Safe not initialized")
-        return self.safe.remove_card(card_index)
-
-    # Artifacts expansion helper methods
-    def has_artifact_on_display(self) -> bool:
-        """Check if player has an artifact on display"""
-        return self.display is not None
-
-    def get_museum_artifact_count(self) -> int:
-        """Count artifacts in museums"""
-        from .museum import Museum
-
-        return sum(
-            1
-            for museum in self.museums
-            if isinstance(museum, Museum) and museum.has_artifact()
-        )
-
-    def get_museum_by_id(self, museum_id: str):
-        """Get museum by ID"""
-        from .museum import Museum
-
-        for museum in self.museums:
-            if isinstance(museum, Museum) and museum.museum_id == museum_id:
-                return museum
-        return None
-
-    def find_artifact_in_museums(self, age: int):
-        """Find museum containing artifact of specific age"""
-        from .museum import Museum
-
-        for museum in self.museums:
-            if (
-                isinstance(museum, Museum)
-                and museum.artifact
-                and museum.artifact.age == age
-            ):
-                return museum
-        return None
-
     def to_dict(
         self,
         include_computed: bool = True,
         achievement_cards: dict | None = None,
-        viewer_id: str | None = None,
     ) -> dict:
         """
         Convert player to dictionary.
@@ -657,7 +485,6 @@ class Player(BaseModel):
         Args:
             include_computed: Include computed_state fields (default True for Phase 2)
             achievement_cards: Achievement cards dict for achievement calculations (least privilege)
-            viewer_id: ID of player viewing this data (for Safe privacy filtering)
         """
         base_dict = {
             "id": self.id,
@@ -680,43 +507,6 @@ class Player(BaseModel):
             "is_ai": self.is_ai,
             "ai_difficulty": self.ai_difficulty,
         }
-
-        # Unseen expansion: Add Safe with proper privacy filtering
-        if self.safe:
-            is_owner = (viewer_id == self.id) if viewer_id else True
-            if is_owner:
-                base_dict["safe"] = self.safe.to_dict_for_owner()
-            else:
-                base_dict["safe"] = self.safe.to_dict_for_opponent()
-        else:
-            # When Safe is None, serialize as empty Safe dict to fix Pydantic validation
-            base_dict["safe"] = {
-                "player_id": self.id,
-                "cards": [],
-                "secret_ages": []
-            }
-
-        # Echoes expansion: Add ForecastZone
-        if self.forecast_zone:
-            base_dict["forecast_zone"] = self.forecast_zone.to_dict()
-        else:
-            base_dict["forecast_zone"] = None
-
-        # Artifacts expansion: Add display and museums
-        if self.display:
-            base_dict["display"] = self.display.to_dict()
-        else:
-            base_dict["display"] = None
-
-        if self.museums:
-            from .museum import Museum
-
-            base_dict["museums"] = [
-                museum.to_dict() if isinstance(museum, Museum) else museum
-                for museum in self.museums
-            ]
-        else:
-            base_dict["museums"] = []
 
         # Phase 2: Add computed state if requested
         if include_computed:
@@ -753,12 +543,12 @@ class Player(BaseModel):
 
         # Count all visible symbols on board
         visible_symbols = {
-            "castle": self.count_symbol("castle"),
-            "crown": self.count_symbol("crown"),
-            "leaf": self.count_symbol("leaf"),
-            "lightbulb": self.count_symbol("lightbulb"),
-            "factory": self.count_symbol("factory"),
-            "clock": self.count_symbol("clock"),
+            "circuit": self.count_symbol("circuit"),
+            "neural_net": self.count_symbol("neural_net"),
+            "data": self.count_symbol("data"),
+            "algorithm": self.count_symbol("algorithm"),
+            "robot": self.count_symbol("robot"),
+            "human_mind": self.count_symbol("human_mind"),
         }
 
         # Calculate total score
