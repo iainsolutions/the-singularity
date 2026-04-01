@@ -460,28 +460,20 @@ class ActionScheduler:
         # Clear player-specific variables if needed
         if action.clear_variables_after:
             logger.debug("SCHEDULER: Clearing player-specific variables")
-            variables_to_clear = [
-                "selected_cards",
-                "selected_achievement",  # CRITICAL: Clear singular form
-                "selected_achievements",  # CRITICAL: Clear plural form
-                "interaction_response",
-                "final_interaction_request",
-                "cards_to_return",
-                "card_to_return",
-                "cards_to_transfer",
-                "cards_to_tuck",
-                "cards_to_meld",
-                "cards_to_score",
-                "highest_card",
-                "lowest_card",
-                "chosen_option",  # Also clear chosen_option
-                "last_drawn",  # CRITICAL: Clear last_drawn for sharing isolation
-                "first_drawn",
-                "second_drawn",
-                "third_drawn",
-            ]
-            for var_name in variables_to_clear:
-                updated_context = updated_context.without_variable(var_name)
+            system_vars = {
+                "phase_sequence", "start_timestamp", "card_name", "activating_player_id",
+                "game_id", "sharing_players_count", "vulnerable_player_ids",
+                "effects", "effect_metadata", "effects_count",
+                "current_effect_index", "current_effect_context",
+                "in_sharing_phase", "in_execution_phase",
+                "is_sharing_execution", "demanding_player",
+                "resumed_action_index", "current_player_in_effect",
+                "_last_executing_player_id", "_last_responding_player_id",
+                "_demand_transfer_count_accumulator",
+            }
+            for var_name in list(updated_context.variables.keys()):
+                if var_name not in system_vars:
+                    updated_context = updated_context.without_variable(var_name)
 
         # Update sharing context if needed
         if action.update_sharing_context:

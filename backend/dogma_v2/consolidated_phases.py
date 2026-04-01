@@ -1191,40 +1191,20 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
                 logger.debug(
                     "CONSOLIDATED: Clearing player-specific variables before next player"
                 )
-                variables_to_clear = [
-                    "selected_cards",
-                    "selected_card",
-                    "interaction_response",
-                    "final_interaction_request",
-                    "cards_to_return",
-                    "card_to_return",
-                    "cards_to_transfer",
-                    "cards_to_tuck",
-                    "cards_to_meld",
-                    "cards_to_score",
-                    "highest_card",
-                    "lowest_card",
-                    "to_return",
-                    "returned_count",
-                    "last_drawn",
-                    "first_drawn",
-                    "second_drawn",
-                    "third_drawn",
-                    "drawn",
-                    "melded_cards",
-                    "first_melded",
-                    "transferred_cards",
-                    "last_returned",
-                    "chosen_option",
-                    "chosen_color",
-                    "chosen_symbol",
-                    "condition_result",
-                    "last_evaluation",
-                    "filtered",
-                    "unique_ages",
-                ]
-                for var_name in variables_to_clear:
-                    current_context = current_context.without_variable(var_name)
+                system_vars = {
+                    "phase_sequence", "start_timestamp", "card_name", "activating_player_id",
+                    "game_id", "sharing_players_count", "vulnerable_player_ids",
+                    "effects", "effect_metadata", "effects_count",
+                    "current_effect_index", "current_effect_context",
+                    "in_sharing_phase", "in_execution_phase",
+                    "is_sharing_execution", "demanding_player",
+                    "resumed_action_index", "current_player_in_effect",
+                    "_last_executing_player_id", "_last_responding_player_id",
+                    "_demand_transfer_count_accumulator",
+                }
+                for var_name in list(current_context.variables.keys()):
+                    if var_name not in system_vars:
+                        current_context = current_context.without_variable(var_name)
 
             # Track sharing results
             if is_sharing:
