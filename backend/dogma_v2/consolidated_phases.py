@@ -1112,15 +1112,23 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
             # Do NOT clear when resuming for the SAME player (they need their interaction response)
             prev_player_id = current_context.get_variable("_last_executing_player_id")
             if prev_player_id and prev_player_id != player.id:
-                for var_name in [
-                    "selected_cards", "selected_card", "to_return", "returned_count",
-                    "last_drawn", "first_drawn", "second_drawn", "third_drawn", "drawn",
-                    "melded_cards", "first_melded", "transferred_cards", "last_returned",
-                    "chosen_option", "chosen_color", "chosen_symbol", "condition_result",
-                    "last_evaluation", "filtered", "unique_ages", "highest_card", "lowest_card",
-                    "final_interaction_request", "interaction_response",
-                ]:
-                    current_context = current_context.without_variable(var_name)
+                # Clear ALL non-system variables to prevent any leaking between players
+                # Cards use arbitrary store_result names (to_meld, drawn_cards, etc.)
+                # so a hardcoded list will always miss some
+                system_vars = {
+                    "phase_sequence", "start_timestamp", "card_name", "activating_player_id",
+                    "game_id", "sharing_players_count", "vulnerable_player_ids",
+                    "effects", "effect_metadata", "effects_count",
+                    "current_effect_index", "current_effect_context",
+                    "in_sharing_phase", "in_execution_phase",
+                    "is_sharing_execution", "demanding_player",
+                    "resumed_action_index", "current_player_in_effect",
+                    "_last_executing_player_id", "_last_responding_player_id",
+                    "_demand_transfer_count_accumulator",
+                }
+                for var_name in list(current_context.variables.keys()):
+                    if var_name not in system_vars:
+                        current_context = current_context.without_variable(var_name)
             current_context = current_context.with_variable("_last_executing_player_id", player.id)
 
             # Execute the action via scheduler
@@ -1796,20 +1804,21 @@ class ConsolidatedResolutionPhase(ConsolidatedPhase):
                 # Clear resume_primitive_index - next player starts fresh from primitive 0
                 context = context.without_variable("resume_primitive_index")
 
-                # Clear player-specific variables to prevent cross-contamination
-                for var in [
-                    "selected_cards", "selected_card", "selected_achievement", "selected_achievements",
-                    "interaction_response", "final_interaction_request",
-                    "cards_to_return", "cards_to_select", "cards_to_transfer",
-                    "cards_to_tuck", "cards_to_meld", "cards_to_score",
-                    "highest_card", "lowest_card", "chosen_option", "chosen_symbol", "chosen_color",
-                    "decline", "pending_store_result", "control_flow_depth",
-                    "to_return", "returned_count", "last_returned",
-                    "last_drawn", "first_drawn", "second_drawn", "third_drawn", "drawn",
-                    "melded_cards", "first_melded", "transferred_cards",
-                    "condition_result", "last_evaluation", "filtered", "unique_ages",
-                ]:
-                    context = context.without_variable(var)
+                # Clear ALL non-system variables to prevent cross-contamination
+                system_vars = {
+                    "phase_sequence", "start_timestamp", "card_name", "activating_player_id",
+                    "game_id", "sharing_players_count", "vulnerable_player_ids",
+                    "effects", "effect_metadata", "effects_count",
+                    "current_effect_index", "current_effect_context",
+                    "in_sharing_phase", "in_execution_phase",
+                    "is_sharing_execution", "demanding_player",
+                    "resumed_action_index", "current_player_in_effect",
+                    "_last_executing_player_id", "_last_responding_player_id",
+                    "_demand_transfer_count_accumulator",
+                }
+                for var_name in list(context.variables.keys()):
+                    if var_name not in system_vars:
+                        context = context.without_variable(var_name)
 
                 logger.info(
                     f"CONSOLIDATED RESOLUTION: Moving to next player "
