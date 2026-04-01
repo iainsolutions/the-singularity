@@ -59,7 +59,7 @@ class RepeatEffect(ActionPrimitive):
 
         context.set_variable("_repeat_count", current_repeat_count + 1)
 
-        activity_logger.info(f"{context.player.name} repeats the effect")
+        logger.info(f"{context.player.name} repeats the effect")
         context.add_result("Effect will be repeated")
 
         logger.debug("RepeatEffect: Set repeat flag")

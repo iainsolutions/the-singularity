@@ -86,7 +86,7 @@ class RevealTopCard(ActionPrimitive):
         context.set_variable(self.store_color, top_card.color)
         context.set_variable(self.store_name, top_card.name)
 
-        activity_logger.info(
+        logger.info(
             f"🔍 {context.player.name} revealed {top_card.name} (age {age}, {top_card.color})"
         )
 

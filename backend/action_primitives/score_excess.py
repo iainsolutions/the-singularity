@@ -91,7 +91,7 @@ class ScoreExcess(ActionPrimitive):
         # Store the count
         context.set_variable(self.store_result, num_to_score)
 
-        activity_logger.info(
+        logger.info(
             f"📊 {player.name} scored {num_to_score} excess {color} cards (keeping top {keep_top})"
         )
 

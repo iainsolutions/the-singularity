@@ -62,7 +62,7 @@ class SelectAnyPlayer(ActionPrimitive):
             selected_player = eligible_players[0]
             context.set_variable(self.store_result, selected_player.id)
 
-            activity_logger.info(
+            logger.info(
                 f"{context.player.name} auto-selected {selected_player.name} (only eligible player)"
             )
             context.add_result(f"Auto-selected: {selected_player.name}")

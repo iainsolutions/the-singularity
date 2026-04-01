@@ -45,7 +45,7 @@ class WinGame(ActionPrimitive):
         context.game.phase = GamePhase.FINISHED
 
         # Log the victory
-        activity_logger.info(f"🏆 {winner.name} wins the game!")
+        logger.info(f"🏆 {winner.name} wins the game!")
         context.add_result(f"{winner.name} wins the game!")
 
         logger.info(f"Game ended - Winner: {winner.name}")
@@ -103,7 +103,7 @@ class LoseGame(ActionPrimitive):
         context.game.phase = GamePhase.FINISHED
 
         # Log the loss
-        activity_logger.info(f"💀 {loser.name} loses the game! {winner.name} wins!")
+        logger.info(f"💀 {loser.name} loses the game! {winner.name} wins!")
         context.add_result(f"{loser.name} loses the game! {winner.name} wins!")
 
         logger.info(f"Game ended - Loser: {loser.name}, Winner: {winner.name}")

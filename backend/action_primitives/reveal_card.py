@@ -76,9 +76,9 @@ class RevealCard(ActionPrimitive):
 
         if self.to_player:
             to_player_name = self.to_player if isinstance(self.to_player, str) else getattr(self.to_player, "name", "unknown")
-            activity_logger.info(f"👁️ {player_name} reveals {card_name} to {to_player_name}")
+            logger.info(f"👁️ {player_name} reveals {card_name} to {to_player_name}")
         else:
-            activity_logger.info(f"👁️ {player_name} reveals {card_name}")
+            logger.info(f"👁️ {player_name} reveals {card_name}")
 
         context.add_result(f"Revealed {card_name}")
 

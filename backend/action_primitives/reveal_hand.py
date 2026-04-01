@@ -66,9 +66,9 @@ class RevealHand(ActionPrimitive):
 
         if self.to_player:
             to_player_name = self.to_player if isinstance(self.to_player, str) else getattr(self.to_player, "name", "unknown")
-            activity_logger.info(f"👁️ {player_name} reveals hand to {to_player_name}: {', '.join(card_names)}")
+            logger.info(f"👁️ {player_name} reveals hand to {to_player_name}: {', '.join(card_names)}")
         else:
-            activity_logger.info(f"👁️ {player_name} reveals hand: {', '.join(card_names)}")
+            logger.info(f"👁️ {player_name} reveals hand: {', '.join(card_names)}")
 
         context.add_result(f"Revealed {len(hand_cards)} cards from hand")
 

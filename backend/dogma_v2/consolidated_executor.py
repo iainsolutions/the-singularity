@@ -208,7 +208,7 @@ class ConsolidatedDogmaExecutor:
         optimized_context = optimize_context_for_phase(context)
         current_phase = create_consolidated_execution_pipeline()  # Start with Phase 1
         phase_count = 0
-        max_phases = 200  # Cards with sharing + RepeatAction + ExecuteDogma chains need headroom
+        max_phases = 50  # Cards with sharing + RepeatAction + ExecuteDogma chains need headroom
 
         logger.info("CONSOLIDATED: Starting 8-phase execution pipeline")
 
@@ -418,7 +418,7 @@ class ConsolidatedDogmaExecutor:
         phase_count = len(
             context.get_variable("phase_sequence", [])
         )  # Continue counting
-        max_phases = 200  # Cards with sharing + RepeatAction + ExecuteDogma chains need headroom
+        max_phases = 50  # Cards with sharing + RepeatAction + ExecuteDogma chains need headroom
 
         logger.info(
             f"CONSOLIDATED: Continuing from phase {current_phase.get_phase_name() if current_phase else 'None'}"
