@@ -191,6 +191,19 @@ class AITurnExecutor:
                         )
                     break
 
+                # If only action is dogma_response, handle as interaction
+                if available_actions == ["dogma_response"]:
+                    logger.info("Pending interaction detected via available_actions, handling as interaction")
+                    game = self.game_manager.get_game(game_id)
+                    if game:
+                        result = await self._handle_interaction(
+                            game_id, player_id, game, agent
+                        )
+                        if result:
+                            turn_summary["actions_taken"].append(result["action"])
+                            turn_summary["total_cost"] += result.get("api_cost", 0)
+                        continue
+
                 # Filter out provably useless dogma actions
                 available_actions = self._filter_useless_actions(
                     available_actions, game, player
