@@ -6,6 +6,7 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  Popover,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -13,12 +14,20 @@ import {
   ContentCopy as CopyIcon,
   Check as CheckIcon,
   ExitToApp as LeaveIcon,
+  Info as InfoIcon,
 } from "@mui/icons-material";
+import circuitIcon from "../../assets/icons/circuit.svg";
+import neuralNetIcon from "../../assets/icons/neural_net.svg";
+import dataIcon from "../../assets/icons/data.svg";
+import algorithmIcon from "../../assets/icons/algorithm.svg";
+import humanMindIcon from "../../assets/icons/human_mind.svg";
+import robotIcon from "../../assets/icons/robot.svg";
 
 
 const GameHeader = memo(
   function GameHeader({ gameId, gameState, onLeaveGame }) {
     const [copiedGameId, setCopiedGameId] = useState(false);
+    const [legendAnchor, setLegendAnchor] = useState(null);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -148,29 +157,59 @@ const GameHeader = memo(
             />
           </Box>
 
-          {/* Domain legend */}
-          <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", alignItems: "center" }}>
-            {[
-              { label: "Processing", color: "#0066CC" },
-              { label: "Labor", color: "#CC3333" },
-              { label: "Ethics", color: "#339933" },
-              { label: "Creativity", color: "#7733AA" },
-              { label: "Connection", color: "#CC9900" },
-            ].map(({ label, color }) => (
-              <Chip
-                key={label}
-                label={label}
-                size="small"
-                sx={{
-                  bgcolor: color,
-                  color: "white",
-                  fontSize: "0.65rem",
-                  height: 20,
-                  fontWeight: 600,
-                }}
-              />
-            ))}
-          </Box>
+          {/* Legend popout */}
+          <Tooltip title="Game Reference">
+            <IconButton
+              size="small"
+              onClick={(e) => setLegendAnchor(e.currentTarget)}
+              sx={{ color: "text.secondary" }}
+            >
+              <InfoIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Popover
+            open={Boolean(legendAnchor)}
+            anchorEl={legendAnchor}
+            onClose={() => setLegendAnchor(null)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            transformOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Box sx={{ p: 2, minWidth: 280 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Domains</Typography>
+              <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", mb: 1.5 }}>
+                {[
+                  { label: "Processing", color: "#0066CC" },
+                  { label: "Labor", color: "#CC3333" },
+                  { label: "Ethics", color: "#339933" },
+                  { label: "Creativity", color: "#7733AA" },
+                  { label: "Connection", color: "#CC9900" },
+                ].map(({ label, color }) => (
+                  <Chip key={label} label={label} size="small"
+                    sx={{ bgcolor: color, color: "white", fontSize: "0.7rem", height: 22, fontWeight: 600 }}
+                  />
+                ))}
+              </Box>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Icons</Typography>
+              <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0.5 }}>
+                {[
+                  { icon: circuitIcon, label: "Circuit", desc: "Hardware" },
+                  { icon: neuralNetIcon, label: "Neural Net", desc: "Intelligence" },
+                  { icon: dataIcon, label: "Data", desc: "Information" },
+                  { icon: algorithmIcon, label: "Algorithm", desc: "Methods" },
+                  { icon: humanMindIcon, label: "Human Mind", desc: "Consciousness" },
+                  { icon: robotIcon, label: "Robot", desc: "Automation" },
+                ].map(({ icon, label, desc }) => (
+                  <Box key={label} sx={{ display: "flex", alignItems: "center", gap: 0.5, py: 0.3 }}>
+                    <img src={icon} alt={label} style={{ width: 18, height: 18 }} />
+                    <Box>
+                      <Box sx={{ fontSize: "0.75rem", fontWeight: 600 }}>{label}</Box>
+                      <Box sx={{ fontSize: "0.6rem", color: "text.secondary" }}>{desc}</Box>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Popover>
 
           <Button
             variant={isMobile ? "text" : "outlined"}
