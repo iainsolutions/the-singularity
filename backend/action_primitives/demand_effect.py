@@ -38,7 +38,7 @@ class DemandEffect(ActionPrimitive):
     def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.required_symbol = config.get("required_symbol")
-        self.demand_actions = config.get("demand_actions", [])
+        self.demand_actions = config.get("demand_actions") or config.get("actions", [])
         self.repeat_on_compliance = config.get("repeat_on_compliance", False)
         self.fallback_actions = config.get("fallback_actions", [])
 

@@ -61,7 +61,7 @@ class DemandPhase(DogmaPhase):
 
         # Extract configuration
         self.required_symbol = effect_config.get("required_symbol")
-        self.demand_actions = effect_config.get("demand_actions", [])
+        self.demand_actions = effect_config.get("demand_actions") or effect_config.get("actions", [])
         self.repeat_on_compliance = effect_config.get("repeat_on_compliance", False)
         self.fallback_actions = effect_config.get("fallback_actions", [])
         self.is_compel = effect_config.get("is_compel", False)  # Artifacts expansion

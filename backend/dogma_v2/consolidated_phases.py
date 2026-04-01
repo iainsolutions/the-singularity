@@ -591,7 +591,7 @@ class ConsolidatedInitializationPhase(ConsolidatedPhase):
                         # If yes, keep the DemandEffect wrapper intact to route through DemandPhase
                         # If no, extract demand_actions for inline execution (existing behavior)
                         if action.get("type") == "DemandEffect" and is_demand:
-                            demand_actions = action.get("demand_actions", [])
+                            demand_actions = action.get("demand_actions") or action.get("actions", [])
                             repeat_on_compliance = action.get(
                                 "repeat_on_compliance", False
                             )
