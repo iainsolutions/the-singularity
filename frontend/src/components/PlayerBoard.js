@@ -308,14 +308,9 @@ const PlayerBoard = memo(
 
     return (
       <Box sx={{ width: "100%" }}>
-        {/* Symbol counter above board for current player */}
-        {showSymbolCounter && isCurrentPlayer && (
-          <Box
-            sx={{
-              mb: compact ? 1 : 2,
-              display: hideBoard ? "none" : "block",
-            }}
-          >
+        {/* Symbol counter above board for all players */}
+        {showSymbolCounter && !hideBoard && (
+          <Box sx={{ mb: compact ? 1 : 2 }}>
             <SymbolCounter
               player={player}
               compareToPlayer={compareToPlayer}
@@ -442,18 +437,6 @@ const PlayerBoard = memo(
           compact={compact}
           isCurrentPlayer={isCurrentPlayer}
         />
-
-        {/* Symbol counter above hand for other players */}
-        {showSymbolCounter && !isCurrentPlayer && !hideBoard && (
-          <Box sx={{ mt: compact ? 1 : 2 }}>
-            <SymbolCounter
-              player={player}
-              compareToPlayer={compareToPlayer}
-              position="below"
-              isCurrentPlayer={isCurrentPlayer}
-            />
-          </Box>
-        )}
 
         {/* Hand Cards */}
         {showHand && (
