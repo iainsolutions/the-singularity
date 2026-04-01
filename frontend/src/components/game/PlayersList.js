@@ -25,7 +25,7 @@ function PlayersList({
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {/* Other Players */}
       {otherPlayers.map((player) => (
-        <Paper key={player.id} elevation={1} sx={{ p: 1.5, mb: 1 }}>
+        <Paper key={player.id} elevation={1} sx={{ p: 1.5, mb: 1, overflow: "visible" }}>
           <PlayerBoard
             player={player}
             isCurrentPlayer={false}
