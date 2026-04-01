@@ -1107,6 +1107,18 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
                         f"CONSOLIDATED: Resuming sharing for {player.name} (already started)"
                     )
 
+            # Clear player-specific effect variables before each player's execution
+            # This prevents variable leaking between sharing players (e.g. to_return from AI reused by human)
+            for var_name in [
+                "selected_cards", "selected_card", "to_return", "returned_count",
+                "last_drawn", "first_drawn", "second_drawn", "third_drawn", "drawn",
+                "melded_cards", "first_melded", "transferred_cards", "last_returned",
+                "chosen_option", "chosen_color", "chosen_symbol", "condition_result",
+                "last_evaluation", "filtered", "unique_ages", "highest_card", "lowest_card",
+                "final_interaction_request", "interaction_response",
+            ]:
+                current_context = current_context.without_variable(var_name)
+
             # Execute the action via scheduler
             result = scheduler.execute_action(
                 effect=list(action.effect),
