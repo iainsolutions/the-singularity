@@ -79,7 +79,6 @@ class ActionScheduler:
         is_resuming_after_interaction: bool = False,
         continuing_after_sharing: bool = False,
         is_demand: bool = False,
-        is_fallback_only: bool = False,
     ) -> ActionExecutionResult:
         """
         Execute all primitives in an effect for a player.
@@ -189,13 +188,6 @@ class ActionScheduler:
                 execution_context = execution_context.with_variable(
                     "demanding_player", context.activating_player
                 )
-
-            # FALLBACK-ONLY: Set flag for demand effects with zero vulnerable players
-            # This happens when no players are vulnerable but fallback_actions exist
-            # The flag is consumed by DemandPhase.execute() to skip routing and execute fallback directly
-            if is_fallback_only:
-                logger.debug(f"SCHEDULER: Setting is_fallback_only flag for zero-vulnerable demand")
-                execution_context = execution_context.with_variable("is_fallback_only", True)
 
             # Set effect context for state tracking
             effect_context = f"effect_{effect_index + 1}"
@@ -629,7 +621,6 @@ class ActionScheduler:
                 f"🔄 SCHEDULER: Executing action {action_num}/{total_actions} "
                 f"(Effect {action.effect_index}, Player={action.player.name}, "
                 f"sharing={action.is_sharing}, demand={action.is_demand}, "
-                f"fallback_only={action.is_fallback_only}, "
                 f"resume_index={action.resume_action_index})"
             )
 
@@ -692,7 +683,6 @@ class ActionScheduler:
                 is_resuming_after_interaction=is_resuming_after_interaction,
                 continuing_after_sharing=continuing_after_sharing,
                 is_demand=action.is_demand,
-                is_fallback_only=action.is_fallback_only,
             )
             logger.debug(
                 f"SCHEDULER DEBUG: Action executed - success={result.success}, "

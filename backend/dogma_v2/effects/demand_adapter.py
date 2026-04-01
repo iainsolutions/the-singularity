@@ -73,7 +73,7 @@ class DemandEffectAdapter(Effect):
 
         Demands require:
         - required_symbol or symbol_requirement
-        - demand_actions list
+        - actions list
 
         Returns:
             Tuple of (is_valid, error_message)
@@ -86,13 +86,13 @@ class DemandEffectAdapter(Effect):
             return False, "Demand missing required_symbol or symbol_requirement"
 
         # Check for demand actions
-        demand_actions = self.config.get("demand_actions", [])
-        if not demand_actions:
-            return False, "Demand missing demand_actions"
+        actions = self.config.get("actions", [])
+        if not actions:
+            return False, "Demand missing actions"
 
         # Validate action list structure
-        if not isinstance(demand_actions, list):
-            return False, "demand_actions must be a list"
+        if not isinstance(actions, list):
+            return False, "actions must be a list"
 
         return True, None
 

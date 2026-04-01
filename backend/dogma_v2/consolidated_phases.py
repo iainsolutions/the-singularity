@@ -2251,7 +2251,7 @@ class ConsolidatedDemandPhase(ConsolidatedPhase):
     Responsibilities:
     1. Process demand effects for all eligible players
     2. Handle compliance checking and state management
-    3. Execute demand actions and fallback actions
+    3. Execute demand actions
     4. Return to execution phase for remaining effects
     """
 

@@ -19,7 +19,6 @@ from utils.symbol_mapping import string_to_symbol
 
 from ..core.context import DogmaContext
 from ..core.phases import DogmaPhase, PhaseResult, ValidationResult
-from ..effects import EffectFactory
 from .demand_target import DemandTargetPhase
 
 logger = logging.getLogger(__name__)
@@ -45,7 +44,6 @@ class DemandPhase(DogmaPhase):
     1. ALWAYS set demand_transferred_count (even when 0)
     2. Capture states before/after demand processing
     3. Proper compliance detection
-    4. Handle fallback actions correctly
     """
 
     def __init__(self, effect_config: dict[str, Any], return_phase: DogmaPhase):
@@ -63,7 +61,6 @@ class DemandPhase(DogmaPhase):
         self.required_symbol = effect_config.get("required_symbol")
         self.demand_actions = effect_config.get("actions", [])
         self.repeat_on_compliance = effect_config.get("repeat_on_compliance", False)
-        self.fallback_actions = effect_config.get("fallback_actions", [])
         self.is_compel = effect_config.get("is_compel", False)  # Artifacts expansion
 
         # Processing state
@@ -102,22 +99,6 @@ class DemandPhase(DogmaPhase):
     def execute(self, context: DogmaContext) -> PhaseResult:
         """Execute demand processing state machine"""
         self.log_phase_start(context)
-
-        # FALLBACK-ONLY MODE: Skip demand routing, execute fallback immediately
-        # This happens when there are no vulnerable players but fallback_actions exist
-        is_fallback_only = context.has_variable("is_fallback_only") and context.get_variable("is_fallback_only")
-        if is_fallback_only and self.state == DemandState.INITIALIZING:
-            logger.info("🔥 FALLBACK-ONLY: No vulnerable players, executing fallback actions directly")
-            # Set demand_transferred_count to 0 (required for repeat logic)
-            updated_context = context.with_variable("demand_transferred_count", 0)
-
-            if self.fallback_actions:
-                return self._execute_fallback_actions(updated_context)
-            else:
-                # No fallback despite flag - shouldn't happen but handle gracefully
-                logger.warning("is_fallback_only=True but no fallback_actions defined")
-                updated_context = updated_context.with_result("No vulnerable players and no fallback actions")
-                return self._transition_to(DemandState.COMPLETE, updated_context)
 
         # Validate configuration
         validation = self.validate(context)
@@ -317,10 +298,9 @@ class DemandPhase(DogmaPhase):
 
         # Check if anyone can comply
         if not self.can_comply:
-            logger.error(
-                f"🔥 FALLBACK DEBUG: No players can comply. affected_players={len(self.affected_players)}, can_comply={len(self.can_comply)}, has_fallback={bool(self.fallback_actions)}"
+            logger.info(
+                f"No players can comply with demand (affected={len(self.affected_players)})"
             )
-            logger.info("No players can comply with demand")
             # CRITICAL FIX: Always set demand_transferred_count, even when 0
             updated_context = context.with_variable("demand_transferred_count", 0)
 
@@ -338,32 +318,12 @@ class DemandPhase(DogmaPhase):
                     complying_players_count=0,
                 )
 
-            # Execute fallback actions if defined
-            if self.fallback_actions:
-                logger.error(
-                    f"🔥 FALLBACK DEBUG: Executing {len(self.fallback_actions)} fallback actions!"
-                )
-                logger.info("Executing fallback actions")
-
-                # Log fallback activation
-                if activity_logger:
-                    activity_logger.log_dogma_fallback_activated(
-                        game_id=context.game.game_id,
-                        player_id=context.activating_player.id,
-                        card_name=context.card.name,
-                        fallback_reason="No cards were transferred due to this demand",
-                        fallback_effect=f"{len(self.fallback_actions)} fallback actions",
-                        fallback_actions=self.fallback_actions,
-                    )
-
-                return self._execute_fallback_actions(updated_context)
-            else:
-                # No fallback, complete demand with 0 transfers
-                logger.info("No fallback actions, completing demand with 0 transfers")
-                updated_context = updated_context.with_result(
-                    f"No players affected by {self.required_symbol} demand"
-                )
-                return PhaseResult.success(self.return_phase, updated_context)
+            # Complete demand with 0 transfers
+            logger.info("No players can comply, completing demand with 0 transfers")
+            updated_context = updated_context.with_result(
+                f"No players affected by {self.required_symbol} demand"
+            )
+            return PhaseResult.success(self.return_phase, updated_context)
 
         # Players can comply, start processing
         logger.info(f"{len(self.can_comply)} players can comply with demand")
@@ -687,75 +647,6 @@ class DemandPhase(DogmaPhase):
 
         # Return to the phase that initiated the demand
         return PhaseResult.success(self.return_phase, final_context)
-
-    def _execute_fallback_actions(self, context: DogmaContext) -> PhaseResult:
-        """Execute fallback actions when no one can comply"""
-        logger.info(f"Executing {len(self.fallback_actions)} fallback actions")
-
-        # Activity: log fallback activation before executing actions (e.g., draw a 1)
-        try:
-            if activity_logger:
-                activity_logger.log_dogma_fallback_activated(
-                    game_id=context.game.game_id,
-                    player_id=context.activating_player.id,
-                    card_name=context.card.name,
-                    fallback_reason="No players could comply with demand",
-                    fallback_effect=f"{len(self.fallback_actions)} action(s)",
-                )
-        except Exception:
-            pass
-
-        # Execute fallback actions inline (simplified approach)
-
-        try:
-            fallback_context = context
-            # ENHANCEMENT: Set context for state tracking to identify this as demand fallback
-            fallback_context = fallback_context.with_variable(
-                "current_effect_context", "demand_fallback"
-            )
-
-            for i, action_config in enumerate(self.fallback_actions):
-                logger.debug(f"Executing fallback action {i}: {action_config}")
-
-                # CRITICAL FIX: Check execute_as to determine which player executes the action
-                # Fallback actions should execute for the ACTIVATING player by default
-                exec_as = (
-                    (action_config.get("execute_as") or "activating").lower()
-                    if isinstance(action_config, dict)
-                    else "activating"
-                )
-                if exec_as in ("activating", "demanding", "active"):
-                    exec_player = context.activating_player
-                else:
-                    # This shouldn't happen for fallback actions, but handle it
-                    exec_player = context.player
-
-                # Switch context to the correct player
-                exec_context = fallback_context.with_player(exec_player)
-
-                logger.info(
-                    f"Executing fallback action for {exec_player.name} (execute_as={exec_as})"
-                )
-
-                # Execute action using Effect abstraction
-                effect = EffectFactory.create(action_config)
-                result = effect.execute(exec_context)
-
-                if result.success:
-                    # Update context with clean results (no internal signals)
-                    fallback_context = fallback_context.with_variables(result.variables)
-                    fallback_context = fallback_context.with_results(
-                        tuple(result.results)
-                    )
-                else:
-                    logger.warning(f"Fallback action {i} failed: {result.error}")
-
-            # Complete with fallback results
-            return PhaseResult.success(self.return_phase, fallback_context)
-
-        except Exception as e:
-            logger.error(f"Error executing fallback actions: {e}", exc_info=True)
-            return PhaseResult.error(f"Fallback actions failed: {e}", context)
 
     def _can_player_comply(self, player, context: DogmaContext) -> bool:
         """

@@ -16,9 +16,9 @@ class DemandEffect(ActionPrimitive):
     """
     Marker primitive for demand effects - NO-OP during execution.
 
-    This primitive is a structural wrapper in BaseCards.json that:
+    This primitive is a structural wrapper in SingularityCards.json that:
     1. Marks an effect as is_demand=true (checked during initialization)
-    2. Contains demand_actions which are extracted and executed by vulnerable players
+    2. Contains actions which are extracted and executed by vulnerable players
 
     The actual demand routing is handled by:
     - ConsolidatedInitializationPhase: Identifies vulnerable players
@@ -26,13 +26,12 @@ class DemandEffect(ActionPrimitive):
     - ConsolidatedSharingPhase: Executes the plan
 
     This primitive should NEVER be executed as an action primitive - the
-    demand_actions are extracted during effect loading and replace this wrapper.
+    actions are extracted during effect loading and replace this wrapper.
 
     Parameters:
     - required_symbol: Symbol for vulnerability check (used during initialization)
-    - demand_actions: Actions vulnerable players execute (extracted during loading)
+    - actions: Actions vulnerable players execute (extracted during loading)
     - repeat_on_compliance: Whether to repeat (deprecated, not currently used)
-    - fallback_actions: Fallback actions (deprecated, not currently used)
     """
 
     def __init__(self, config: dict[str, Any]):
@@ -40,7 +39,6 @@ class DemandEffect(ActionPrimitive):
         self.required_symbol = config.get("required_symbol")
         self.demand_actions = config.get("actions", [])
         self.repeat_on_compliance = config.get("repeat_on_compliance", False)
-        self.fallback_actions = config.get("fallback_actions", [])
 
     def execute(self, context: ActionContext) -> ActionResult:
         """

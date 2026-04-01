@@ -29,8 +29,7 @@ class PlannedAction:
     # Optional behavior flags
     clear_variables_after: bool = False  # Clear context variables after execution
     update_sharing_context: bool = False  # Update sharing-specific variables
-    is_demand: bool = False  # NEW: Is this a demand execution?
-    is_fallback_only: bool = False  # NEW: Execute only fallback_actions (zero vulnerable players)
+    is_demand: bool = False  # Is this a demand execution?
 
     @property
     def is_resuming(self) -> bool:
@@ -48,7 +47,6 @@ class PlannedAction:
             clear_variables_after=self.clear_variables_after,
             update_sharing_context=self.update_sharing_context,
             is_demand=self.is_demand,
-            is_fallback_only=self.is_fallback_only,
         )
 
     def to_dict(self) -> dict:
@@ -69,7 +67,6 @@ class PlannedAction:
             "clear_variables_after": self.clear_variables_after,
             "update_sharing_context": self.update_sharing_context,
             "is_demand": self.is_demand,
-            "is_fallback_only": self.is_fallback_only,
         }
 
     @staticmethod
@@ -102,7 +99,6 @@ class PlannedAction:
             clear_variables_after=data.get("clear_variables_after", False),
             update_sharing_context=data.get("update_sharing_context", False),
             is_demand=data.get("is_demand", False),
-            is_fallback_only=data.get("is_fallback_only", False),
         )
 
 
@@ -278,7 +274,6 @@ class ActionPlan:
                                 "update_sharing_context", False
                             ),
                             is_demand=action_data.get("is_demand", False),
-                            is_fallback_only=action_data.get("is_fallback_only", False),
                         )
                     )
                 else:
@@ -317,14 +312,9 @@ class ActionPlan:
                 # Cities expansion: If endorsed, affect each opponent twice (two passes)
                 num_passes = 2 if endorsed else 1
 
-                # Check if demand has fallback_actions for zero-vulnerable case
-                demand_config = metadata.get("demand_config", {})
-                has_fallback = bool(demand_config.get("fallback_actions"))
-
                 logger.debug(
                     f"PLAN: Effect {effect_idx} is DEMAND - routing to {len(vulnerable_players)} vulnerable players"
                     f"{' (ENDORSED - 2 passes)' if endorsed else ''}"
-                    f"{' (has fallback)' if has_fallback else ''}"
                 )
 
                 if len(vulnerable_players) > 0:
@@ -338,40 +328,10 @@ class ActionPlan:
                                     player=player,
                                     is_sharing=False,  # Demands don't count as sharing
                                     update_sharing_context=False,
-                                    is_demand=True,  # NEW: Mark as demand execution
+                                    is_demand=True,
                                 )
                             )
-                elif has_fallback:
-                    # Zero vulnerable players but has fallback_actions
-                    # Create a demand action for the activating player to execute fallback
-                    logger.debug(
-                        f"PLAN: No vulnerable players but demand has fallback - routing to activating player"
-                    )
-
-                    # CRITICAL FIX: Use only fallback_actions, not the full effect with demand_actions
-                    # The full effect contains demand_actions (draw, select, transfer) which should NOT execute
-                    # when no players are vulnerable. Only fallback_actions should execute.
-                    fallback_actions = demand_config.get("fallback_actions", [])
-                    if fallback_actions:
-                        logger.debug(
-                            f"PLAN: Creating fallback-only action with {len(fallback_actions)} fallback actions"
-                        )
-                        actions.append(
-                            PlannedAction(
-                                effect=tuple(fallback_actions),  # Use fallback_actions, NOT the full effect
-                                effect_index=effect_start_index + effect_idx,
-                                player=activating_player,
-                                is_sharing=False,
-                                update_sharing_context=False,
-                                is_demand=True,
-                                is_fallback_only=True,  # Signal that this is just for fallback
-                            )
-                        )
-                    else:
-                        logger.warning(
-                            f"PLAN: Demand has has_fallback=True but no fallback_actions found in demand_config"
-                        )
-                # else: No vulnerable players and no fallback - skip entirely
+                # else: No vulnerable players - skip entirely
             else:
                 # NON-DEMAND EFFECT: Sharing players + activating player
                 logger.debug(
@@ -487,7 +447,6 @@ class ActionPlan:
                                 "update_sharing_context", False
                             ),
                             is_demand=action_data.get("is_demand", False),
-                            is_fallback_only=action_data.get("is_fallback_only", False),
                         )
                     )
                 else:
