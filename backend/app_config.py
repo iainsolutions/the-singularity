@@ -49,7 +49,7 @@ class CORSConfig:
         environment = os.getenv("INNOVATION_ENV", "development").lower()
         origins_map = {
             "development": ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"],
-            "staging": ["https://staging.innovation.example.com"],
+            "staging": ["https://staging.singularity.example.com"],
             "production": [],  # Production origins should be configured explicitly
         }
         return origins_map.get(environment, ["http://localhost:3000"])

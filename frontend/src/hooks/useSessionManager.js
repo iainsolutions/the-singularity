@@ -13,7 +13,7 @@ export function useSessionManager() {
       hasToken: !!token,
     });
     const sessionData = { gameId, playerId, playerName, token };
-    localStorage.setItem("innovation-session", JSON.stringify(sessionData));
+    localStorage.setItem("singularity-session", JSON.stringify(sessionData));
     console.log("✅ [SessionManager] Session saved successfully");
   }, []);
 
@@ -23,18 +23,18 @@ export function useSessionManager() {
       console.log("🔍 [SessionManager] All localStorage keys:", Object.keys(localStorage));
 
       // First try the new key
-      let sessionData = localStorage.getItem("innovation-session");
+      let sessionData = localStorage.getItem("singularity-session");
       console.log("🔍 [SessionManager] New key data:", sessionData ? "found" : "not found");
 
       // Migration: Check for old key format and migrate
       if (!sessionData) {
-        const oldSessionData = localStorage.getItem("innovation_game_session");
+        const oldSessionData = localStorage.getItem("singularity_game_session");
         console.log("🔍 [SessionManager] Old key data:", oldSessionData ? "found" : "not found");
         if (oldSessionData) {
           console.log("🔄 [SessionManager] Migrating session from old key format");
           // Migrate to new key
-          localStorage.setItem("innovation-session", oldSessionData);
-          localStorage.removeItem("innovation_game_session");
+          localStorage.setItem("singularity-session", oldSessionData);
+          localStorage.removeItem("singularity_game_session");
           sessionData = oldSessionData;
         }
       }
@@ -47,7 +47,7 @@ export function useSessionManager() {
   }, []);
 
   const clearSession = useCallback(() => {
-    localStorage.removeItem("innovation-session");
+    localStorage.removeItem("singularity-session");
   }, []);
 
   return {

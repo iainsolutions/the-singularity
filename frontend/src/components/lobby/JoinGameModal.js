@@ -8,26 +8,26 @@ function JoinGameModal({ visible }) {
   const { createGame, joinGame, loading, clearError } = useGame();
   const [playerName, setPlayerName] = useState(() => {
     // Load cached username from localStorage on initial render
-    return localStorage.getItem("innovation_player_name") || "";
+    return localStorage.getItem("singularity_player_name") || "";
   });
   const [gameId, setGameId] = useState("");
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [selectedExpansions, setSelectedExpansions] = useState(() => {
     // Load cached expansion selections from localStorage on initial render
-    const cached = localStorage.getItem("innovation_selected_expansions");
+    const cached = localStorage.getItem("singularity_selected_expansions");
     return cached ? JSON.parse(cached) : [];
   });
 
   // Save username to localStorage whenever it changes
   useEffect(() => {
     if (playerName.trim()) {
-      localStorage.setItem("innovation_player_name", playerName.trim());
+      localStorage.setItem("singularity_player_name", playerName.trim());
     }
   }, [playerName]);
 
   // Save expansion selections to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem("innovation_selected_expansions", JSON.stringify(selectedExpansions));
+    localStorage.setItem("singularity_selected_expansions", JSON.stringify(selectedExpansions));
   }, [selectedExpansions]);
 
   const handleCreateGame = async () => {

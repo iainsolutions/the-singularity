@@ -3,10 +3,10 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "innovation-game"
+name = "the-singularity"
 version = "1.0.0"
-description = "Innovation card game implementation"
-authors = [{name = "Innovation Team"}]
+description = "The Singularity — a card game about the race to AI superintelligence"
+authors = [{name = "Iain Knight"}]
 license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.11"

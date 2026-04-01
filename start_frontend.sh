@@ -1,8 +1,8 @@
 
 #!/bin/bash
-# Start script for the Innovation game frontend
+# Start script for the The Singularity game frontend
 
-echo "Starting Innovation frontend..."
+echo "Starting The Singularity frontend..."
 
 # Function to kill process on port
 kill_port() {

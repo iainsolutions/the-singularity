@@ -8,12 +8,12 @@ function AIPlayerSetup({ gameId, onAIAdded, onAIRemoved }) {
   const [currentProvider, setCurrentProvider] = useState("");
   const [selectedProvider, setSelectedProvider] = useState(() => {
     // Load saved provider preference from localStorage
-    return localStorage.getItem("innovation_ai_provider") || "";
+    return localStorage.getItem("singularity_ai_provider") || "";
   });
   const [difficulties, setDifficulties] = useState([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState(() => {
     // Load saved difficulty preference from localStorage
-    return localStorage.getItem("innovation_ai_difficulty") || "beginner";
+    return localStorage.getItem("singularity_ai_difficulty") || "beginner";
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -39,18 +39,18 @@ function AIPlayerSetup({ gameId, onAIAdded, onAIRemoved }) {
           setCurrentProvider(data.default_provider || "anthropic");
 
           // Set selected provider (use default provider if no saved preference)
-          const savedProvider = localStorage.getItem("innovation_ai_provider");
+          const savedProvider = localStorage.getItem("singularity_ai_provider");
           const validProvider = configuredProviders.find(p => p.name === savedProvider);
 
           if (!validProvider) {
             // Use default provider from backend
             const defaultProvider = data.default_provider || configuredProviders[0]?.name || "anthropic";
             setSelectedProvider(defaultProvider);
-            localStorage.setItem("innovation_ai_provider", defaultProvider);
+            localStorage.setItem("singularity_ai_provider", defaultProvider);
           }
 
           // Only update selectedDifficulty if the saved preference is invalid
-          const savedDifficulty = localStorage.getItem("innovation_ai_difficulty");
+          const savedDifficulty = localStorage.getItem("singularity_ai_difficulty");
           const validDifficulties = data.available_difficulties?.map((d) => d.id) || [];
 
           // If saved preference is invalid or doesn't exist, use first available
@@ -58,7 +58,7 @@ function AIPlayerSetup({ gameId, onAIAdded, onAIRemoved }) {
             if (data.available_difficulties && data.available_difficulties.length > 0) {
               const defaultDifficulty = data.available_difficulties[0].id;
               setSelectedDifficulty(defaultDifficulty);
-              localStorage.setItem("innovation_ai_difficulty", defaultDifficulty);
+              localStorage.setItem("singularity_ai_difficulty", defaultDifficulty);
             }
           }
         } else {
@@ -151,7 +151,7 @@ function AIPlayerSetup({ gameId, onAIAdded, onAIRemoved }) {
                 const newProvider = e.target.value;
                 setSelectedProvider(newProvider);
                 // Save preference to localStorage
-                localStorage.setItem("innovation_ai_provider", newProvider);
+                localStorage.setItem("singularity_ai_provider", newProvider);
               }}
               disabled={loading}
               className={styles.aiSetup__select}
@@ -175,7 +175,7 @@ function AIPlayerSetup({ gameId, onAIAdded, onAIRemoved }) {
               const newDifficulty = e.target.value;
               setSelectedDifficulty(newDifficulty);
               // Save preference to localStorage
-              localStorage.setItem("innovation_ai_difficulty", newDifficulty);
+              localStorage.setItem("singularity_ai_difficulty", newDifficulty);
             }}
             disabled={loading}
             className={styles.aiSetup__select}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Start script for the Innovation game backend server.
+Start script for The Singularity game backend server.
 """
 
 import sys
@@ -204,7 +204,7 @@ def main():
     print("Installing dependencies...")
     subprocess.run([venv_pip, 'install', '-r', '../requirements.txt'], check=True)
 
-    print("Starting Innovation backend server on http://localhost:8000")
+    print("Starting The Singularity backend server on http://localhost:8000")
     print("Press Ctrl+C to stop the server")
 
     # Ensure a dev JWT secret for non-prod/local runs (respect .env if provided)

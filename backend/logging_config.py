@@ -270,7 +270,7 @@ class GameActivityLogger:
         if self.enable_file_logging:
             # File handler for all logs
             file_handler = logging.handlers.RotatingFileHandler(
-                os.path.join(self.log_dir, "innovation.log"),
+                os.path.join(self.log_dir, "singularity.log"),
                 maxBytes=50 * 1024 * 1024,  # 50MB
                 backupCount=5,
             )
@@ -951,8 +951,8 @@ ai_interaction_logger = logging.getLogger("ai.interactions")
 def get_logger(name: str | None = None) -> logging.Logger:
     """Get a logger instance"""
     if name:
-        return logging.getLogger(f"innovation.{name}")
-    return logging.getLogger("innovation")
+        return logging.getLogger(f"singularity.{name}")
+    return logging.getLogger("singularity")
 
 
 def log_game_action(game_id: str, player_id: str, action: str, **kwargs):

@@ -12,7 +12,7 @@ const getDebugMode = () => {
 
   // Check localStorage for runtime debug toggle
   if (typeof window !== "undefined" && window.localStorage) {
-    return window.localStorage.getItem("INNOVATION_DEBUG") === "true";
+    return window.localStorage.getItem("SINGULARITY_DEBUG") === "true";
   }
 
   // Default to false in production, true in development
@@ -126,14 +126,14 @@ class Logger {
    */
   static enableDebug() {
     if (typeof window !== "undefined" && window.localStorage) {
-      window.localStorage.setItem("INNOVATION_DEBUG", "true");
+      window.localStorage.setItem("SINGULARITY_DEBUG", "true");
       window.location.reload();
     }
   }
 
   static disableDebug() {
     if (typeof window !== "undefined" && window.localStorage) {
-      window.localStorage.removeItem("INNOVATION_DEBUG");
+      window.localStorage.removeItem("SINGULARITY_DEBUG");
       window.location.reload();
     }
   }
