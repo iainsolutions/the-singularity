@@ -47,33 +47,11 @@ _MODEL_DISPLAY_NAMES = {
 
 
 def _get_ai_display_name(difficulty: str, provider: str | None = None) -> str:
-    """Generate a user-friendly AI player name based on the model being used."""
-    from services.ai_providers.model_config import get_default_model_for_difficulty
+    """Generate a user-friendly AI player name based on personality codename."""
+    from services.ai_personalities import get_codename
 
-    # Get the model for this difficulty
-    model_id = get_default_model_for_difficulty(difficulty)
-
-    # Look up the display name
-    model_name = _MODEL_DISPLAY_NAMES.get(model_id)
-
-    if model_name:
-        return model_name
-
-    # Fallback: extract a readable name from the model ID
-    # e.g., "claude-sonnet-4-20250514" -> "Sonnet 4"
-    if "haiku" in model_id.lower():
-        return "Haiku"
-    elif "sonnet" in model_id.lower():
-        return "Sonnet"
-    elif "opus" in model_id.lower():
-        return "Opus"
-    elif "gpt" in model_id.lower():
-        return "GPT"
-    elif "gemini" in model_id.lower():
-        return "Gemini"
-
-    # Ultimate fallback
-    return f"AI ({difficulty.capitalize()})"
+    # Use the thematic codename from the personality system
+    return get_codename(difficulty)
 
 # Provider-specific cost estimates (per game, intermediate difficulty)
 _PROVIDER_COST_ESTIMATES = {
@@ -148,6 +126,16 @@ class ProviderInfo(BaseModel):
     is_default: bool
 
 
+class PersonalityInfo(BaseModel):
+    """AI personality profile for a difficulty level."""
+
+    codename: str
+    era: int
+    tagline: str
+    backstory: str
+    play_style: str
+
+
 class DifficultyInfo(BaseModel):
     """Information about a difficulty level with provider-specific details."""
 
@@ -156,6 +144,7 @@ class DifficultyInfo(BaseModel):
     description: str
     models: dict[str, str]
     costs: dict[str, str]
+    personality: PersonalityInfo | None = None
     # Legacy fields for backward compatibility
     model: str | None = None
     estimated_cost_per_game: str | None = None

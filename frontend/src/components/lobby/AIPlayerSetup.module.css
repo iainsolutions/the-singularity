@@ -1,16 +1,19 @@
 .aiSetup {
   margin: 20px 0;
   padding: 15px;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  border: 1px solid #2a3050;
   border-radius: 8px;
+  color: #c0c8e0;
 }
 
 .aiSetup__title {
   margin: 0 0 15px 0;
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #e0e6f0;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
 }
 
 .aiSetup__error {
@@ -101,4 +104,76 @@
 .aiSetup__model {
   font-family: "Courier New", monospace;
   font-size: 12px;
+}
+
+/* Personality card */
+.aiSetup__personality {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #0d1230 0%, #151b40 100%);
+  border: 1px solid #2a3560;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.aiSetup__personality::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00d4ff, #7b2ff7, #00d4ff);
+}
+
+.aiSetup__codename {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #00d4ff;
+  margin: 0 0 2px 0;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+.aiSetup__era {
+  font-size: 11px;
+  color: #7b8ab8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 8px 0;
+}
+
+.aiSetup__tagline {
+  font-size: 14px;
+  font-style: italic;
+  color: #a0b0d0;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+}
+
+.aiSetup__backstory {
+  font-size: 12px;
+  color: #8090b0;
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+
+.aiSetup__playStyle {
+  font-size: 12px;
+  color: #00d4ff;
+  font-weight: 500;
+  margin: 0;
+}
+
+.aiSetup__providerSelect {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aiSetup__providerSelect label {
+  font-weight: 500;
+  font-size: 14px;
 }

@@ -197,64 +197,30 @@ class AIService:
         model_map = get_difficulty_model_map()
         fallback_model = get_fallback_model()
 
-        return [
-            {
-                "id": "novice",
-                "name": "Novice",
-                "description": "Just learning the rules, makes mistakes",
-                "estimated_cost_per_game": "$0.03-0.08",
-                "model": model_map.get("novice", fallback_model),
-            },
-            {
-                "id": "beginner",
-                "name": "Beginner",
-                "description": "Understands basics, random legal moves",
-                "estimated_cost_per_game": "$0.05-0.15",
-                "model": model_map.get("beginner", fallback_model),
-            },
-            {
-                "id": "intermediate",
-                "name": "Intermediate",
-                "description": "Tactical play with basic strategy",
-                "estimated_cost_per_game": "$0.10-0.20",
-                "model": model_map.get("intermediate", fallback_model),
-            },
-            {
-                "id": "skilled",
-                "name": "Skilled",
-                "description": "Consistent strategy, good card evaluation",
-                "estimated_cost_per_game": "$0.50-0.80",
-                "model": model_map.get("skilled", fallback_model),
-            },
-            {
-                "id": "advanced",
-                "name": "Advanced",
-                "description": "Strategic planning and combos",
-                "estimated_cost_per_game": "$0.60-1.00",
-                "model": model_map.get("advanced", fallback_model),
-            },
-            {
-                "id": "pro",
-                "name": "Pro",
-                "description": "Strong positional play, anticipates opponent",
-                "estimated_cost_per_game": "$0.80-1.20",
-                "model": model_map.get("pro", fallback_model),
-            },
-            {
-                "id": "expert",
-                "name": "Expert",
-                "description": "Near-optimal play with deep analysis",
-                "estimated_cost_per_game": "$2.50-3.50",
-                "model": model_map.get("expert", fallback_model),
-            },
-            {
-                "id": "master",
-                "name": "Master",
-                "description": "Maximum strategic depth, tournament-level",
-                "estimated_cost_per_game": "$3.00-4.50",
-                "model": model_map.get("master", fallback_model),
-            },
+        from services.ai_personalities import get_all_personalities
+        personalities = get_all_personalities()
+
+        base_difficulties = [
+            {"id": "novice", "name": "Novice", "description": "Just learning the rules, makes mistakes", "estimated_cost_per_game": "$0.03-0.08"},
+            {"id": "beginner", "name": "Beginner", "description": "Understands basics, random legal moves", "estimated_cost_per_game": "$0.05-0.15"},
+            {"id": "intermediate", "name": "Intermediate", "description": "Tactical play with basic strategy", "estimated_cost_per_game": "$0.10-0.20"},
+            {"id": "skilled", "name": "Skilled", "description": "Consistent strategy, good card evaluation", "estimated_cost_per_game": "$0.50-0.80"},
+            {"id": "advanced", "name": "Advanced", "description": "Strategic planning and combos", "estimated_cost_per_game": "$0.60-1.00"},
+            {"id": "pro", "name": "Pro", "description": "Strong positional play, anticipates opponent", "estimated_cost_per_game": "$0.80-1.20"},
+            {"id": "expert", "name": "Expert", "description": "Near-optimal play with deep analysis", "estimated_cost_per_game": "$2.50-3.50"},
+            {"id": "master", "name": "Master", "description": "Maximum strategic depth, tournament-level", "estimated_cost_per_game": "$3.00-4.50"},
         ]
+
+        result = []
+        for diff in base_difficulties:
+            diff["model"] = model_map.get(diff["id"], fallback_model)
+            # Attach personality profile for frontend
+            personality = personalities.get(diff["id"])
+            if personality:
+                diff["personality"] = personality
+            result.append(diff)
+
+        return result
 
 
 # Global instance

@@ -77,6 +77,14 @@ async def get_cards_database():
     return get_cached_cards_database()
 
 
+@router.get("/cards/lore")
+async def get_lore():
+    """Get domain and era lore for the frontend"""
+    from data.cards import load_lore_from_json
+
+    return load_lore_from_json()
+
+
 @router.post("/cards/cache/invalidate")
 async def invalidate_cards_cache_endpoint():
     """Invalidate cards cache (development/testing endpoint)"""

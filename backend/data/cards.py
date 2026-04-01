@@ -97,6 +97,20 @@ def load_cards_from_json() -> list[Card]:
     return cards
 
 
+def load_lore_from_json() -> dict:
+    """Load domain_lore and era_lore from SingularityCards.json."""
+    try:
+        with open(CARDS_PATH) as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"domain_lore": {}, "era_lore": {}}
+
+    return {
+        "domain_lore": data.get("domain_lore", {}),
+        "era_lore": data.get("era_lore", {}),
+    }
+
+
 def load_achievement_cards_from_json() -> tuple[list[Card], list[Card]]:
     """Load achievement cards from SingularityCards.json top-level data.
 

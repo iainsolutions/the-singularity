@@ -10,6 +10,7 @@ import SetupPhasePanel from "./SetupPhasePanel";
 import ActionLog from "../ActionLog";
 import AICostMonitor from "./AICostMonitor";
 import AITurnIndicator from "./AITurnIndicator";
+import EraLoreBanner from "./EraLoreBanner";
 import { useGame } from "../../context/GameContext";
 import ActionsPanel from "./ActionsPanel";
 import MeldSourceModal from "./MeldSourceModal";
@@ -89,6 +90,16 @@ function GameLayout({
       <Paper elevation={1} sx={{ mb: 1, p: 1.5 }}>
         <GameHeader gameId={gameId} gameState={gameState} onLeaveGame={handleLeaveGame} />
       </Paper>
+
+      {/* Era Lore Banner — highest top-card era across all players */}
+      {gameState?.phase === "playing" && (
+        <EraLoreBanner currentAge={
+          Math.max(1, ...(gameState?.players || []).flatMap(p =>
+            ["blue", "red", "green", "yellow", "purple"]
+              .map(c => (p.board?.[`${c}_cards`] || []).slice(-1)[0]?.age || 0)
+          ))
+        } />
+      )}
 
       {/* Error Display */}
       {error && (

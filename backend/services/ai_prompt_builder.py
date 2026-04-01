@@ -867,11 +867,19 @@ Return ONLY JSON:
         return prompt_parts
 
     def get_cached_system_context(self) -> list:
-        """Minimal system context: just the game rules."""
+        """Minimal system context: game rules + AI personality voice."""
+        from services.ai_personalities import get_prompt_voice
+
+        persona = get_prompt_voice(self.difficulty)
+        rules = self._get_rules_minimal()
+
+        # Prepend personality voice to the rules context
+        system_text = f"{persona}\n\n{rules}"
+
         return [
             {
                 "type": "text",
-                "text": self._get_rules_minimal(),
+                "text": system_text,
                 "cache_control": {"type": "ephemeral"},
             },
         ]

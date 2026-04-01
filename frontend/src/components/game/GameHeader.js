@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import {
   Button,
   Typography,
@@ -19,6 +19,7 @@ import {
   ExitToApp as LeaveIcon,
   Info as InfoIcon,
 } from "@mui/icons-material";
+import { fetchLore } from "../../services/loreService";
 import circuitIcon from "../../assets/icons/circuit.svg";
 import neuralNetIcon from "../../assets/icons/neural_net.svg";
 import dataIcon from "../../assets/icons/data.svg";
@@ -32,7 +33,12 @@ const GameHeader = memo(
     const [copiedGameId, setCopiedGameId] = useState(false);
     const [legendAnchor, setLegendAnchor] = useState(null);
     const [infoTab, setInfoTab] = useState(0);
+    const [domainLore, setDomainLore] = useState(null);
     const theme = useTheme();
+
+    useEffect(() => {
+      fetchLore().then((data) => setDomainLore(data.domain_lore));
+    }, []);
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
     const handleCopyGameId = async () => {
@@ -115,6 +121,17 @@ const GameHeader = memo(
           </Box>
         </Box>
 
+        {/* Legend popout */}
+        <Button
+          variant="outlined"
+          size="small"
+          startIcon={<InfoIcon />}
+          onClick={(e) => setLegendAnchor(e.currentTarget)}
+          sx={{ fontSize: "0.75rem" }}
+        >
+          How to Play
+        </Button>
+
         <Box
           sx={{
             display: "flex",
@@ -160,17 +177,6 @@ const GameHeader = memo(
               variant="outlined"
             />
           </Box>
-
-          {/* Legend popout */}
-          <Tooltip title="Game Reference">
-            <IconButton
-              size="small"
-              onClick={(e) => setLegendAnchor(e.currentTarget)}
-              sx={{ color: "text.secondary" }}
-            >
-              <InfoIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
           <Popover
             open={Boolean(legendAnchor)}
             anchorEl={legendAnchor}
@@ -232,12 +238,17 @@ const GameHeader = memo(
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Domains</Typography>
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, mb: 1.5 }}>
                     {[
-                      { label: "Processing", color: "#0066CC", lore: "The race to harness raw computational power — from mechanical wheels to quantum lattices." },
-                      { label: "Labor", color: "#CC3333", lore: "Where machines learned to move, build, and eventually replace the human hand." },
-                      { label: "Ethics", color: "#339933", lore: "Humanity's desperate attempt to encode conscience into silicon." },
-                      { label: "Creativity", color: "#7733AA", lore: "The domain where machines learned to dream, and their dreams were stranger and more beautiful than ours." },
-                      { label: "Connection", color: "#CC9900", lore: "The networks that bound minds together — first human to human, then human to machine, then machine to machine." },
-                    ].map(({ label, color, lore }) => (
+                      { key: "blue", label: domainLore?.blue?.name || "Processing", color: "#0066CC" },
+                      { key: "red", label: domainLore?.red?.name || "Labor", color: "#CC3333" },
+                      { key: "green", label: domainLore?.green?.name || "Ethics", color: "#339933" },
+                      { key: "purple", label: domainLore?.purple?.name || "Creativity", color: "#7733AA" },
+                      { key: "yellow", label: domainLore?.yellow?.name || "Connection", color: "#CC9900" },
+                    ].map(({ key, label, color }) => {
+                      const fullLore = domainLore?.[key]?.lore || "";
+                      // Show first sentence only for the compact legend
+                      const lore = fullLore.split(/[.!]/)[0] + ".";
+                      return { label, color, lore };
+                    }).map(({ label, color, lore }) => (
                       <Box key={label} sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
                         <Chip label={label} size="small"
                           sx={{ bgcolor: color, color: "white", fontSize: "0.65rem", height: 20, fontWeight: 600, flexShrink: 0 }}

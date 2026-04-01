@@ -182,7 +182,7 @@ function AIPlayerSetup({ gameId, onAIAdded, onAIRemoved }) {
           >
             {difficulties.map((diff) => (
               <option key={diff.id} value={diff.id}>
-                {diff.name}
+                {diff.personality ? `${diff.personality.codename} (${diff.name})` : diff.name}
               </option>
             ))}
           </select>
@@ -195,7 +195,25 @@ function AIPlayerSetup({ gameId, onAIAdded, onAIRemoved }) {
 
       {selectedDifficultyInfo && (
         <div className={styles.aiSetup__info}>
-          <p className={styles.aiSetup__description}>{selectedDifficultyInfo.description}</p>
+          {selectedDifficultyInfo.personality && (
+            <div className={styles.aiSetup__personality}>
+              <p className={styles.aiSetup__codename}>
+                {selectedDifficultyInfo.personality.codename}
+              </p>
+              <p className={styles.aiSetup__era}>
+                Era {selectedDifficultyInfo.personality.era} AI System
+              </p>
+              <p className={styles.aiSetup__tagline}>
+                "{selectedDifficultyInfo.personality.tagline}"
+              </p>
+              <p className={styles.aiSetup__backstory}>
+                {selectedDifficultyInfo.personality.backstory}
+              </p>
+              <p className={styles.aiSetup__playStyle}>
+                {selectedDifficultyInfo.personality.play_style}
+              </p>
+            </div>
+          )}
           <p className={styles.aiSetup__cost}>
             Estimated cost: {displayCost} per game
           </p>
