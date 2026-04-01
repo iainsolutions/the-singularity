@@ -7,6 +7,9 @@ import {
   IconButton,
   Tooltip,
   Popover,
+  Divider,
+  Tabs,
+  Tab,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -28,6 +31,7 @@ const GameHeader = memo(
   function GameHeader({ gameId, gameState, onLeaveGame }) {
     const [copiedGameId, setCopiedGameId] = useState(false);
     const [legendAnchor, setLegendAnchor] = useState(null);
+    const [infoTab, setInfoTab] = useState(0);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -174,45 +178,97 @@ const GameHeader = memo(
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             transformOrigin={{ vertical: "top", horizontal: "center" }}
           >
-            <Box sx={{ p: 2, minWidth: 280 }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Domains</Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, mb: 1.5 }}>
-                {[
-                  { label: "Processing", color: "#0066CC", lore: "The race to harness raw computational power — from mechanical wheels to quantum lattices." },
-                  { label: "Labor", color: "#CC3333", lore: "Where machines learned to move, build, and eventually replace the human hand." },
-                  { label: "Ethics", color: "#339933", lore: "Humanity's desperate attempt to encode conscience into silicon." },
-                  { label: "Creativity", color: "#7733AA", lore: "The domain where machines learned to dream, and their dreams were stranger and more beautiful than ours." },
-                  { label: "Connection", color: "#CC9900", lore: "The networks that bound minds together — first human to human, then human to machine, then machine to machine." },
-                ].map(({ label, color, lore }) => (
-                  <Box key={label} sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
-                    <Chip label={label} size="small"
-                      sx={{ bgcolor: color, color: "white", fontSize: "0.65rem", height: 20, fontWeight: 600, flexShrink: 0 }}
-                    />
-                    <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.6rem", lineHeight: 1.3 }}>
-                      {lore}
-                    </Typography>
+            <Box sx={{ minWidth: 320, maxWidth: 400 }}>
+              <Tabs
+                value={infoTab}
+                onChange={(_, v) => setInfoTab(v)}
+                variant="fullWidth"
+                sx={{ minHeight: 36, "& .MuiTab-root": { minHeight: 36, fontSize: "0.75rem", py: 0.5 } }}
+              >
+                <Tab label="How to Play" />
+                <Tab label="Reference" />
+              </Tabs>
+              <Divider />
+
+              {infoTab === 0 && (
+                <Box sx={{ p: 2, fontSize: "0.75rem", lineHeight: 1.5 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Goal</Typography>
+                  <Typography variant="caption" display="block" sx={{ mb: 1.5 }}>
+                    Claim Breakthroughs by building your tech stack and archiving points.
+                    First to {"{"}6/5/4{"}"} breakthroughs (2/3/4 players) wins.
+                  </Typography>
+
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Your Turn: 2 Actions</Typography>
+                  <Box component="ul" sx={{ m: 0, pl: 2, mb: 1.5, "& li": { fontSize: "0.72rem", mb: 0.3 } }}>
+                    <li><strong>Research</strong> — Draw a card from the supply matching your highest era</li>
+                    <li><strong>Deploy</strong> — Play a card from hand onto your tech stack</li>
+                    <li><strong>Execute</strong> — Activate a top card's effects</li>
+                    <li><strong>Achieve</strong> — Claim a Breakthrough (need score {"\u2265"} 5x era AND a top card {"\u2265"} that era)</li>
                   </Box>
-                ))}
-              </Box>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Icons</Typography>
-              <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0.5 }}>
-                {[
-                  { icon: circuitIcon, label: "Circuit", desc: "Hardware" },
-                  { icon: neuralNetIcon, label: "Neural Net", desc: "Intelligence" },
-                  { icon: dataIcon, label: "Data", desc: "Information" },
-                  { icon: algorithmIcon, label: "Algorithm", desc: "Methods" },
-                  { icon: humanMindIcon, label: "Human Mind", desc: "Consciousness" },
-                  { icon: robotIcon, label: "Robot", desc: "Automation" },
-                ].map(({ icon, label, desc }) => (
-                  <Box key={label} sx={{ display: "flex", alignItems: "center", gap: 0.5, py: 0.3 }}>
-                    <img src={icon} alt={label} style={{ width: 18, height: 18 }} />
-                    <Box>
-                      <Box sx={{ fontSize: "0.75rem", fontWeight: 600 }}>{label}</Box>
-                      <Box sx={{ fontSize: "0.6rem", color: "text.secondary" }}>{desc}</Box>
-                    </Box>
+
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Execute Effects</Typography>
+                  <Box component="ul" sx={{ m: 0, pl: 2, mb: 1.5, "& li": { fontSize: "0.72rem", mb: 0.3 } }}>
+                    <li><strong>Override</strong> — Forces opponents with <em>fewer</em> of the featured icon to comply</li>
+                    <li><strong>Cooperative</strong> — Opponents with {"\u2265"} your icons share the effect; if any share, you get a free Research</li>
                   </Box>
-                ))}
-              </Box>
+
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Proliferating</Typography>
+                  <Typography variant="caption" display="block" sx={{ mb: 1.5 }}>
+                    Fan out a stack to reveal extra icons on cards underneath.
+                    Left/Right reveal 2 extra icons per card; Up reveals 3.
+                  </Typography>
+
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Key Terms</Typography>
+                  <Box sx={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "2px 8px", fontSize: "0.7rem" }}>
+                    <strong>Archive</strong><span>Score pile (sum of era numbers = score)</span>
+                    <strong>Harvest</strong><span>Move a card to your archive</span>
+                    <strong>Recall</strong><span>Return a card to the supply</span>
+                  </Box>
+                </Box>
+              )}
+
+              {infoTab === 1 && (
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Domains</Typography>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, mb: 1.5 }}>
+                    {[
+                      { label: "Processing", color: "#0066CC", lore: "The race to harness raw computational power — from mechanical wheels to quantum lattices." },
+                      { label: "Labor", color: "#CC3333", lore: "Where machines learned to move, build, and eventually replace the human hand." },
+                      { label: "Ethics", color: "#339933", lore: "Humanity's desperate attempt to encode conscience into silicon." },
+                      { label: "Creativity", color: "#7733AA", lore: "The domain where machines learned to dream, and their dreams were stranger and more beautiful than ours." },
+                      { label: "Connection", color: "#CC9900", lore: "The networks that bound minds together — first human to human, then human to machine, then machine to machine." },
+                    ].map(({ label, color, lore }) => (
+                      <Box key={label} sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
+                        <Chip label={label} size="small"
+                          sx={{ bgcolor: color, color: "white", fontSize: "0.65rem", height: 20, fontWeight: 600, flexShrink: 0 }}
+                        />
+                        <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.6rem", lineHeight: 1.3 }}>
+                          {lore}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Icons</Typography>
+                  <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0.5 }}>
+                    {[
+                      { icon: circuitIcon, label: "Circuit", desc: "Hardware" },
+                      { icon: neuralNetIcon, label: "Neural Net", desc: "Intelligence" },
+                      { icon: dataIcon, label: "Data", desc: "Information" },
+                      { icon: algorithmIcon, label: "Algorithm", desc: "Methods" },
+                      { icon: humanMindIcon, label: "Human Mind", desc: "Consciousness" },
+                      { icon: robotIcon, label: "Robot", desc: "Automation" },
+                    ].map(({ icon, label, desc }) => (
+                      <Box key={label} sx={{ display: "flex", alignItems: "center", gap: 0.5, py: 0.3 }}>
+                        <img src={icon} alt={label} style={{ width: 18, height: 18 }} />
+                        <Box>
+                          <Box sx={{ fontSize: "0.75rem", fontWeight: 600 }}>{label}</Box>
+                          <Box sx={{ fontSize: "0.6rem", color: "text.secondary" }}>{desc}</Box>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
             </Box>
           </Popover>
 
