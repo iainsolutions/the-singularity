@@ -262,19 +262,19 @@ class AsyncGameManager:
                     elif isinstance(cards, list):
                         fix_cards_in_list(cards)
 
-        # Fix special_achievements at top level (flattened from deck_manager)
-        if "special_achievements" in game_data and isinstance(game_data["special_achievements"], dict):
-            for name, card in list(game_data["special_achievements"].items()):
-                if isinstance(card, dict):
-                    fix_card_fields(card)
-
-        # Fix special_achievements inside deck_manager
-        if "deck_manager" in game_data and isinstance(game_data["deck_manager"], dict):
-            dm = game_data["deck_manager"]
-            if "special_achievements" in dm and isinstance(dm["special_achievements"], dict):
-                for name, card in list(dm["special_achievements"].items()):
+        # Fix special_achievements and related list fields (Pydantic {} → [] corruption)
+        for root in [game_data, game_data.get("deck_manager", {})]:
+            if not isinstance(root, dict):
+                continue
+            # Fix card fields inside special_achievements dict
+            if "special_achievements" in root and isinstance(root["special_achievements"], dict):
+                for name, card in list(root["special_achievements"].items()):
                     if isinstance(card, dict):
                         fix_card_fields(card)
+            # Fix list fields that Pydantic converts {} → []
+            for field in ["special_achievements_available", "special_achievements_junk", "junk_pile"]:
+                if field in root and isinstance(root[field], dict) and not root[field]:
+                    root[field] = []
 
         # Fix action_log entries with state_changes as dict instead of list
         if "action_log" in game_data:
