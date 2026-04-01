@@ -1794,12 +1794,16 @@ class ConsolidatedResolutionPhase(ConsolidatedPhase):
 
                 # Clear player-specific variables to prevent cross-contamination
                 for var in [
-                    "selected_cards", "selected_achievement", "selected_achievements",
+                    "selected_cards", "selected_card", "selected_achievement", "selected_achievements",
                     "interaction_response", "final_interaction_request",
                     "cards_to_return", "cards_to_select", "cards_to_transfer",
                     "cards_to_tuck", "cards_to_meld", "cards_to_score",
-                    "highest_card", "lowest_card", "chosen_option", "chosen_symbol",
+                    "highest_card", "lowest_card", "chosen_option", "chosen_symbol", "chosen_color",
                     "decline", "pending_store_result", "control_flow_depth",
+                    "to_return", "returned_count", "last_returned",
+                    "last_drawn", "first_drawn", "second_drawn", "third_drawn", "drawn",
+                    "melded_cards", "first_melded", "transferred_cards",
+                    "condition_result", "last_evaluation", "filtered", "unique_ages",
                 ]:
                     context = context.without_variable(var)
 
