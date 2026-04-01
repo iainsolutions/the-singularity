@@ -1169,6 +1169,7 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
                 )
                 variables_to_clear = [
                     "selected_cards",
+                    "selected_card",
                     "interaction_response",
                     "final_interaction_request",
                     "cards_to_return",
@@ -1179,6 +1180,24 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
                     "cards_to_score",
                     "highest_card",
                     "lowest_card",
+                    "to_return",
+                    "returned_count",
+                    "last_drawn",
+                    "first_drawn",
+                    "second_drawn",
+                    "third_drawn",
+                    "drawn",
+                    "melded_cards",
+                    "first_melded",
+                    "transferred_cards",
+                    "last_returned",
+                    "chosen_option",
+                    "chosen_color",
+                    "chosen_symbol",
+                    "condition_result",
+                    "last_evaluation",
+                    "filtered",
+                    "unique_ages",
                 ]
                 for var_name in variables_to_clear:
                     current_context = current_context.without_variable(var_name)
