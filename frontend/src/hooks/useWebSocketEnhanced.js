@@ -801,10 +801,14 @@ export function useWebSocketEnhanced({
             // Publish into game context state if setter provided
             if (typeof addActivityEvent === "function") addActivityEvent(normalized);
 
-            // NOTE: activity_event messages are informational only.
-            // Game state updates come from action_performed messages, not activity_events.
-            // We do NOT send sync_request here to avoid flooding the system.
-            // sync_request should only be used during actual reconnections.
+            // Handle game_ended: force a game state refresh so victory banner shows
+            if (event.event_type === "game_ended") {
+              console.log("🏆 [WebSocket] Game ended! Fetching final state...");
+              // Send sync request to get the final game state with phase=finished and winner
+              if (wsRef.current?.readyState === WebSocket.OPEN) {
+                wsRef.current.send(JSON.stringify({ type: "sync_request" }));
+              }
+            }
           } catch (e) {
             console.error("Failed to handle activity_event", e);
           }

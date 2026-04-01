@@ -276,10 +276,10 @@ function GameLayout({
                 if (!winner) return "";
                 const achievements = winner.achievements?.length || 0;
                 const score = winner.score || winner.score_pile_value || 0;
-                if (achievements >= 6) {
-                  return `Victory by ${achievements} Achievements`;
+                if (achievements >= 4) {
+                  return `Victory by ${achievements} Breakthroughs!`;
                 }
-                return `Score: ${score} points | ${achievements} Achievements`;
+                return `Score: ${score} | ${achievements} Breakthroughs`;
               })()}
             </Typography>
             <Button

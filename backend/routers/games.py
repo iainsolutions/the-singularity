@@ -1285,6 +1285,10 @@ async def retry_ai_turn(game_id: str):
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
 
+    from models.game import GamePhase
+    if game.phase == GamePhase.FINISHED:
+        raise HTTPException(status_code=400, detail="Game is finished")
+
     # Find current AI player
     current_player_index = game.state.current_player_index
     if current_player_index is None or current_player_index >= len(game.players):

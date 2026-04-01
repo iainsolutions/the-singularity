@@ -41,6 +41,11 @@ class AITurnExecutor:
         if not game:
             return {"success": False, "error": "Game not found"}
 
+        from models.game import GamePhase
+        if game.phase == GamePhase.FINISHED:
+            logger.info(f"AI turn skipped: game {game_id} is finished")
+            return {"success": True, "error": None, "actions_taken": 0}
+
         logger.info(f"AI turn starting: game={game_id}, player={player_id}")
 
         turn_summary = {
