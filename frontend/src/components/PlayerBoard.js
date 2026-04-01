@@ -488,7 +488,7 @@ const PlayerBoard = memo(
 
         {/* Symbol counter below board for other players */}
         {showSymbolCounter && !isCurrentPlayer && !hideBoard && (
-          <Box sx={{ mt: compact ? 1 : 2 }}>
+          <Box sx={{ mt: compact ? 1 : 2, position: "relative", zIndex: 5 }}>
             <SymbolCounter
               player={player}
               compareToPlayer={compareToPlayer}
