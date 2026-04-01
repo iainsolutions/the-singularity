@@ -443,6 +443,18 @@ const PlayerBoard = memo(
           isCurrentPlayer={isCurrentPlayer}
         />
 
+        {/* Symbol counter above hand for other players */}
+        {showSymbolCounter && !isCurrentPlayer && !hideBoard && (
+          <Box sx={{ mt: compact ? 1 : 2 }}>
+            <SymbolCounter
+              player={player}
+              compareToPlayer={compareToPlayer}
+              position="below"
+              isCurrentPlayer={isCurrentPlayer}
+            />
+          </Box>
+        )}
+
         {/* Hand Cards */}
         {showHand && (
           <PlayerHand
@@ -484,18 +496,6 @@ const PlayerBoard = memo(
             isCurrentPlayer={isCurrentPlayer}
             compact={compact}
           />
-        )}
-
-        {/* Symbol counter below board for other players */}
-        {showSymbolCounter && !isCurrentPlayer && !hideBoard && (
-          <Box sx={{ mt: compact ? 1 : 2, position: "relative", zIndex: 5 }}>
-            <SymbolCounter
-              player={player}
-              compareToPlayer={compareToPlayer}
-              position="below"
-              isCurrentPlayer={isCurrentPlayer}
-            />
-          </Box>
         )}
 
         {/* Achieve from Safe Modal - Unseen Expansion */}
