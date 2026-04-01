@@ -6,6 +6,7 @@ import logging
 from dataclasses import dataclass
 from typing import Optional
 
+from dogma_v2.core.constants import SYSTEM_CONTEXT_VARS
 from dogma_v2.core.context import DogmaContext
 from dogma_v2.interaction_request import InteractionRequest
 from models.player import Player
@@ -460,17 +461,7 @@ class ActionScheduler:
         # Clear player-specific variables if needed
         if action.clear_variables_after:
             logger.debug("SCHEDULER: Clearing player-specific variables")
-            system_vars = {
-                "phase_sequence", "start_timestamp", "card_name", "activating_player_id",
-                "game_id", "sharing_players_count", "vulnerable_player_ids",
-                "effects", "effect_metadata", "effects_count",
-                "current_effect_index", "current_effect_context",
-                "in_sharing_phase", "in_execution_phase",
-                "is_sharing_execution", "demanding_player",
-                "resumed_action_index", "current_player_in_effect",
-                "_last_executing_player_id", "_last_responding_player_id",
-                "_demand_transfer_count_accumulator",
-            }
+            system_vars = SYSTEM_CONTEXT_VARS
             for var_name in list(updated_context.variables.keys()):
                 if var_name not in system_vars:
                     updated_context = updated_context.without_variable(var_name)

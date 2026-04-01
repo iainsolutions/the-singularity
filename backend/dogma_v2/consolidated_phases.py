@@ -38,6 +38,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
+from .core.constants import SYSTEM_CONTEXT_VARS
 from .core.context import DogmaContext
 from .core.phases import PhaseResult, ResultType
 from .core.sharing_context import SharingContext
@@ -1115,17 +1116,7 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
                 # Clear ALL non-system variables to prevent any leaking between players
                 # Cards use arbitrary store_result names (to_meld, drawn_cards, etc.)
                 # so a hardcoded list will always miss some
-                system_vars = {
-                    "phase_sequence", "start_timestamp", "card_name", "activating_player_id",
-                    "game_id", "sharing_players_count", "vulnerable_player_ids",
-                    "effects", "effect_metadata", "effects_count",
-                    "current_effect_index", "current_effect_context",
-                    "in_sharing_phase", "in_execution_phase",
-                    "is_sharing_execution", "demanding_player",
-                    "resumed_action_index", "current_player_in_effect",
-                    "_last_executing_player_id", "_last_responding_player_id",
-                    "_demand_transfer_count_accumulator",
-                }
+                system_vars = SYSTEM_CONTEXT_VARS
                 for var_name in list(current_context.variables.keys()):
                     if var_name not in system_vars:
                         current_context = current_context.without_variable(var_name)
@@ -1191,17 +1182,7 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
                 logger.debug(
                     "CONSOLIDATED: Clearing player-specific variables before next player"
                 )
-                system_vars = {
-                    "phase_sequence", "start_timestamp", "card_name", "activating_player_id",
-                    "game_id", "sharing_players_count", "vulnerable_player_ids",
-                    "effects", "effect_metadata", "effects_count",
-                    "current_effect_index", "current_effect_context",
-                    "in_sharing_phase", "in_execution_phase",
-                    "is_sharing_execution", "demanding_player",
-                    "resumed_action_index", "current_player_in_effect",
-                    "_last_executing_player_id", "_last_responding_player_id",
-                    "_demand_transfer_count_accumulator",
-                }
+                system_vars = SYSTEM_CONTEXT_VARS
                 for var_name in list(current_context.variables.keys()):
                     if var_name not in system_vars:
                         current_context = current_context.without_variable(var_name)
@@ -1785,17 +1766,7 @@ class ConsolidatedResolutionPhase(ConsolidatedPhase):
                 context = context.without_variable("resume_primitive_index")
 
                 # Clear ALL non-system variables to prevent cross-contamination
-                system_vars = {
-                    "phase_sequence", "start_timestamp", "card_name", "activating_player_id",
-                    "game_id", "sharing_players_count", "vulnerable_player_ids",
-                    "effects", "effect_metadata", "effects_count",
-                    "current_effect_index", "current_effect_context",
-                    "in_sharing_phase", "in_execution_phase",
-                    "is_sharing_execution", "demanding_player",
-                    "resumed_action_index", "current_player_in_effect",
-                    "_last_executing_player_id", "_last_responding_player_id",
-                    "_demand_transfer_count_accumulator",
-                }
+                system_vars = SYSTEM_CONTEXT_VARS
                 for var_name in list(context.variables.keys()):
                     if var_name not in system_vars:
                         context = context.without_variable(var_name)
