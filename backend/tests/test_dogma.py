@@ -42,18 +42,18 @@ class TestSimpleDogma:
         # Player should have drawn a card
         assert len(player.hand) >= hand_before + 1
 
-    def test_astrolabe_draws_and_scores(self, card_by_name):
-        """Astrolabe: Research a [1] and Harvest it."""
+    def test_astrolabe_draws(self, card_by_name):
+        """Astrolabe: Research a [1] (nerfed — draw only, no harvest)."""
         astrolabe = card_by_name("Astrolabe")
         game = make_game_with_cards([astrolabe], [card_by_name("Pascaline")])
         player = game.players[0]
-        score_before = len(player.score_pile)
+        hand_before = len(player.hand)
 
         executor = ConsolidatedDogmaExecutor()
         result = executor.execute_dogma(game, player, astrolabe)
 
         assert result.success
-        assert len(player.score_pile) >= score_before + 1
+        assert len(player.hand) >= hand_before + 1
 
     def test_jacquard_loom_draws_and_melds(self, card_by_name):
         """Jacquard Loom: Research a [1] and Deploy it."""
