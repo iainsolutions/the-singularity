@@ -50,6 +50,7 @@ class Card(BaseModel):
     achievement_requirement: str | None = None
     expansion: str = "base"
     is_revealed: bool = False
+    flavour_text: str | None = None
 
     def __str__(self):
         return f"{self.name} (Age {self.age})"
@@ -96,4 +97,5 @@ class Card(BaseModel):
             "achievement_requirement": self.achievement_requirement,
             "expansion": self.expansion,
             "is_revealed": self.is_revealed,
+            "flavour_text": self.flavour_text,
         }

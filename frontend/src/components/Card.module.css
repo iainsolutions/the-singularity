@@ -208,6 +208,23 @@
   height: 26px;
 }
 
+.flavourText {
+  font-size: 6px;
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.45);
+  text-align: center;
+  padding: 1px 2px;
+  line-height: 1.2;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.card:hover .flavourText {
+  font-size: 8px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
 .cardResource {
   font-family: 'Orbitron', sans-serif;
   font-size: 6px;

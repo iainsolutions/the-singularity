@@ -176,17 +176,22 @@ const GameHeader = memo(
           >
             <Box sx={{ p: 2, minWidth: 280 }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Domains</Typography>
-              <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", mb: 1.5 }}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, mb: 1.5 }}>
                 {[
-                  { label: "Processing", color: "#0066CC" },
-                  { label: "Labor", color: "#CC3333" },
-                  { label: "Ethics", color: "#339933" },
-                  { label: "Creativity", color: "#7733AA" },
-                  { label: "Connection", color: "#CC9900" },
-                ].map(({ label, color }) => (
-                  <Chip key={label} label={label} size="small"
-                    sx={{ bgcolor: color, color: "white", fontSize: "0.7rem", height: 22, fontWeight: 600 }}
-                  />
+                  { label: "Processing", color: "#0066CC", lore: "The race to harness raw computational power — from mechanical wheels to quantum lattices." },
+                  { label: "Labor", color: "#CC3333", lore: "Where machines learned to move, build, and eventually replace the human hand." },
+                  { label: "Ethics", color: "#339933", lore: "Humanity's desperate attempt to encode conscience into silicon." },
+                  { label: "Creativity", color: "#7733AA", lore: "The domain where machines learned to dream, and their dreams were stranger and more beautiful than ours." },
+                  { label: "Connection", color: "#CC9900", lore: "The networks that bound minds together — first human to human, then human to machine, then machine to machine." },
+                ].map(({ label, color, lore }) => (
+                  <Box key={label} sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
+                    <Chip label={label} size="small"
+                      sx={{ bgcolor: color, color: "white", fontSize: "0.65rem", height: 20, fontWeight: 600, flexShrink: 0 }}
+                    />
+                    <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.6rem", lineHeight: 1.3 }}>
+                      {lore}
+                    </Typography>
+                  </Box>
                 ))}
               </Box>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Icons</Typography>

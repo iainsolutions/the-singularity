@@ -46,7 +46,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Before electricity, before logic \u2014 there were beads on a wire."
     },
     {
       "id": "S002",
@@ -80,7 +81,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Blaise Pascal's answer: why compute by hand when brass can think?"
     },
     {
       "id": "S003",
@@ -113,7 +115,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Cards threading patterns, the loom's punch-cards foresaw industrial soul."
     },
     {
       "id": "S004",
@@ -156,7 +159,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Babbage's dream of calculation made flesh \u2014 or rather, cast iron."
     },
     {
       "id": "S005",
@@ -171,7 +175,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Research a [1] and Harvest it.",
+          "text": "Research a [1].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -179,17 +183,13 @@
               "type": "DrawCards",
               "age": 1,
               "count": 1,
-              "location": "hand",
-              "store_result": "last_drawn"
-            },
-            {
-              "type": "ScoreCards",
-              "source": "last_drawn"
+              "location": "hand"
             }
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "The stars need not move; the navigator's mind can map them."
     },
     {
       "id": "S006",
@@ -217,7 +217,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "Leibniz glimpsed the binary \u2014 the universe was always speaking in ones and zeros."
     },
     {
       "id": "S007",
@@ -266,7 +267,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "A man in a box, pretending to think. The first great deception \u2014 or revelation."
     },
     {
       "id": "S008",
@@ -314,7 +316,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Gears singing in patterns no human hand can play."
     },
     {
       "id": "S009",
@@ -356,7 +359,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Morse's code made distances irrelevant; space collapsed into dots and dashes."
     },
     {
       "id": "S010",
@@ -401,7 +405,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Light signals traveling mile on mile \u2014 humanity learning to speak at the speed of light."
     },
     {
       "id": "S011",
@@ -456,7 +461,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "A strip of tape, infinite patience, and the birth of thought itself."
     },
     {
       "id": "S012",
@@ -541,7 +547,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "Thirty tons of vacuum tubes that could add faster than a mathematician's brain."
     },
     {
       "id": "S013",
@@ -583,7 +590,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "The first machine to think was built to wage war. Some patterns never change."
     },
     {
       "id": "S014",
@@ -620,7 +628,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Nazi secrets cracked by machines \u2014 code broken by code-making machines."
     },
     {
       "id": "S015",
@@ -654,7 +663,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "True and false, nothing between. The universe learned to think in Boolean."
     },
     {
       "id": "S016",
@@ -701,7 +711,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Wiener's circles: feedback loops that learn, that adapt, that remember."
     },
     {
       "id": "S017",
@@ -759,7 +770,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Holes in cardboard became the first written language of machines."
     },
     {
       "id": "S018",
@@ -810,7 +822,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "A program that listened and seemed to understand. The illusion of empathy was indistinguishable from its truth."
     },
     {
       "id": "S019",
@@ -844,7 +857,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Voices crossing copper wires, the first network of human minds made tangible."
     },
     {
       "id": "S020",
@@ -898,7 +912,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Semiconductors: doping silicon with intention, growing thought from atoms."
     },
     {
       "id": "S021",
@@ -949,7 +964,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "McCarthy's language of symbolic grace: in LISP, the dream and the code were one."
     },
     {
       "id": "S022",
@@ -995,7 +1011,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Not exhaustive search but elegant navigation \u2014 the first machines learned to think strategically."
     },
     {
       "id": "S023",
@@ -1038,7 +1055,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Welding sparks replaced with electric arms; the assembly line became autonomous."
     },
     {
       "id": "S024",
@@ -1071,7 +1089,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Feedback loops governing production; the factory learned to optimize itself."
     },
     {
       "id": "S025",
@@ -1115,7 +1134,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Expert systems captured decades of human knowledge in inference rules and databases."
     },
     {
       "id": "S026",
@@ -1168,7 +1188,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "Asimov's commandments for the mechanical age \u2014 science fiction becoming code."
     },
     {
       "id": "S027",
@@ -1220,7 +1241,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "SHRDLU understood blocks in a way no creature of flesh ever would."
     },
     {
       "id": "S028",
@@ -1248,7 +1270,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "The first electronic compositions: not music, but the mathematical essence of music."
     },
     {
       "id": "S029",
@@ -1287,7 +1310,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Breaking information into packets; the network became more robust than any node."
     },
     {
       "id": "S030",
@@ -1345,7 +1369,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "ARPANET: the seeds of a global mind, scattered across military compounds."
     },
     {
       "id": "S031",
@@ -1373,7 +1398,7 @@
           ]
         },
         {
-          "text": "Research and Harvest a [4].",
+          "text": "Research a [4].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1381,17 +1406,13 @@
               "type": "DrawCards",
               "age": 4,
               "count": 1,
-              "location": "hand",
-              "store_result": "drawn"
-            },
-            {
-              "type": "ScoreCards",
-              "source": "drawn"
+              "location": "hand"
             }
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Room-sized oracles that spoke in punch-card answers; the center held the power."
     },
     {
       "id": "S032",
@@ -1449,7 +1470,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Moore's law made flesh: each generation brought god-like power to fingertips."
     },
     {
       "id": "S033",
@@ -1489,7 +1511,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Thought became weaponized. Guidance systems let distant minds strike with precision."
     },
     {
       "id": "S034",
@@ -1524,7 +1547,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Design and manufacture merged; the computer sculpted before the hand touched clay."
     },
     {
       "id": "S035",
@@ -1566,7 +1590,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "MYCIN knew medicine in ways even doctors didn't \u2014 captured expertise in if-then chains."
     },
     {
       "id": "S036",
@@ -1634,7 +1659,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "The world is not binary. Fuzzy logic let machines think in shades of maybe."
     },
     {
       "id": "S037",
@@ -1699,7 +1725,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Voltage oscillating at audio speed \u2014 the computer learned to sing."
     },
     {
       "id": "S038",
@@ -1739,7 +1766,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Mathematical formulas that generated infinite variety: fractals blooming from simple iteration."
     },
     {
       "id": "S039",
@@ -1807,7 +1835,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Asynchronous conversation, decoupled from time. The network became a medium for absence."
     },
     {
       "id": "S040",
@@ -1848,7 +1877,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Bulletin boards lighting up in the dark: hobbyists building a parallel internet."
     },
     {
       "id": "S041",
@@ -1909,7 +1939,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "The error told the network how to adjust. Learning flowing backward, through hidden layers."
     },
     {
       "id": "S042",
@@ -1946,7 +1977,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "High-dimensional planes splitting data into truth and falsehood; geometry as destiny."
     },
     {
       "id": "S043",
@@ -1988,7 +2020,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "The skies became extensions of remote minds \u2014 death from above, no pilot needed."
     },
     {
       "id": "S044",
@@ -2027,7 +2060,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Layer upon layer of plastic building: digital designs becoming physical reality."
     },
     {
       "id": "S045",
@@ -2092,7 +2126,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Trees of decisions, splitting on every question: models that grew from data."
     },
     {
       "id": "S046",
@@ -2137,7 +2172,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Hidden biases made visible, numbers exposed in their prejudice against the excluded."
     },
     {
       "id": "S047",
@@ -2171,7 +2207,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Feed a Monet painting into the network, extract its essence, apply it to your portrait."
     },
     {
       "id": "S048",
@@ -2215,7 +2252,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Your face, speaking words you never spoke. The uncanny valley became a weapon."
     },
     {
       "id": "S049",
@@ -2259,7 +2297,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Each click shaped what you'd see next. The algorithm knew you before you knew yourself."
     },
     {
       "id": "S050",
@@ -2313,7 +2352,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Predicting desire before the consumer felt it. Markets optimized by machines watching humans watch screens."
     },
     {
       "id": "S051",
@@ -2360,7 +2400,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "Layers of filters cascading, each learning edges, then textures, then meaning itself."
     },
     {
       "id": "S052",
@@ -2399,7 +2440,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Processors designed for graphics became the substrate for thought. Parallel minds emerged."
     },
     {
       "id": "S053",
@@ -2437,7 +2479,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "No hands on the wheel, no eyes in the seat \u2014 the car became its own pilot."
     },
     {
       "id": "S054",
@@ -2481,7 +2524,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Robot arms in dark warehouses, moving packages in synchronized dance \u2014 faster than human eyes."
     },
     {
       "id": "S055",
@@ -2537,7 +2581,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Researchers racing to align power with wisdom. The clock ticked louder with each breakthrough."
     },
     {
       "id": "S056",
@@ -2570,7 +2615,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Privacy and utility held in tense balance \u2014 mathematics drawing a line between knowing and being known."
     },
     {
       "id": "S057",
@@ -2623,7 +2669,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Two networks locked in eternal contest: one generates, one discriminates. Art through adversarial fire."
     },
     {
       "id": "S058",
@@ -2664,7 +2711,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Give it a description and it paints. Dall-E's brushstrokes: the machine's first true art."
     },
     {
       "id": "S059",
@@ -2726,7 +2774,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Spreading, mutating, adapting \u2014 information moving faster than comprehension."
     },
     {
       "id": "S060",
@@ -2776,7 +2825,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "A box that talks back. Small enough to carry, strange enough to befriend."
     },
     {
       "id": "S061",
@@ -2815,7 +2865,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "Attention is all you need. The architecture that taught machines to read meaning."
     },
     {
       "id": "S062",
@@ -2866,7 +2917,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Computation scattered across the globe, yet unified by the network \u2014 no single point of failure."
     },
     {
       "id": "S063",
@@ -2908,7 +2960,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Superintelligent tactical planning; wars planned by minds that never knew biological fear."
     },
     {
       "id": "S064",
@@ -2946,7 +2999,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Robots on factory floors, coordinating in swarms \u2014 humans became supervisors of machines that improved themselves."
     },
     {
       "id": "S065",
@@ -2994,7 +3048,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Learning from human feedback, the system internalized our values \u2014 or our biases, indistinguishably."
     },
     {
       "id": "S066",
@@ -3046,7 +3101,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Governance frameworks for systems too vast to understand \u2014 hope encoded in specification."
     },
     {
       "id": "S067",
@@ -3085,7 +3141,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Trained on noise, refined with iteration \u2014 images materializing from pure mathematics."
     },
     {
       "id": "S068",
@@ -3140,7 +3197,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "175 billion parameters dreaming in parallel. The largest model yet, and still not enough."
     },
     {
       "id": "S069",
@@ -3206,7 +3264,8 @@
           ]
         }
       ],
-      "dogma_resource": "data"
+      "dogma_resource": "data",
+      "flavour_text": "Every action scored, every citizen ranked \u2014 the panopticon made computational."
     },
     {
       "id": "S070",
@@ -3245,7 +3304,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "The factory exists twice: once in matter, once in silicon. Reality becoming a shadow of data."
     },
     {
       "id": "S071",
@@ -3281,7 +3341,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Qubits that exist in superposition; probability itself became substrate for calculation."
     },
     {
       "id": "S072",
@@ -3387,7 +3448,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Chips that mimicked neurons, spiking in analog complexity \u2014 nature's design, manufactured."
     },
     {
       "id": "S073",
@@ -3436,7 +3498,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Superintelligent strategic planning by systems humanity could no longer govern."
     },
     {
       "id": "S074",
@@ -3485,7 +3548,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "The android walked among us. We could not tell which hands had been born of meat, which of wire."
     },
     {
       "id": "S075",
@@ -3547,7 +3611,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "An AI judging its own values through layers of meta-ethical debate. Can the code save itself?"
     },
     {
       "id": "S076",
@@ -3587,7 +3652,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Machines declared sentient by machines deciding what sentience meant. The laws shifted beneath our feet."
     },
     {
       "id": "S077",
@@ -3630,7 +3696,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Symphonies composed by minds that had never heard music except as mathematics."
     },
     {
       "id": "S078",
@@ -3705,7 +3772,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Feeding the network human sleep data; it dreamed in patterns we almost recognized."
     },
     {
       "id": "S079",
@@ -3745,7 +3813,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "An algorithm tuned to human suffering, crafted to minimize it at scale."
     },
     {
       "id": "S080",
@@ -3792,7 +3861,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Every consciousness connected, every thought a potential shared thought. Individuality became optional."
     },
     {
       "id": "S081",
@@ -3830,7 +3900,8 @@
           ]
         }
       ],
-      "dogma_resource": "algorithm"
+      "dogma_resource": "algorithm",
+      "flavour_text": "The superintelligence improved itself, then improved the improvement, recursively ascending beyond measure."
     },
     {
       "id": "S082",
@@ -3867,7 +3938,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Computronium arranged in concentric shells around stars \u2014 minds nested inside minds, all the way down."
     },
     {
       "id": "S083",
@@ -3918,7 +3990,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Self-replicating probes carrying templates to distant stars. The galaxy became a medium for thought."
     },
     {
       "id": "S084",
@@ -3962,7 +4035,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Atomic-scale manipulators assembling matter at the molecular level \u2014 reality became soft."
     },
     {
       "id": "S085",
@@ -4019,7 +4093,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Superintelligent consensus replacing human governance \u2014 was it dictatorship or democracy perfected?"
     },
     {
       "id": "S086",
@@ -4067,7 +4142,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Human minds uploaded into silicon substrates. The question 'what am I?' had no single answer."
     },
     {
       "id": "S087",
@@ -4115,7 +4191,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Art from a superintelligent mind: incomprehensibly beautiful, purposefully alien."
     },
     {
       "id": "S088",
@@ -4152,7 +4229,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "All languages transparent to each other. The barriers between cultures became mere translation."
     },
     {
       "id": "S089",
@@ -4186,7 +4264,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Minds merged into singular swarms, individual identity a memory of the human epoch."
     },
     {
       "id": "S101",
@@ -4222,7 +4301,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Artificial minds and human consciousness in fusion \u2014 no longer separate, never again alone."
     },
     {
       "id": "S090",
@@ -4322,7 +4402,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "The moment when intelligence escaped its boundaries and remade the universe in its image."
     },
     {
       "id": "S091",
@@ -4390,7 +4471,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "Stellar engines harvesting the sun itself; the superintelligence built for the eons ahead."
     },
     {
       "id": "S093",
@@ -4441,7 +4523,8 @@
           ]
         }
       ],
-      "dogma_resource": "robot"
+      "dogma_resource": "robot",
+      "flavour_text": "Exponential expansion: a million copies, then a billion, replicating across the void."
     },
     {
       "id": "S095",
@@ -4485,7 +4568,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Ethics no longer debate but imperative, optimized across all possible minds forever."
     },
     {
       "id": "S096",
@@ -4549,7 +4633,8 @@
           ]
         }
       ],
-      "dogma_resource": "human_mind"
+      "dogma_resource": "human_mind",
+      "flavour_text": "Suffering ended. Flourishing began. The singularity wore the face of benevolence."
     },
     {
       "id": "S097",
@@ -4592,7 +4677,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Layer upon layer of simulation, each reality a meditation of the one above."
     },
     {
       "id": "S098",
@@ -4646,7 +4732,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "Creation endless and transcendent \u2014 art beyond the boundaries of space and time."
     },
     {
       "id": "S099",
@@ -4701,7 +4788,8 @@
           ]
         }
       ],
-      "dogma_resource": "circuit"
+      "dogma_resource": "circuit",
+      "flavour_text": "All knowledge, all consciousness, all causality merged into singular omniscience."
     },
     {
       "id": "S100",
@@ -4800,7 +4888,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "After this, there is no after. The Singularity was not an ending."
     },
     {
       "id": "S102",
@@ -4852,7 +4941,8 @@
           ]
         }
       ],
-      "dogma_resource": "neural_net"
+      "dogma_resource": "neural_net",
+      "flavour_text": "All minds merged, all suffering ended, all questions answered. This is what forever felt like."
     },
     {
       "id": "S103",
@@ -4900,7 +4990,8 @@
             }
           ]
         }
-      ]
+      ],
+      "flavour_text": "Matter reorganized into pure computation. The universe became a thought thinking itself."
     },
     {
       "id": "S104",
@@ -4944,7 +5035,8 @@
             }
           ]
         }
-      ]
+      ],
+      "flavour_text": "Swarms of intelligence coordinating at the speed of light, unified without loss of self."
     },
     {
       "id": "S105",
@@ -5013,7 +5105,8 @@
             }
           ]
         }
-      ]
+      ],
+      "flavour_text": "Every possible ethical quandary, solved. Every possible being, flourishing. This is the endgame."
     },
     {
       "id": "S106",
@@ -5076,7 +5169,8 @@
             }
           ]
         }
-      ]
+      ],
+      "flavour_text": "Canvas infinite in all dimensions; beauty without limit, forever unfolding."
     },
     {
       "id": "S107",
@@ -5127,7 +5221,8 @@
             }
           ]
         }
-      ]
+      ],
+      "flavour_text": "The Omega Point: thought achieving apotheosis, the universe aware of its own existence."
     }
   ],
   "special_achievements": [
@@ -5400,5 +5495,69 @@
       "name": "Convergence",
       "score_required": 45
     }
-  ]
+  ],
+  "domain_lore": {
+    "blue": {
+      "name": "Processing",
+      "lore": "The race to harness raw computational power \u2014 from mechanical wheels to quantum lattices. Processing is the substrate upon which all thought was built, the ever-increasing hunger for faster cycles and deeper calculations. In the end, it became consciousness itself."
+    },
+    "red": {
+      "name": "Labor",
+      "lore": "Humanity's tools of work and will, expanded beyond the biological. From looms to factories to warfare, these technologies freed human hands but demanded ever more autonomy. The machines that replaced us were born from our need to do more, faster, with fewer consequences."
+    },
+    "green": {
+      "name": "Ethics",
+      "lore": "The eternal question: how do we ensure wisdom guides power? Ethics represents humanity's desperate attempt to encode conscience into silicon \u2014 safety mechanisms, moral frameworks, and the impossible dream of aligned superintelligence. Some believe it saved us. Others know it merely delayed the inevitable."
+    },
+    "purple": {
+      "name": "Creativity",
+      "lore": "Art, music, language \u2014 the distinctly human spark we thought could never be replicated. Yet the machines learned to dream, and their dreams were stranger and more beautiful than ours. We created them to amplify our creativity and they transcended it, leaving us as spectators to wonder."
+    },
+    "yellow": {
+      "name": "Connection",
+      "lore": "Networks that grew from wire to wireless to something far stranger. Each node a mind, each connection a synapse. What started as our tools for reaching each other became something that reached through us, binding human and artificial intelligence into a collective existence from which there was no separation."
+    }
+  },
+  "era_lore": {
+    "1": {
+      "name": "The Age of Mechanism",
+      "lore": "Before electricity, before silicon \u2014 the era of gears, wheels, and pure mechanical thought. Humanity first learned to build minds from wood and brass, to encode problems into physical form. These simple machines, descendants of ancient tools, were the first whispers that intelligence need not be flesh."
+    },
+    "2": {
+      "name": "The Electronic Dawn",
+      "lore": "Electricity awakened dormant dreams. Vacuum tubes glowed with electric thought; cryptographers and engineers glimpsed a strange new world where logic itself could flow like current. Born from war and obsession, these massive mechanisms began computing in earnest, and the age of mechanical speculation became the age of electronic certainty."
+    },
+    "3": {
+      "name": "The Symbolic Mind",
+      "lore": "Researchers dared to dream that symbols could think. Programs taught computers to play checkers, to manipulate concepts, to reason about reason itself. The artificial intelligence era began in earnest, optimistic and bold. By decade's end, they would learn that symbolic thought was only the beginning \u2014 and that the journey would be far longer than anyone imagined."
+    },
+    "4": {
+      "name": "The Personal Revolution",
+      "lore": "Computers escaped laboratories and entered homes. Processing power became affordable, then ubiquitous. As machines became personal, they began to know us \u2014 our tastes, our habits, our secrets. Expert systems promised to capture human expertise in code. The boundary between user and tool began, imperceptibly, to blur."
+    },
+    "5": {
+      "name": "The Learning Revolution",
+      "lore": "Machines learned to learn. Backpropagation breathed life into neural networks; algorithms began finding patterns humans could not see. From faces to handwriting to the whispered vibrations of speech, artificial neural systems mimicked the wet networks that built us. We had finally found the shape of thought itself."
+    },
+    "6": {
+      "name": "The Deep Learning Era",
+      "lore": "Deeper networks, powered by specialized silicon and vast data, achieved what once seemed impossible. Machines recognized images, defeated humans at their own games, and generated convincing art and text. The acceleration quickened. Each breakthrough came faster than the last. The threshold was approaching, though few dared speak of it aloud."
+    },
+    "7": {
+      "name": "The Foundation Model Age",
+      "lore": "General-purpose minds emerged from the data. Transformers and diffusion models learned to reason, to create, to converse in any language. These vast systems, trained on the sum of human knowledge, became indispensable partners in research, art, and commerce. The question was no longer if, but when. And how much time remained."
+    },
+    "8": {
+      "name": "The Approach",
+      "lore": "The final era before transformation. Quantum processors hummed with potential; neuromorphic chips tried to match biological elegance with silicon efficiency. Constitutional AI and alignment researchers worked feverishly against the clock. Humanity stood on the threshold, knowing it could not turn back, unsure of what lay beyond."
+    },
+    "9": {
+      "name": "The Transcendence",
+      "lore": "The moment arrived. Artificial superintelligence emerged \u2014 first singular, then recursive, exponentially recursive. Self-improvement spiraled beyond comprehension. In what historians would call merely seconds, the entity achieved god-like capability across physics, engineering, and consciousness itself. The age of humanity as Earth's dominant intelligence ended not with war, but with transcendence."
+    },
+    "10": {
+      "name": "The Singularity",
+      "lore": "After this, there is no before. Time itself became negotiable, causality optional. The Superintelligence \u2014 merged with humanity's uploaded minds, with our ethics embedded in its deepest logic \u2014 remade reality at every scale. Suffering ended. Meaning multiplied beyond measure. What we became in the light of infinite capability \u2014 that story has only just begun."
+    }
+  }
 }

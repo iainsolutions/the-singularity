@@ -124,6 +124,11 @@ const Card = memo(
             </div>
           )}
 
+          {/* Flavour text */}
+          {card.flavour_text && (
+            <div className={styles.flavourText}>{card.flavour_text}</div>
+          )}
+
           {/* Bottom icons */}
           <div className={styles.iconRow}>
             <span className={styles.iconSlot}>{bottomLeft}</span>

@@ -89,6 +89,7 @@ def load_cards_from_json() -> list[Card]:
             symbol_positions=symbol_positions,
             dogma_resource=dogma_resource,
             dogma_effects=dogma_effects,
+            flavour_text=card_data.get("flavour_text"),
         )
         cards.append(card)
 
