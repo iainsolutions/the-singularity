@@ -34,7 +34,7 @@ const ColorStack = ({
   // Calculate container dimensions based on splay and card count
   const cardCount = cards.length;
   const baseWidth = compact ? 100 : 180;
-  const baseHeight = compact ? 50 : 120;
+  const baseHeight = compact ? 80 : 230;
 
   // Limit visible cards to prevent excessive spreading
   const maxVisibleCards = 10;
