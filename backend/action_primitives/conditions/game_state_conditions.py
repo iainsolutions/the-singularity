@@ -118,7 +118,7 @@ class GameStateConditions(BaseConditionEvaluator):
                 card_color = (
                     last_drawn.color.value
                     if hasattr(last_drawn.color, "value")
-                    else str(last_drawn.color)
+                    else last_drawn.color.value
                 )
                 return card_color == expected_color
             return False

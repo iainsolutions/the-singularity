@@ -52,7 +52,7 @@ class GetCardColors(ActionPrimitive):
         for card in cards_data:
             if hasattr(card, "color"):
                 # Card object
-                colors.append(str(card.color))
+                colors.append(card.color.value)
             elif isinstance(card, dict) and "color" in card:
                 # Card dictionary
                 colors.append(card["color"])

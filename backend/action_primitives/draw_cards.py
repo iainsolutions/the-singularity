@@ -221,7 +221,7 @@ class DrawCards(ActionPrimitive):
                         pass
                     # Store the color for condition checking (CardColor is str enum)
                     if hasattr(card, "color"):
-                        context.set_variable("revealed_color", str(card.color))
+                        context.set_variable("revealed_color", card.color.value)
             else:
                 # Handle age skipping
                 higher_age = self._find_next_available_age(context.game, age)
@@ -333,7 +333,7 @@ class DrawCards(ActionPrimitive):
                                 pass
                             if hasattr(card, "color"):
                                 # CardColor is str enum, can use directly
-                                context.set_variable("revealed_color", str(card.color))
+                                context.set_variable("revealed_color", card.color.value)
                 else:
                     context.add_result(f"No cards available from era {age} or higher")
 

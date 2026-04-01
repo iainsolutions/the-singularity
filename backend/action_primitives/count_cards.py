@@ -146,7 +146,7 @@ class CountCards(ActionPrimitive):
             required_color = self.filter_criteria["color"]
             if hasattr(card, "color"):
                 # Use .value for enum, fallback to str for other types
-                card_color = card.color.value if hasattr(card.color, "value") else str(card.color)
+                card_color = card.color.value if hasattr(card.color, "value") else card.color.value
                 if card_color != required_color:
                     return False
 

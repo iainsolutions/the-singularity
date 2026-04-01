@@ -169,7 +169,7 @@ class CardConditions(BaseConditionEvaluator):
             card = context.get_variable(card_variable)
 
             if card and hasattr(card, "color"):
-                card_color = str(card.color)
+                card_color = card.color.value if hasattr(card.color, "value") else card.color.value
                 return card_color == target_color
             return False
 
@@ -247,7 +247,7 @@ class CardConditions(BaseConditionEvaluator):
                     card_color = (
                         card.color.value
                         if hasattr(card.color, "value")
-                        else str(card.color)
+                        else card.color.value
                     )
                     logger.debug(f"any_card_color: card={card.name if hasattr(card, 'name') else 'unknown'}, color={card_color}")
                     if card_color == target_color:
@@ -269,7 +269,7 @@ class CardConditions(BaseConditionEvaluator):
             color_counts = {}
             for card in cards:
                 if card and hasattr(card, "color"):
-                    card_color = str(card.color)
+                    card_color = card.color.value
                     color_counts[card_color] = color_counts.get(card_color, 0) + 1
 
             return any(count >= n for count in color_counts.values())
@@ -283,13 +283,13 @@ class CardConditions(BaseConditionEvaluator):
             selected_cards = context.get_variable(selected_source, [])
 
             if card and hasattr(card, "color") and selected_cards:
-                card_color = str(card.color)
+                card_color = card.color.value
                 for sel_card in selected_cards:
                     if hasattr(sel_card, "color"):
                         sel_color = (
                             sel_card.color.value
                             if hasattr(sel_card.color, "value")
-                            else str(sel_card.color)
+                            else sel_card.color.value
                         )
                         if card_color == sel_color:
                             return True
@@ -354,7 +354,7 @@ class CardConditions(BaseConditionEvaluator):
                 card_color = (
                     last_drawn.color.value
                     if hasattr(last_drawn.color, "value")
-                    else str(last_drawn.color)
+                    else last_drawn.color.value
                 )
                 return card_color == expected_color
             return False

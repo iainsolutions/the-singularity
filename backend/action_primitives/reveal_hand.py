@@ -56,7 +56,7 @@ class RevealHand(ActionPrimitive):
 
         # Store colors if requested
         if self.store_colors:
-            colors = [str(card.color) if hasattr(card, "color") else card.get("color")
+            colors = [card.color.value if hasattr(card, "color") else card.get("color")
                      for card in hand_cards]
             context.set_variable(self.store_colors, colors)
 

@@ -67,7 +67,7 @@ class MeldCard(ActionPrimitive):
                 melded_cards.append(card)
                 # Track color for store_color (CardColor is str enum, can use directly)
                 if card and hasattr(card, "color"):
-                    colors_melded.add(str(card.color))
+                    colors_melded.add(card.color.value)
 
         if melded_count > 0:
             # Add detailed logging with card names (melded cards are public)
@@ -168,7 +168,7 @@ class MeldCard(ActionPrimitive):
         # Record state change
         color = None
         try:
-            color = str(card.color)
+            color = card.color.value
         except (AttributeError, TypeError) as e:
             logger.debug(f"Could not extract color from card: {e}")
             color = None
@@ -186,7 +186,7 @@ class MeldCard(ActionPrimitive):
             if activity_logger:
                 activity_color = None
                 try:
-                    activity_color = str(card.color)
+                    activity_color = card.color.value
                 except (AttributeError, TypeError) as e:
                     logger.debug(f"Could not extract color for activity log: {e}")
                     activity_color = None

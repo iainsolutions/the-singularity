@@ -133,7 +133,7 @@ class RevealAndProcess(ActionPrimitive):
             elif condition_check.startswith("color_"):
                 required_color = condition_check.split("_", 1)[1]
                 if hasattr(card, "color"):
-                    card_color = str(card.color)
+                    card_color = card.color.value
                     if card_color.lower() == required_color.lower():
                         return True
             elif condition_check.startswith("age_"):

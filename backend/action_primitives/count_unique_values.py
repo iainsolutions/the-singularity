@@ -72,7 +72,7 @@ class CountUniqueValues(ActionPrimitive):
         elif self.criteria == "color":
             # CardColor is str enum, can use directly
             if hasattr(card, "color"):
-                return str(card.color).lower()
+                return card.color.value.lower()
             return None
         elif self.criteria == "symbol_count":
             # Count total symbols on the card

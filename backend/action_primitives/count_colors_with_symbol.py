@@ -59,7 +59,7 @@ class CountColorsWithSymbol(ActionPrimitive):
 
                         if symbol_str == self.symbol.lower():
                             # CardColor is str enum, can use directly
-                            colors_with_symbol.add(str(card.color))
+                            colors_with_symbol.add(card.color.value)
                             break
 
             count = len(colors_with_symbol)
