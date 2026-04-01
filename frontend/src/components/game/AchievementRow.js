@@ -207,13 +207,14 @@ const AchievementRow = memo(
           {/* Regular Achievements */}
           <div className={styles.regularAchievementSection}>
             {AGES.map((age) => {
-              // Get achievement data from backend (no more frontend logic!)
-              const achievementInfo = achievementData?.regular?.find((a) => a.age === age);
+              // Check if achievement is still available from game state
+              const ageAchievementCards = achievements?.[age];
+              const hasUnclaimed = Array.isArray(ageAchievementCards)
+                ? ageAchievementCards.length > 0
+                : !!ageAchievementCards;
 
-              // Backend tells us everything we need to know
-              const hasUnclaimed = achievementInfo?.available ?? true; // Default to true if no data yet
-              const isEligible = achievementInfo?.can_claim ?? false;
-              const displayState = achievementInfo?.display_state || "available";
+              // Check if current player can claim this
+              const isEligible = currentPlayer?.computed_state?.can_achieve?.includes(age) ?? false;
 
               // Fallback to old achievements prop for WebSocket interaction handling
               // (This is still needed for the select_achievement interaction)

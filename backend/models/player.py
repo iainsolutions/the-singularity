@@ -267,7 +267,7 @@ class Player(BaseModel):
 
     # Special achievement names that should not be counted for score threshold calculations
     SPECIAL_ACHIEVEMENT_NAMES: frozenset[str] = frozenset([
-        "Monument", "Empire", "World", "Wonder", "Universe", "Wealth", "Destiny", "Supremacy", "Mastery"
+        "Emergence", "Dominion", "Consciousness", "Apotheosis", "Transcendence", "Abundance"
     ])
 
     def required_score_for_achievement(self, age: int) -> int:
