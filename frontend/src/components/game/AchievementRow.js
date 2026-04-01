@@ -160,19 +160,26 @@ const AchievementRow = memo(
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontFamily: "'Orbitron', sans-serif",
-                      fontSize: "7px",
-                      fontWeight: 700,
-                      color: "white",
-                      textAlign: "center",
-                      padding: "2px",
+                      overflow: "hidden",
                       opacity: isEarnedByOther ? 0.5 : 1,
                       border: isEarnedByYou
                         ? "2px solid rgba(255, 215, 0, 0.8)"
                         : "2px solid transparent",
                     }}
                   >
-                    {specialName}
+                    <span
+                      style={{
+                        fontFamily: "'Orbitron', sans-serif",
+                        fontSize: "6px",
+                        fontWeight: 700,
+                        color: "white",
+                        transform: "rotate(-45deg)",
+                        whiteSpace: "nowrap",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      {specialName}
+                    </span>
                   </div>
                   {isClaimed && (
                     <Chip
