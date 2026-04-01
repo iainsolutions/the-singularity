@@ -14,7 +14,7 @@ import {
   Check as CheckIcon,
   ExitToApp as LeaveIcon,
 } from "@mui/icons-material";
-import ExpansionIndicator from "./ExpansionIndicator";
+
 
 const GameHeader = memo(
   function GameHeader({ gameId, gameState, onLeaveGame }) {
@@ -148,7 +148,29 @@ const GameHeader = memo(
             />
           </Box>
 
-          <ExpansionIndicator gameState={gameState} />
+          {/* Domain legend */}
+          <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", alignItems: "center" }}>
+            {[
+              { label: "Processing", color: "#0066CC" },
+              { label: "Labor", color: "#CC3333" },
+              { label: "Ethics", color: "#339933" },
+              { label: "Creativity", color: "#7733AA" },
+              { label: "Connection", color: "#CC9900" },
+            ].map(({ label, color }) => (
+              <Chip
+                key={label}
+                label={label}
+                size="small"
+                sx={{
+                  bgcolor: color,
+                  color: "white",
+                  fontSize: "0.65rem",
+                  height: 20,
+                  fontWeight: 600,
+                }}
+              />
+            ))}
+          </Box>
 
           <Button
             variant={isMobile ? "text" : "outlined"}
