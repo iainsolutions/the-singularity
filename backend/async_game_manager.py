@@ -262,6 +262,20 @@ class AsyncGameManager:
                     elif isinstance(cards, list):
                         fix_cards_in_list(cards)
 
+        # Fix special_achievements at top level (flattened from deck_manager)
+        if "special_achievements" in game_data and isinstance(game_data["special_achievements"], dict):
+            for name, card in list(game_data["special_achievements"].items()):
+                if isinstance(card, dict):
+                    fix_card_fields(card)
+
+        # Fix special_achievements inside deck_manager
+        if "deck_manager" in game_data and isinstance(game_data["deck_manager"], dict):
+            dm = game_data["deck_manager"]
+            if "special_achievements" in dm and isinstance(dm["special_achievements"], dict):
+                for name, card in list(dm["special_achievements"].items()):
+                    if isinstance(card, dict):
+                        fix_card_fields(card)
+
         # Fix action_log entries with state_changes as dict instead of list
         if "action_log" in game_data:
             for entry in game_data["action_log"]:
