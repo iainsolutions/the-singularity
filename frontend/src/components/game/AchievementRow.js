@@ -67,37 +67,34 @@ const AchievementRow = memo(
     useEffect(() => {
       if (!gameState) return;
 
-      const available = gameState.special_achievements_available || [];
-      const specialData = available.map((name) => ({
+      // Start with all known special achievements
+      const specialData = Object.keys(SPECIAL_ACHIEVEMENTS).map((name) => ({
         name,
         display_state: "available",
         claimed_by: null,
       }));
 
-      // Check if any player has claimed special achievements
+      // Mark claimed ones from player achievements
       for (const player of gameState.players || []) {
         for (const ach of player.achievements || []) {
           const achName = ach?.name || ach;
-          if (SPECIAL_ACHIEVEMENTS[achName]) {
-            const existing = specialData.find((s) => s.name === achName);
-            if (existing) {
-              existing.display_state =
-                player.id === currentPlayer?.id ? "earned_by_you" : "earned_by_other";
-              existing.claimed_by = player.name;
-            } else {
-              specialData.push({
-                name: achName,
-                display_state:
-                  player.id === currentPlayer?.id ? "earned_by_you" : "earned_by_other",
-                claimed_by: player.name,
-              });
-            }
+          const entry = specialData.find((s) => s.name === achName);
+          if (entry) {
+            entry.display_state =
+              player.id === currentPlayer?.id ? "earned_by_you" : "earned_by_other";
+            entry.claimed_by = player.name;
           }
         }
       }
 
+      // Mark junked ones
+      for (const name of gameState.special_achievements_junk || []) {
+        const entry = specialData.find((s) => s.name === name);
+        if (entry) entry.display_state = "junked";
+      }
+
       setAchievementData({ special: specialData });
-    }, [gameState?.special_achievements_available, gameState?.players, currentPlayer?.id]);
+    }, [gameState, currentPlayer?.id]);
 
     // Era-based tile color for achievements
     const getEraColor = (age) => ERA_COLORS[age] || "#666";
