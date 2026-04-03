@@ -1,3 +1,2 @@
-// Stub — expansion feature not used in The Singularity
-const ScorePileSelection = () => null;
-export default ScorePileSelection;
+// Re-export from canonical location
+export { default } from "../../board/ScorePileSelection";

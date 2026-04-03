@@ -70,6 +70,15 @@ class RevealTopCard(ActionPrimitive):
         context.set_variable(self.store_color, color_value)
         context.set_variable(self.store_name, top_card.name)
 
+        # Emit state change so players can see what was revealed
+        context.state_tracker.record_reveal(
+            player_name=context.player.name,
+            card_name=top_card.name,
+            age=age,
+            color=color_value,
+            context=context.get_variable("current_effect_context", "reveal"),
+        )
+
         logger.info(
             f"{context.player.name} revealed {top_card.name} (era {age}, {color_value})"
         )

@@ -1,0 +1,131 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0a0a0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.container {
+  max-width: 600px;
+  padding: 40px 24px;
+  text-align: center;
+  color: #e0e0e0;
+  line-height: 1.7;
+}
+
+/* Beat animations */
+.beat {
+  opacity: 0;
+  animation: fadeIn 800ms ease-out forwards;
+}
+
+.beat1 { animation-delay: 0ms; }
+.beat2 { animation-delay: 1200ms; }
+.beat3 { animation-delay: 2400ms; }
+.cta   { animation-delay: 3400ms; opacity: 0; animation: fadeIn 600ms ease-out 3400ms forwards; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .beat, .cta {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Typography */
+.headline {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 12px;
+}
+
+.body {
+  font-size: 1.1rem;
+  color: #c0c0c0;
+  margin: 0 0 48px;
+}
+
+.codename {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  color: #fff;
+  margin: 0 0 6px;
+  letter-spacing: 2px;
+}
+
+.tagline {
+  font-size: 1rem;
+  font-style: italic;
+  color: #999;
+  margin: 0 0 16px;
+}
+
+.description {
+  font-size: 1rem;
+  color: #c0c0c0;
+  margin: 0 0 48px;
+}
+
+.humanText {
+  font-size: 1.1rem;
+  color: #c0c0c0;
+  margin: 0 0 48px;
+}
+
+.humanText strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* CTA */
+.beginBtn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 12px 36px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.beginBtn:hover {
+  border-color: #fff;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.15);
+}
+
+.beginBtn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+/* Skip link */
+.skip {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  color: #666;
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.skip:hover {
+  color: #aaa;
+}

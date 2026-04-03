@@ -5,11 +5,13 @@ import JoinGameModal from "./lobby/JoinGameModal";
 import PlayerList from "./lobby/PlayerList";
 import LobbyActions from "./lobby/LobbyActions";
 import AIPlayerSetup from "./lobby/AIPlayerSetup";
+import GamePreamble from "./lobby/GamePreamble";
 import styles from "./GameLobby.module.css";
 
 function GameLobby() {
   const navigate = useNavigate();
   const [copiedGameId, setCopiedGameId] = useState(false);
+  const [showPreamble, setShowPreamble] = useState(false);
   const {
     startGame,
     gameId,
@@ -22,15 +24,28 @@ function GameLobby() {
     setGameState,
   } = useGame();
 
+  // Find highest-difficulty AI opponent (if any)
+  const aiPlayer = gameState?.players
+    ?.filter((p) => p.is_ai)
+    ?.sort((a, b) => {
+      const order = ["novice","beginner","intermediate","skilled","advanced","pro","expert","master"];
+      return order.indexOf(b.ai_difficulty) - order.indexOf(a.ai_difficulty);
+    })?.[0];
+
   useEffect(() => {
     if (
       gameId &&
       gameState &&
       (gameState.phase === "playing" || gameState.phase === "setup_card_selection")
     ) {
-      navigate(`/game/${gameId}`);
+      // Show preamble for AI games on fresh start, otherwise navigate directly
+      if (aiPlayer && !showPreamble) {
+        setShowPreamble(true);
+      } else if (!showPreamble) {
+        navigate(`/game/${gameId}`);
+      }
     }
-  }, [gameId, gameState, navigate]);
+  }, [gameId, gameState, navigate, aiPlayer, showPreamble]);
 
   const handleStartGame = async () => {
     try {
@@ -88,6 +103,19 @@ function GameLobby() {
       setGameState(data.game_state);
     }
   };
+
+  if (showPreamble && aiPlayer) {
+    return (
+      <GamePreamble
+        aiDifficulty={aiPlayer.ai_difficulty || "intermediate"}
+        playerName={playerName}
+        onBegin={() => {
+          setShowPreamble(false);
+          navigate(`/game/${gameId}`);
+        }}
+      />
+    );
+  }
 
   return (
     <>

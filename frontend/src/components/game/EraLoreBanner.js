@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useRef } from "react";
-import { Box, Typography, Collapse } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { fetchLore } from "../../services/loreService";
 
 const ERA_COLORS = {
@@ -17,9 +17,8 @@ const ERA_COLORS = {
 
 const EraLoreBanner = memo(function EraLoreBanner({ currentAge }) {
   const [eraLore, setEraLore] = useState({});
-  const [showLore, setShowLore] = useState(false);
-  const [animateIn, setAnimateIn] = useState(false);
   const prevAgeRef = useRef(currentAge);
+  const [animateIn, setAnimateIn] = useState(false);
 
   useEffect(() => {
     fetchLore().then((data) => {
@@ -31,11 +30,7 @@ const EraLoreBanner = memo(function EraLoreBanner({ currentAge }) {
   useEffect(() => {
     if (prevAgeRef.current !== currentAge && currentAge) {
       setAnimateIn(true);
-      setShowLore(true);
-      const timer = setTimeout(() => {
-        setShowLore(false);
-        setAnimateIn(false);
-      }, 8000);
+      const timer = setTimeout(() => setAnimateIn(false), 1500);
       prevAgeRef.current = currentAge;
       return () => clearTimeout(timer);
     }
@@ -48,7 +43,6 @@ const EraLoreBanner = memo(function EraLoreBanner({ currentAge }) {
 
   return (
     <Box
-      onClick={() => setShowLore(!showLore)}
       sx={{
         background: `linear-gradient(135deg, ${color}22 0%, ${color}11 100%)`,
         border: `1px solid ${color}33`,
@@ -56,11 +50,7 @@ const EraLoreBanner = memo(function EraLoreBanner({ currentAge }) {
         px: 2,
         py: 0.75,
         mb: 1,
-        cursor: "pointer",
         transition: "all 0.3s ease",
-        "&:hover": {
-          background: `linear-gradient(135deg, ${color}33 0%, ${color}22 100%)`,
-        },
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -88,25 +78,23 @@ const EraLoreBanner = memo(function EraLoreBanner({ currentAge }) {
           {era.name}
         </Typography>
       </Box>
-      <Collapse in={showLore} timeout={500}>
-        <Typography
-          variant="body2"
-          sx={{
-            color: `${color}AA`,
-            fontSize: "0.72rem",
-            lineHeight: 1.5,
-            mt: 0.5,
-            fontStyle: "italic",
-            animation: animateIn ? "loreFadeIn 1s ease-in" : "none",
-            "@keyframes loreFadeIn": {
-              "0%": { opacity: 0, transform: "translateY(-4px)" },
-              "100%": { opacity: 1, transform: "translateY(0)" },
-            },
-          }}
-        >
-          {era.lore}
-        </Typography>
-      </Collapse>
+      <Typography
+        variant="body2"
+        sx={{
+          color: `${color}AA`,
+          fontSize: "0.72rem",
+          lineHeight: 1.5,
+          mt: 0.5,
+          fontStyle: "italic",
+          animation: animateIn ? "loreFadeIn 1s ease-in" : "none",
+          "@keyframes loreFadeIn": {
+            "0%": { opacity: 0, transform: "translateY(-4px)" },
+            "100%": { opacity: 1, transform: "translateY(0)" },
+          },
+        }}
+      >
+        {era.lore}
+      </Typography>
     </Box>
   );
 });
