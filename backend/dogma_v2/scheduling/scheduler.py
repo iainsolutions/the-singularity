@@ -933,25 +933,38 @@ class ActionScheduler:
                     if val is not None:
                         logger.info(f"🔀   {key} = {val}")
 
-                # CRITICAL FIX: Clear effect-scoped variables on effect transitions
-                # to prevent variable leakage between effects (e.g., last_drawn from one effect
-                # being reused by another effect, causing card duplication bug)
-                #
-                # ARCHITECTURAL DEBT: This treats symptoms, not root cause.
-                # Real fix needed: Card immutability + move semantics validation
-                #   1. Each card should have unique ID tracked across all locations
-                #   2. Card moves should be atomic (remove from source, add to dest)
-                #   3. Add post-action validation to detect duplicate card_ids
-                #   4. Raise error if same card_id exists in multiple locations
-                # Current fix: Band-aid to prevent variable leakage causing duplication
-                effect_scoped_vars = ["last_drawn", "selected_cards", "selected_color"]
-                for var_name in effect_scoped_vars:
-                    if current_context.has_variable(var_name):
+                # CRITICAL FIX: Clear ALL non-system variables on effect transitions.
+                # Previous approach used a hardcoded list which missed custom store_result
+                # variables like "to_return", causing ENIAC bug where demand's to_return
+                # leaked into cooperative effect and skipped the SelectCards interaction.
+                # Now uses SYSTEM_CONTEXT_VARS whitelist — only system vars survive transitions.
+                from dogma_v2.core.constants import SYSTEM_CONTEXT_VARS
+
+                # Also preserve demand_transferred_count (just set above) and endorsed
+                preserve_vars = SYSTEM_CONTEXT_VARS | {"demand_transferred_count", "endorsed"}
+                vars_to_clear = [
+                    k for k in current_context.variables
+                    if k not in preserve_vars and not k.startswith("_")
+                ]
+                for var_name in vars_to_clear:
+                    logger.debug(
+                        f"🔀 SCHEDULER: Clearing {var_name} on effect transition"
+                    )
+                    current_context = current_context.without_variable(var_name)
+
+                # CRITICAL FIX: Clear demanding_player when transitioning from demand
+                # to non-demand effect. demanding_player is a system var (needed across
+                # demand phases) but must NOT leak into cooperative effects — SelectCards
+                # checks it to decide if selection is optional, causing auto-select instead
+                # of prompting the player.
+                if action.is_demand and not next_action.is_demand:
+                    if current_context.has_variable("demanding_player"):
                         logger.info(
-                            f"🔀 SCHEDULER: Clearing {var_name} on effect transition "
-                            f"(was: {current_context.get_variable(var_name)})"
+                            "🔀 SCHEDULER: Clearing demanding_player on demand→cooperative transition"
                         )
-                        current_context = current_context.without_variable(var_name)
+                        current_context = current_context.without_variable(
+                            "demanding_player"
+                        )
 
                 if any(a.is_sharing for a in current_plan.actions):
                     logger.debug(

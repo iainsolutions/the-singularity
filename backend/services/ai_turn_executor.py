@@ -99,7 +99,8 @@ class AITurnExecutor:
                     if interaction_id in handled_interactions:
                         stale_skip_count += 1
                         if stale_skip_count > 5:
-                            logger.error(f"Interaction stuck after response was sent, giving up")
+                            logger.error(f"Interaction stuck after response was sent, clearing and ending turn")
+                            await self._clear_pending_dogma(game_id)
                             break
                         await asyncio.sleep(1)
                         continue
@@ -122,6 +123,40 @@ class AITurnExecutor:
                             turn_summary["total_latency_ms"] += result.get(
                                 "latency_ms", 0
                             )
+                        else:
+                            # Transient failure (e.g. AI API error) — retry up to
+                            # 3 times before giving up.  Do NOT clear
+                            # pending_dogma_action on the first failure because
+                            # the interaction is still valid and clearing it
+                            # silently drops a mandatory dogma effect.
+                            interaction_retries = getattr(
+                                self, "_interaction_retries", {}
+                            )
+                            self._interaction_retries = interaction_retries
+                            retry_count = interaction_retries.get(
+                                interaction_id, 0
+                            )
+                            retry_count += 1
+                            interaction_retries[interaction_id] = retry_count
+
+                            if retry_count >= 3:
+                                logger.error(
+                                    f"Interaction failed after {retry_count} retries, "
+                                    f"clearing pending dogma and ending turn"
+                                )
+                                await self._clear_pending_dogma(game_id)
+                                break
+                            else:
+                                logger.warning(
+                                    f"Interaction handling failed (attempt {retry_count}/3), "
+                                    f"retrying after delay"
+                                )
+                                # Remove from handled set so the retry loop
+                                # re-enters the handling branch instead of
+                                # hitting the stale-skip detector.
+                                handled_interactions.discard(interaction_id)
+                                stale_skip_count = 0
+                                await asyncio.sleep(2 * retry_count)
                         continue
 
                 # Check for pending interaction targeting OTHER players (human players)
@@ -202,6 +237,10 @@ class AITurnExecutor:
                         if result:
                             turn_summary["actions_taken"].append(result["action"])
                             turn_summary["total_cost"] += result.get("api_cost", 0)
+                        else:
+                            logger.error(f"Interaction handling failed (dogma_response path), clearing and ending turn")
+                            await self._clear_pending_dogma(game_id)
+                            break
                         continue
 
                 # Filter out provably useless dogma actions
@@ -628,6 +667,19 @@ class AITurnExecutor:
                 exc_info=True,
             )
             return available_actions
+
+    async def _clear_pending_dogma(self, game_id: str):
+        """Clear stale pending_dogma_action to unstick the game."""
+        try:
+            from redis_store import redis_store
+            game = await self.game_manager.load_game_from_storage(game_id)
+            if game and game.state.pending_dogma_action:
+                game.state.pending_dogma_action = None
+                self.game_manager.games[game_id] = game
+                await redis_store.save_game(game_id, game.to_dict())
+                logger.info(f"Cleared stale pending_dogma_action for game {game_id}")
+        except Exception as e:
+            logger.error(f"Failed to clear pending_dogma_action: {e}")
 
     async def _get_available_actions(self, game_id: str, player_id: str) -> list[str]:
         """Get list of available actions for player using game manager's logic"""

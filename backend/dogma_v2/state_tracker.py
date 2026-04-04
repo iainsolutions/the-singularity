@@ -102,6 +102,30 @@ class StateChangeTracker:
             )
         )
 
+    def record_reveal(
+        self,
+        player_name: str,
+        card_name: str,
+        age: int,
+        color: str,
+        context: str = "reveal",
+        visibility: Visibility = Visibility.OWNER_ONLY,
+    ):
+        """Record a card reveal/peek (owner-only by default for top-deck peeks)."""
+        self.changes.append(
+            StateChange(
+                change_type="reveal",
+                data={
+                    "player": player_name,
+                    "card": card_name,
+                    "age": age,
+                    "color": color,
+                },
+                visibility=visibility,
+                context=context,
+            )
+        )
+
     def record_score(self, player_name: str, card_name: str, context: str = "score"):
         """Record a card score (always public)"""
         self.changes.append(
@@ -414,6 +438,9 @@ class StateChangeTracker:
 
         elif change.change_type == "return":
             return f"{data['player']} recalls {data['card']} to {data['position']} of era {data['age']} supply"
+
+        elif change.change_type == "reveal":
+            return f"{data['player']} reveals {data['card']} (era {data['age']}, {data['color']})"
 
         return None
 

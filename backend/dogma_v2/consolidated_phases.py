@@ -2368,6 +2368,29 @@ class ConsolidatedDemandPhase(ConsolidatedPhase):
         # Clear the marker variable now that we've used it
         updated_context = updated_context.without_variable("demand_invoked_from_phase")
 
+        # CRITICAL FIX: Clear demand-scoped store_result variables to prevent leaking
+        # into subsequent cooperative effects. Bug: ENIAC demand (effect 1) stores
+        # PROMETHEUS's card in "to_return". When cooperative effect (effect 2) runs,
+        # SelectCards sees "to_return" already set and skips the interaction entirely.
+        # Fix: Extract all store_result variables from demand actions and clear them.
+        demand_actions = demand_config.get("actions", [])
+        for action in demand_actions:
+            store_var = action.get("store_result")
+            if store_var and updated_context.has_variable(store_var):
+                logger.info(
+                    f"CONSOLIDATED DEMAND: Clearing demand-scoped variable '{store_var}'"
+                )
+                updated_context = updated_context.without_variable(store_var)
+            # Also check nested actions (e.g., DemandEffect wraps inner actions)
+            nested_actions = action.get("actions", [])
+            for nested in nested_actions:
+                nested_store = nested.get("store_result")
+                if nested_store and updated_context.has_variable(nested_store):
+                    logger.info(
+                        f"CONSOLIDATED DEMAND: Clearing nested demand-scoped variable '{nested_store}'"
+                    )
+                    updated_context = updated_context.without_variable(nested_store)
+
         # After demand completes, route back to the appropriate execution phase
         # The effect_index has already been incremented, so execution will continue with the next effect
         verify_effect_index = updated_context.get_variable("current_effect_index", 0)
