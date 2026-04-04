@@ -109,8 +109,9 @@ class StateChangeTracker:
         age: int,
         color: str,
         context: str = "reveal",
+        visibility: Visibility = Visibility.OWNER_ONLY,
     ):
-        """Record a card reveal/peek (always public — everyone sees it)"""
+        """Record a card reveal/peek (owner-only by default for top-deck peeks)."""
         self.changes.append(
             StateChange(
                 change_type="reveal",
@@ -120,7 +121,7 @@ class StateChangeTracker:
                     "age": age,
                     "color": color,
                 },
-                visibility=Visibility.PUBLIC,
+                visibility=visibility,
                 context=context,
             )
         )
