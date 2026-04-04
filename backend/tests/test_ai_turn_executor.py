@@ -70,11 +70,11 @@ def make_mock_game(player_id="ai-1", player_name="PROMETHEUS", is_ai=True,
 
 
 class TestInteractionFailureCleanup:
-    """Regression: AI executor must clear pending_dogma_action when interaction handling fails."""
+    """Regression: AI executor retries transient failures before clearing pending_dogma_action."""
 
     @pytest.mark.asyncio
-    async def test_failed_interaction_clears_pending_dogma(self):
-        """When _handle_interaction returns None, pending_dogma_action should be cleared."""
+    async def test_failed_interaction_retries_then_clears(self):
+        """When _handle_interaction returns None 3 times, pending_dogma_action should be cleared."""
         pending = make_pending_dogma("ai-1")
         game, player = make_mock_game(pending_dogma=pending)
 
@@ -88,20 +88,72 @@ class TestInteractionFailureCleanup:
         agent = AsyncMock()
         agent.difficulty = "expert"
 
+        handle_call_count = 0
         clear_called = False
+
+        async def count_handles(*args, **kwargs):
+            nonlocal handle_call_count
+            handle_call_count += 1
+            return None
 
         async def track_clear(game_id):
             nonlocal clear_called
             clear_called = True
             game.state.pending_dogma_action = None
 
-        with patch.object(executor, '_handle_interaction', return_value=None):
+        with patch.object(executor, '_handle_interaction', side_effect=count_handles):
             with patch.object(executor, '_clear_pending_dogma', side_effect=track_clear):
                 with patch('services.ai_turn_executor.ai_service') as mock_ai_svc:
                     mock_ai_svc.get_agent.return_value = agent
-                    result = await executor.execute_ai_turn("test-game", "ai-1")
+                    with patch('asyncio.sleep', new_callable=AsyncMock):
+                        result = await executor.execute_ai_turn("test-game", "ai-1")
 
-        assert clear_called, "pending_dogma_action was not cleared after interaction failure"
+        assert handle_call_count == 3, f"Expected 3 retries, got {handle_call_count}"
+        assert clear_called, "pending_dogma_action was not cleared after 3 failed retries"
+
+    @pytest.mark.asyncio
+    async def test_transient_failure_preserves_pending_dogma(self):
+        """A single transient failure should NOT clear pending_dogma_action — it retries."""
+        pending = make_pending_dogma("ai-1")
+        game, player = make_mock_game(pending_dogma=pending)
+
+        gm = MagicMock()
+        gm.get_game.return_value = game
+        gm.load_game_from_storage = AsyncMock(return_value=game)
+        gm.get_available_actions = AsyncMock(return_value={"success": True, "actions": []})
+        gm.games = {}
+
+        executor = AITurnExecutor(gm)
+
+        agent = AsyncMock()
+        agent.difficulty = "expert"
+
+        call_count = 0
+
+        async def fail_then_succeed(*args, **kwargs):
+            nonlocal call_count
+            call_count += 1
+            if call_count == 1:
+                return None  # first attempt fails
+            # Second attempt succeeds — also clear pending so loop can exit
+            game.state.pending_dogma_action = None
+            return {"action": {"action_type": "dogma_response"}, "success": True, "api_cost": 0, "latency_ms": 0}
+
+        clear_called = False
+
+        async def track_clear(game_id):
+            nonlocal clear_called
+            clear_called = True
+
+        with patch.object(executor, '_handle_interaction', side_effect=fail_then_succeed):
+            with patch.object(executor, '_clear_pending_dogma', side_effect=track_clear):
+                with patch('services.ai_turn_executor.ai_service') as mock_ai_svc:
+                    mock_ai_svc.get_agent.return_value = agent
+                    with patch('asyncio.sleep', new_callable=AsyncMock):
+                        result = await executor.execute_ai_turn("test-game", "ai-1")
+
+        assert call_count == 2, f"Expected retry after first failure, got {call_count} calls"
+        assert not clear_called, "pending_dogma_action should NOT be cleared on transient failure"
 
     @pytest.mark.asyncio
     async def test_stale_interaction_clears_pending_dogma(self):

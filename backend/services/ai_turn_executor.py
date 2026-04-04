@@ -124,9 +124,39 @@ class AITurnExecutor:
                                 "latency_ms", 0
                             )
                         else:
-                            logger.error(f"Interaction handling failed, clearing pending dogma and ending turn")
-                            await self._clear_pending_dogma(game_id)
-                            break
+                            # Transient failure (e.g. AI API error) — retry up to
+                            # 3 times before giving up.  Do NOT clear
+                            # pending_dogma_action on the first failure because
+                            # the interaction is still valid and clearing it
+                            # silently drops a mandatory dogma effect.
+                            interaction_retries = getattr(
+                                self, "_interaction_retries", {}
+                            )
+                            self._interaction_retries = interaction_retries
+                            retry_count = interaction_retries.get(
+                                interaction_id, 0
+                            )
+                            retry_count += 1
+                            interaction_retries[interaction_id] = retry_count
+
+                            if retry_count >= 3:
+                                logger.error(
+                                    f"Interaction failed after {retry_count} retries, "
+                                    f"clearing pending dogma and ending turn"
+                                )
+                                await self._clear_pending_dogma(game_id)
+                                break
+                            else:
+                                logger.warning(
+                                    f"Interaction handling failed (attempt {retry_count}/3), "
+                                    f"retrying after delay"
+                                )
+                                # Remove from handled set so the retry loop
+                                # re-enters the handling branch instead of
+                                # hitting the stale-skip detector.
+                                handled_interactions.discard(interaction_id)
+                                stale_skip_count = 0
+                                await asyncio.sleep(2 * retry_count)
                         continue
 
                 # Check for pending interaction targeting OTHER players (human players)
