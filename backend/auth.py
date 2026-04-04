@@ -49,7 +49,7 @@ class AuthManager:
 
     def _validate_jwt_secret(self):
         """Validate JWT secret key security and fail fast if insecure."""
-        environment = os.getenv("INNOVATION_ENV", "development").lower()
+        environment = os.getenv("SINGULARITY_ENV", "development").lower()
         is_production = environment == "production"
         is_staging = environment == "staging"
 
@@ -198,7 +198,7 @@ class AuthManager:
         except jwt.InvalidTokenError as e:
             # Development fallback: also accept legacy default secret to keep tests/backward-compat working
             try:
-                environment = os.getenv("INNOVATION_ENV", "development").lower()
+                environment = os.getenv("SINGULARITY_ENV", "development").lower()
                 if environment != "production" and self.secret_key != DEFAULT_SECRET_KEY:
                     payload = jwt.decode(
                         token, DEFAULT_SECRET_KEY, algorithms=[self.algorithm]

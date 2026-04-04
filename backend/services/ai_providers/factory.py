@@ -11,10 +11,23 @@ from services.ai_providers.base import AIProvider
 
 logger = get_logger(__name__)
 
-
+# Optional providers — imported at registration time so missing
+# dependencies (openai, google-genai) don't break startup.
 _PROVIDER_REGISTRY: dict[str, type[AIProvider]] = {
     AnthropicAIProvider.name: AnthropicAIProvider,
 }
+
+try:
+    from services.ai_providers.openai_provider import OpenAIProvider
+    _PROVIDER_REGISTRY[OpenAIProvider.name] = OpenAIProvider
+except ImportError:
+    logger.debug("OpenAI provider not available (openai package not installed)")
+
+try:
+    from services.ai_providers.gemini_provider import GeminiAIProvider
+    _PROVIDER_REGISTRY[GeminiAIProvider.name] = GeminiAIProvider
+except ImportError:
+    logger.debug("Gemini provider not available (google-genai package not installed)")
 
 
 def register_provider(name: str, provider_cls: type[AIProvider]) -> None:
@@ -55,7 +68,7 @@ def _validate_ollama_url(url: str) -> str:
 
     # Warn on non-localhost in production (SSRF protection)
     is_localhost = parsed.hostname in ["localhost", "127.0.0.1", "::1"]
-    is_production = os.getenv("INNOVATION_ENV") == "production"
+    is_production = os.getenv("SINGULARITY_ENV") == "production"
 
     if not is_localhost and is_production:
         raise ValueError(

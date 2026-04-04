@@ -22,7 +22,7 @@ class SpecialAchievementChecker:
     SPECIAL_ACHIEVEMENTS: ClassVar[dict[str, dict[str, str | int]]] = {
         "Emergence": {
             "age": 1,
-            "description": "Archive 6 cards OR Harvest 6 cards in a single turn",
+            "description": "Archive 6 cards OR Score 6 cards in a single turn",
             "check_function": "check_emergence",
         },
         "Dominion": {
@@ -47,7 +47,7 @@ class SpecialAchievementChecker:
         },
         "Abundance": {
             "age": 6,
-            "description": "Have 5+ Harvest cards from different eras",
+            "description": "Have 5+ Score cards from different eras",
             "check_function": "check_abundance",
         },
     }
@@ -57,7 +57,7 @@ class SpecialAchievementChecker:
 
     def reset_turn_tracking(self, game_id: str, player_id: str):
         key = f"{game_id}_{player_id}"
-        self.turn_tracking[key] = {"cards_tucked": 0, "cards_scored": 0}
+        self.turn_tracking[key] = {"cards_archived": 0, "cards_scored": 0}
 
     def track_card_action(
         self, game_id: str, player_id: str, action: str, count: int = 1
@@ -66,8 +66,8 @@ class SpecialAchievementChecker:
         if key not in self.turn_tracking:
             self.reset_turn_tracking(game_id, player_id)
 
-        if action == "tuck":
-            self.turn_tracking[key]["cards_tucked"] += count
+        if action == "archive":
+            self.turn_tracking[key]["cards_archived"] += count
         elif action == "score":
             self.turn_tracking[key]["cards_scored"] += count
 
@@ -89,10 +89,10 @@ class SpecialAchievementChecker:
         return earned
 
     def check_emergence(self, game: "Game", player: "Player") -> bool:
-        """Archive 6+ cards OR Harvest 6+ cards in a single turn."""
+        """Archive 6+ cards OR Score 6+ cards in a single turn."""
         key = f"{game.game_id}_{player.id}"
         tracking = self.turn_tracking.get(key, {})
-        return tracking.get("cards_tucked", 0) >= 6 or tracking.get("cards_scored", 0) >= 6
+        return tracking.get("cards_archived", 0) >= 6 or tracking.get("cards_scored", 0) >= 6
 
     def check_dominion(self, game: "Game", player: "Player") -> bool:
         """3+ of every icon type visible on board."""
@@ -152,7 +152,7 @@ class SpecialAchievementChecker:
         return high_value_cards == 5
 
     def check_abundance(self, game: "Game", player: "Player") -> bool:
-        """5+ cards in Harvest pile from different eras."""
+        """5+ cards in Score pile from different eras."""
         if not hasattr(player, "score_pile"):
             return False
 

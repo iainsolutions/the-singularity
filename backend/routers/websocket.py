@@ -125,7 +125,7 @@ async def websocket_endpoint(
 
                         # Check if AI agent exists
                         if not ai_service.get_agent(player.id):
-                            difficulty = getattr(player, "ai_difficulty", "beginner")
+                            difficulty = getattr(player, "ai_difficulty", "easy")
                             ai_service.create_agent(
                                 player_id=player.id, difficulty=difficulty
                             )

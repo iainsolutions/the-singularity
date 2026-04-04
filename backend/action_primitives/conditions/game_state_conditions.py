@@ -14,7 +14,7 @@ class GameStateConditions(BaseConditionEvaluator):
     @property
     def supported_conditions(self) -> set[str]:
         return {
-            "tucked_under_age_11",
+            "archived_under_age_11",
             "option_chosen",
             "user_choice",
             "true",
@@ -30,10 +30,10 @@ class GameStateConditions(BaseConditionEvaluator):
         """Evaluate game state related conditions."""
         condition_type = condition.get("type")
 
-        if condition_type == "tucked_under_age_11":
-            # Check if card was tucked under age 11
-            tucked_age = context.get_variable("tucked_under_age")
-            return tucked_age == 11
+        if condition_type == "archived_under_age_11":
+            # Check if card was archived under age 11
+            archived_age = context.get_variable("archived_under_age")
+            return archived_age == 11
 
         elif condition_type == "option_chosen":
             # Check if an option was chosen

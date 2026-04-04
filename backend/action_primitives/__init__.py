@@ -83,9 +83,9 @@ def create_action_primitive(config):
         "SplayCards": lambda: __import__(
             "action_primitives.splay_cards", fromlist=["SplayCards"]
         ).SplayCards,
-        "TuckCard": lambda: __import__(
-            "action_primitives.tuck_card", fromlist=["TuckCard"]
-        ).TuckCard,
+        "ArchiveCard": lambda: __import__(
+            "action_primitives.archive_card", fromlist=["ArchiveCard"]
+        ).ArchiveCard,
         "ExchangeCards": lambda: __import__(
             "action_primitives.exchange_cards", fromlist=["ExchangeCards"]
         ).ExchangeCards,

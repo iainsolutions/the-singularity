@@ -364,7 +364,7 @@ class DemandTargetPhase(DogmaPhase):
         According to Spec 3.3, compliance is detected by actual state changes:
         - Cards transferred (hand/board/score changes)
         - Cards returned to deck
-        - Cards tucked, junked, scored, melded, or exchanged
+        - Cards archived, junked, scored, melded, or exchanged
         """
         if not self.state_before or not self.state_after:
             logger.warning(

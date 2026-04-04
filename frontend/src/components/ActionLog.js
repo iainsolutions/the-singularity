@@ -227,7 +227,7 @@ const ActionLog = memo(
               : `${data.player} researched a card (era ${data.age})`;
 
           case "score":
-            return `${data.player} harvested ${data.card}`;
+            return `${data.player} scored ${data.card}`;
 
           case "splay":
             return `${data.player} proliferated ${data.color} ${data.direction}`;
@@ -240,7 +240,7 @@ const ActionLog = memo(
           case "return":
             return `${data.player} recalled ${data.card}`;
 
-          case "tuck":
+          case "archive":
             return `${data.player} archived ${data.card} to ${data.color}`;
 
           default:

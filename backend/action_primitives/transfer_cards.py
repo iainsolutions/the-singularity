@@ -121,7 +121,7 @@ class TransferCards(ActionPrimitive):
                     context.get_public_card_name(card)
                     for card in cards_to_transfer[:transferred_count]
                 ]
-                context.add_result(f"Harvested: {', '.join(card_names)}")
+                context.add_result(f"Scoreed: {', '.join(card_names)}")
 
         return ActionResult.SUCCESS
 

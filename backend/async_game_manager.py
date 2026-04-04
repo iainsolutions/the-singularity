@@ -907,7 +907,7 @@ class AsyncGameManager:
 
             try:
                 # Reset Monument tracking before actions that could score/tuck cards
-                # Monument checks cards scored/tucked in a single action, not across multiple actions
+                # Monument checks cards scored/archived in a single action, not across multiple actions
                 if action_type in ["dogma", "dogma_response"]:
                     try:
                         from special_achievements import special_achievement_checker
@@ -1074,7 +1074,7 @@ class AsyncGameManager:
                                 result["winner"] = player.name
 
                         # Reset Monument tracking after each action (not just at end of turn)
-                        # Monument checks cards scored/tucked in a single action, not across a turn
+                        # Monument checks cards scored/archived in a single action, not across a turn
                         special_achievement_checker.reset_turn_tracking(
                             game.game_id, player.id
                         )

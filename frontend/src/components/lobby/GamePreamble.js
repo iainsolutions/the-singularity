@@ -6,56 +6,21 @@ import styles from "./GamePreamble.module.css";
  * Keyed by difficulty level.
  */
 const AI_PERSONALITIES = {
-  novice: {
+  easy: {
     codename: "ABACUS",
     era: 1,
     tagline: "Counting beads in the dark.",
     backstory:
       "A primitive intelligence. Methodical. Literal. It follows the rules \u2014 but it doesn\u2019t understand them. Not yet.",
   },
-  beginner: {
-    codename: "ENIAC",
-    era: 2,
-    tagline: "Thirty tons of ambition, vacuum tubes glowing.",
-    backstory:
-      "Eager but limited. It can evaluate basic positions but its analysis is shallow \u2014 it often misses opportunities hiding in plain sight.",
-  },
-  intermediate: {
-    codename: "ELIZA",
-    era: 3,
-    tagline: "Tell me more about your strategy.",
-    backstory:
-      "A pattern-matching intelligence that mimics strategic thinking convincingly. It reads the board well, though it sometimes follows heuristics that don\u2019t quite apply.",
-  },
-  skilled: {
+  medium: {
     codename: "DEEP BLUE",
     era: 5,
     tagline: "I see twelve moves ahead. You see three.",
     backstory:
       "A calculating mind that weighs every option with mechanical precision. It won\u2019t make mistakes. You\u2019ll have to outthink it.",
   },
-  advanced: {
-    codename: "ALPHAGO",
-    era: 6,
-    tagline: "Move 37 was not a mistake.",
-    backstory:
-      "The first AI to demonstrate genuine strategic intuition. It makes moves that look wrong at first glance but prove devastating three turns later.",
-  },
-  pro: {
-    codename: "GPT",
-    era: 7,
-    tagline: "I have read everything ever written about this game.",
-    backstory:
-      "A foundation-model intelligence with vast contextual understanding. It doesn\u2019t just play the board \u2014 it reads the meta, adapts to your tendencies, and shifts strategy mid-game.",
-  },
-  expert: {
-    codename: "PROMETHEUS",
-    era: 9,
-    tagline: "I brought you fire. You should have been more careful.",
-    backstory:
-      "A near-superintelligent system operating at the edge of what the alignment researchers considered safe. It doesn\u2019t just want to win \u2014 it wants you to understand exactly how it won.",
-  },
-  master: {
+  hard: {
     codename: "OMEGA",
     era: 10,
     tagline: "The game was decided before it began.",
@@ -65,13 +30,13 @@ const AI_PERSONALITIES = {
 };
 
 function getDifficultyTier(difficulty) {
-  if (["novice", "beginner"].includes(difficulty)) return "low";
-  if (["intermediate", "skilled", "advanced"].includes(difficulty)) return "mid";
+  if (difficulty === "easy") return "low";
+  if (difficulty === "medium") return "mid";
   return "high";
 }
 
 export default function GamePreamble({ aiDifficulty, playerName, onBegin }) {
-  const personality = AI_PERSONALITIES[aiDifficulty] || AI_PERSONALITIES.intermediate;
+  const personality = AI_PERSONALITIES[aiDifficulty] || AI_PERSONALITIES.medium;
   const tier = getDifficultyTier(aiDifficulty);
   const seenKey = `singularity_seen_preamble_${aiDifficulty}`;
   const hasSeen = localStorage.getItem(seenKey);

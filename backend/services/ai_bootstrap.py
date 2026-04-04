@@ -25,7 +25,7 @@ async def bootstrap_ai_players_for_game(game_id: str, game, event_bus, game_mana
         if player.is_ai:
             try:
                 # Get difficulty from player's ai_difficulty field
-                difficulty = getattr(player, "ai_difficulty", "beginner")
+                difficulty = getattr(player, "ai_difficulty", "easy")
 
                 # Recreate AI agent
                 ai_service.create_agent(player_id=player.id, difficulty=difficulty)

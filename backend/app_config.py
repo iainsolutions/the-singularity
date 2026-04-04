@@ -46,7 +46,7 @@ class CORSConfig:
 
     def _get_default_origins(self) -> list[str]:
         """Get default CORS origins based on environment."""
-        environment = os.getenv("INNOVATION_ENV", "development").lower()
+        environment = os.getenv("SINGULARITY_ENV", "development").lower()
         origins_map = {
             "development": ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"],
             "staging": ["https://staging.singularity.example.com"],
@@ -117,7 +117,7 @@ class SecurityConfig:
     """Security-related configuration."""
 
     def __init__(self):
-        self.environment = os.getenv("INNOVATION_ENV", "development").lower()
+        self.environment = os.getenv("SINGULARITY_ENV", "development").lower()
         self.is_production = self.environment == "production"
         self.is_staging = self.environment == "staging"
         self.is_development = self.environment == "development"

@@ -18,18 +18,18 @@ def make_card(name, age=1, color=CardColor.BLUE, symbols=None):
 
 
 class TestEmergence:
-    """SA01: Archive 6+ cards OR Harvest 6+ cards in a single turn."""
+    """SA01: Archive 6+ cards OR Score 6+ cards in a single turn."""
 
     def test_not_triggered_at_5(self, achievement_checker):
         game = Game()
         game.players = [Player(name="Alice")]
-        achievement_checker.track_card_action(game.game_id, game.players[0].id, "tuck", 5)
+        achievement_checker.track_card_action(game.game_id, game.players[0].id, "archive", 5)
         assert not achievement_checker.check_emergence(game, game.players[0])
 
-    def test_triggered_at_6_tucks(self, achievement_checker):
+    def test_triggered_at_6_archives(self, achievement_checker):
         game = Game()
         game.players = [Player(name="Alice")]
-        achievement_checker.track_card_action(game.game_id, game.players[0].id, "tuck", 6)
+        achievement_checker.track_card_action(game.game_id, game.players[0].id, "archive", 6)
         assert achievement_checker.check_emergence(game, game.players[0])
 
     def test_triggered_at_6_scores(self, achievement_checker):
@@ -41,7 +41,7 @@ class TestEmergence:
     def test_mixed_not_triggered(self, achievement_checker):
         game = Game()
         game.players = [Player(name="Alice")]
-        achievement_checker.track_card_action(game.game_id, game.players[0].id, "tuck", 3)
+        achievement_checker.track_card_action(game.game_id, game.players[0].id, "archive", 3)
         achievement_checker.track_card_action(game.game_id, game.players[0].id, "score", 3)
         assert not achievement_checker.check_emergence(game, game.players[0])
 
@@ -244,7 +244,7 @@ class TestTranscendence:
 
 
 class TestAbundance:
-    """SA06: 5+ cards in Harvest pile from different eras."""
+    """SA06: 5+ cards in Score pile from different eras."""
 
     def test_not_triggered_at_4_eras(self, achievement_checker):
         game = Game()

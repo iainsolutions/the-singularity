@@ -5,7 +5,7 @@ This adapter handles all effects that move cards between locations:
 - Drawing cards (DrawCards)
 - Melding cards (MeldCard)
 - Scoring cards (ScoreCards)
-- Tucking cards (TuckCard)
+- Tucking cards (ArchiveCard)
 - Junking cards (JunkCard, JunkCards)
 - Transferring cards (TransferCards, TransferBetweenPlayers)
 - Exchanging cards (ExchangeCards)
@@ -43,7 +43,7 @@ class TransferEffectAdapter(Effect):
         "DrawCards",
         "MeldCard",
         "ScoreCards",
-        "TuckCard",
+        "ArchiveCard",
         "JunkCard",
         "JunkCards",
         "TransferCards",
@@ -56,7 +56,7 @@ class TransferEffectAdapter(Effect):
     DRAW_EFFECTS: ClassVar[set[str]] = {"DrawCards"}
     MELD_EFFECTS: ClassVar[set[str]] = {"MeldCard"}
     SCORE_EFFECTS: ClassVar[set[str]] = {"ScoreCards"}
-    TUCK_EFFECTS: ClassVar[set[str]] = {"TuckCard"}
+    TUCK_EFFECTS: ClassVar[set[str]] = {"ArchiveCard"}
     JUNK_EFFECTS: ClassVar[set[str]] = {"JunkCard", "JunkCards"}
     TRANSFER_EFFECTS_STRICT: ClassVar[set[str]] = {
         "TransferCards",
@@ -407,7 +407,7 @@ class TransferEffectAdapter(Effect):
             source = self.config.get("source", "selection")
             return f"Score {selection} from {source}"
 
-        elif effect_type == "TuckCard":
+        elif effect_type == "ArchiveCard":
             return "Tuck card under another card"
 
         elif effect_type in self.JUNK_EFFECTS:

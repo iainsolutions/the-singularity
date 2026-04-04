@@ -89,7 +89,7 @@ class ActionType(str, Enum):
     SELECT_CARDS = "SelectCards"
     FILTER_CARDS = "FilterCards"
     MELD_CARD = "MeldCard"
-    TUCK_CARD = "TuckCard"
+    TUCK_CARD = "ArchiveCard"
     SCORE_CARDS = "ScoreCards"
     RETURN_CARDS = "ReturnCards"
     SPLAY_CARDS = "SplayCards"

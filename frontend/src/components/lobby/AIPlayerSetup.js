@@ -13,7 +13,7 @@ function AIPlayerSetup({ gameId, onAIAdded, onAIRemoved }) {
   const [difficulties, setDifficulties] = useState([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState(() => {
     // Load saved difficulty preference from localStorage
-    return localStorage.getItem("singularity_ai_difficulty") || "beginner";
+    return localStorage.getItem("singularity_ai_difficulty") || "easy";
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

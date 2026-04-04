@@ -43,7 +43,7 @@ class TestSimpleDogma:
         assert len(player.hand) >= hand_before + 1
 
     def test_astrolabe_draws(self, card_by_name):
-        """Astrolabe: Research a [1] (nerfed — draw only, no harvest)."""
+        """Astrolabe: Research a [1] (nerfed — draw only, no score)."""
         astrolabe = card_by_name("Astrolabe")
         game = make_game_with_cards([astrolabe], [card_by_name("Pascaline")])
         player = game.players[0]

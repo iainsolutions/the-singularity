@@ -137,13 +137,13 @@ class StateChangeTracker:
             )
         )
 
-    def record_tuck(
-        self, player_name: str, card_name: str, color: str, context: str = "tuck"
+    def record_archive(
+        self, player_name: str, card_name: str, color: str, context: str = "archive"
     ):
-        """Record a card tuck (always public)"""
+        """Record a card archive (always public)"""
         self.changes.append(
             StateChange(
-                change_type="tuck",
+                change_type="archive",
                 data={"player": player_name, "card": card_name, "color": color},
                 visibility=Visibility.PUBLIC,
                 context=context,
@@ -397,9 +397,9 @@ class StateChangeTracker:
             return f"{data['player']} deploys {data['card']} to {data['color']} stack"
 
         elif change.change_type == "score":
-            return f"{data['player']} harvests {data['card']}"
+            return f"{data['player']} scores {data['card']}"
 
-        elif change.change_type == "tuck":
+        elif change.change_type == "archive":
             return f"{data['player']} archives {data['card']} under {data['color']} stack"
 
         elif change.change_type == "symbol_check":

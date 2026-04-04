@@ -999,7 +999,7 @@ class EffectExecutionPhase(DogmaPhase):
                         rl.startswith("drew")
                         or rl.startswith("melded")
                         or rl.startswith("scored")
-                        or "tuck" in rl
+                        or "archive" in rl
                         or "junk" in rl
                         or "returned" in rl
                     ):
@@ -1199,7 +1199,7 @@ class EffectExecutionPhase(DogmaPhase):
                         or "revealed" in action_result.lower()
                         or "transferred" in action_result.lower()
                         or "returned" in action_result.lower()
-                        or "tucked" in action_result.lower()
+                        or "archived" in action_result.lower()
                         or "splayed" in action_result.lower()
                         or "selected" in action_result.lower()
                         or "condition" in action_result.lower()
@@ -1253,7 +1253,7 @@ class EffectExecutionPhase(DogmaPhase):
                         context.game.add_log_entry(
                             player_name=context.current_player.name,
                             action_type=ActionType.DOGMA,
-                            description=f"harvested {change} cards (from {context.card.name})",
+                            description=f"scored {change} cards (from {context.card.name})",
                         )
                     elif change < 0:
                         context.game.add_log_entry(

@@ -226,8 +226,9 @@ const GameHeader = memo(
 
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Key Terms</Typography>
                   <Box sx={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "2px 8px", fontSize: "0.7rem" }}>
-                    <strong>Archive</strong><span>Score pile (sum of era numbers = score)</span>
-                    <strong>Harvest</strong><span>Move a card to your archive</span>
+                    <strong>Archive</strong><span>Place a card at the bottom of its stack</span>
+                    <strong>Score</strong><span>Move a card to your score pile</span>
+                    <strong>Score pile</strong><span>Sum of era numbers = your score</span>
                     <strong>Recall</strong><span>Return a card to the supply</span>
                   </Box>
                 </Box>

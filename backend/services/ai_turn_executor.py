@@ -633,8 +633,8 @@ class AITurnExecutor:
         try:
             if not hasattr(self, "_prompt_builder"):
                 from services.ai_prompt_builder import AIPromptBuilder
-                # "expert" is arbitrary - viability checks don't use difficulty
-                self._prompt_builder = AIPromptBuilder(difficulty="expert")
+                # "hard" is arbitrary - viability checks don't use difficulty
+                self._prompt_builder = AIPromptBuilder(difficulty="hard")
 
             from services.ai_prompt_builder import VIABILITY_USELESS
 

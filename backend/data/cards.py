@@ -171,12 +171,12 @@ def load_achievement_cards_from_json() -> tuple[list[Card], list[Card]]:
             )
     else:
         for name, req in [
-            ("Emergence", "Archive 6+ OR Harvest 6+ in a single turn"),
+            ("Emergence", "Archive 6+ OR Score 6+ in a single turn"),
             ("Dominion", "3+ of every icon type visible on board"),
             ("Consciousness", "12+ visible Human Mind icons on board"),
             ("Apotheosis", "All 5 colors, each Proliferated right/up/aslant"),
             ("Transcendence", "All 5 colors, each top card Era 8+"),
-            ("Abundance", "5+ Harvest cards from different eras"),
+            ("Abundance", "5+ Score cards from different eras"),
         ]:
             special_achievements.append(
                 Card(

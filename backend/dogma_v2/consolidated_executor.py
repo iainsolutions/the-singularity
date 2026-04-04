@@ -954,6 +954,18 @@ class ConsolidatedDogmaExecutor:
                 # Clear pending_store_result now that we've used it
                 context = context.without_variable("pending_store_result")
 
+                # Handle store_remainder: store unselected eligible cards
+                remainder_var = context.get_variable("pending_store_remainder")
+                if remainder_var:
+                    eligible = context.get_variable("pending_eligible_cards") or []
+                    final_selected = context.get_variable(custom_store_name) or []
+                    selected_ids = {id(c) for c in final_selected}
+                    remainder = [c for c in eligible if id(c) not in selected_ids]
+                    context = context.with_variable(remainder_var, remainder)
+                    context = context.without_variable("pending_store_remainder")
+                    context = context.without_variable("pending_eligible_cards")
+                    logger.debug(f"Stored {len(remainder)} remainder cards in '{remainder_var}'")
+
             # Also store under common action primitive variable names for compatibility
             common_store_names = [
                 "cards_to_return",  # Tools Effect 1

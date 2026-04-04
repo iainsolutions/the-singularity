@@ -513,7 +513,7 @@ class ActionScheduler:
             "transfer",
             "meld",
             "score",
-            "tuck",
+            "archive",
             "splay",
             "return",
             "achieve",

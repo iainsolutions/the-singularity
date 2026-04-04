@@ -53,37 +53,22 @@ def _get_ai_display_name(difficulty: str, provider: str | None = None) -> str:
     # Use the thematic codename from the personality system
     return get_codename(difficulty)
 
-# Provider-specific cost estimates (per game, intermediate difficulty)
+# Provider-specific cost estimates (per game)
 _PROVIDER_COST_ESTIMATES = {
     "anthropic": {
-        "novice": "$0.03-0.08",
-        "beginner": "$0.05-0.15",
-        "intermediate": "$0.10-0.20",
-        "skilled": "$0.50-0.80",
-        "advanced": "$0.60-1.00",
-        "pro": "$0.80-1.20",
-        "expert": "$2.50-3.50",
-        "master": "$3.00-4.50",
+        "easy": "$0.01-0.05",
+        "medium": "$0.30-0.80",
+        "hard": "$2.50-4.50",
     },
     "openai": {
-        "novice": "$0.15-0.40",
-        "beginner": "$0.20-0.50",
-        "intermediate": "$0.80-1.20",
-        "skilled": "$1.00-1.50",
-        "advanced": "$0.80-1.20",  # gpt-4o cheaper than gpt-4-turbo
-        "pro": "$0.90-1.30",
-        "expert": "$1.00-1.50",
-        "master": "$1.20-1.80",
+        "easy": "$0.15-0.40",
+        "medium": "$0.80-1.20",
+        "hard": "$1.20-1.80",
     },
     "gemini": {
-        "novice": "$0.04-0.08",  # flash-lite (cheapest)
-        "beginner": "$0.05-0.10",  # flash-lite
-        "intermediate": "$0.12-0.24",  # flash
-        "skilled": "$0.15-0.30",  # flash
-        "advanced": "$0.25-0.50",  # flash or pro
-        "pro": "$0.40-0.80",  # pro
-        "expert": "$0.50-1.00",  # pro
-        "master": "$0.60-1.20",  # pro
+        "easy": "$0.04-0.08",
+        "medium": "$0.15-0.30",
+        "hard": "$0.50-1.00",
     },
 }
 

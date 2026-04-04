@@ -331,14 +331,9 @@ class AIEvaluationFramework:
         ]
 
         difficulties = [
-            "novice",
-            "beginner",
-            "intermediate",
-            "skilled",
-            "advanced",
-            "pro",
-            "expert",
-            "master",
+            "easy",
+            "medium",
+            "hard",
         ]
 
         for difficulty in difficulties:

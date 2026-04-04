@@ -101,7 +101,7 @@ class EffectValidator:
             'optional': {'selection', 'source', 'count'},
             'validation': lambda cfg: EffectValidator._validate_score_cards(cfg)
         },
-        'TuckCard': {
+        'ArchiveCard': {
             'required': {'selection', 'under_card'},
             'optional': {'location'},
             'validation': None

@@ -641,7 +641,7 @@ export function useWebSocketEnhanced({
               console.error("WebSocket dogma_response_processed error:", data.result.error);
               setError(data.result.error || "Dogma response processing failed");
               // CRITICAL FIX: Clear the pending interaction UI when there's an error
-              // Otherwise the frontend stays stuck showing stale interaction UI
+              // Otherwise the frontend stays sarchive showing stale interaction UI
               console.log("🧹 Clearing enhanced pending action due to error");
               setEnhancedPendingAction(null);
             } else {

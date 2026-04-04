@@ -64,6 +64,8 @@ class SelectCards(ActionPrimitive):
         self.message = config.get("message")  # Custom message for interaction prompt
         # reveal_only: True means card stays in source after selection (for "reveal" actions)
         self.reveal_only = config.get("reveal_only", False)
+        # store_remainder: Variable name to store unselected cards from the eligible pool
+        self.store_remainder = config.get("store_remainder")
 
         # Support legacy "count" parameter
         if "count" in config:
@@ -263,6 +265,9 @@ class SelectCards(ActionPrimitive):
         if self.dynamic_filter:
             eligible_cards = self._apply_dynamic_filters(context, eligible_cards)
 
+        # Save eligible cards for store_remainder computation
+        self._eligible_cards = eligible_cards
+
         # Check if minimum requirements can be met
         if len(eligible_cards) < self.min_count:
             if self.is_optional:
@@ -295,6 +300,7 @@ class SelectCards(ActionPrimitive):
                 # SelectCards only SELECTS cards - removal is done by subsequent actions
                 # (TransferBetweenPlayers, ScoreCards, JunkCard, etc.)
                 context.set_variable(self.store_result, selected_cards)
+                self._store_remainder(context, selected_cards)
 
                 # CRITICAL LOGGING: Track card selection for Tools card debugging
                 card_names = [c.name for c in selected_cards]
@@ -332,6 +338,7 @@ class SelectCards(ActionPrimitive):
             # Store the selection
             context.set_variable(self.store_result, selected)
             context.set_variable("selected_cards", selected)
+            self._store_remainder(context, selected)
 
             # CRITICAL LOGGING: Track card selection for Tools card debugging
             card_names = [c.name for c in selected]
@@ -386,6 +393,7 @@ class SelectCards(ActionPrimitive):
             # SelectCards only SELECTS cards - removal is done by subsequent actions
             context.set_variable(self.store_result, [selected_card])
             context.set_variable("selected_cards", [selected_card])
+            self._store_remainder(context, [selected_card])
             context.add_result(
                 f"Auto-selected {selected_card.name} (only eligible card)"
             )
@@ -527,6 +535,9 @@ class SelectCards(ActionPrimitive):
             # Store store_result so _apply_interaction_response knows where to put the response
             # CRITICAL: This must be set BEFORE final_interaction_request to avoid race conditions
             context.set_variable("pending_store_result", self.store_result)
+            if self.store_remainder:
+                context.set_variable("pending_store_remainder", self.store_remainder)
+                context.set_variable("pending_eligible_cards", eligible_cards)
 
             # Store the final WebSocket-ready request
             context.set_variable("final_interaction_request", interaction_request)
@@ -579,6 +590,7 @@ class SelectCards(ActionPrimitive):
 
             # SelectCards only SELECTS cards - removal is done by subsequent actions
             context.set_variable(self.store_result, selected)
+            self._store_remainder(context, selected)
             context.add_result(
                 f"Auto-selected {len(selected)} cards from {self.source} (exact match)"
             )
@@ -593,6 +605,7 @@ class SelectCards(ActionPrimitive):
 
             # SelectCards only SELECTS cards - removal is done by subsequent actions
             context.set_variable(self.store_result, selected)
+            self._store_remainder(context, selected)
             context.add_result(
                 f"Auto-selected all {len(selected)} available cards from {self.source}"
             )
@@ -601,6 +614,16 @@ class SelectCards(ActionPrimitive):
         # No cards available or optional with no selection made
         context.set_variable(self.store_result, [])
         return ActionResult.SUCCESS
+
+    def _store_remainder(self, context: ActionContext, selected: list) -> None:
+        """Store unselected cards from the eligible pool in store_remainder variable."""
+        if not self.store_remainder:
+            return
+        eligible = getattr(self, "_eligible_cards", [])
+        selected_ids = {id(c) for c in selected}
+        remainder = [c for c in eligible if id(c) not in selected_ids]
+        context.set_variable(self.store_remainder, remainder)
+        logger.debug(f"SelectCards: stored {len(remainder)} remainder cards in '{self.store_remainder}'")
 
     def _get_source_cards(self, context: ActionContext) -> list:
         """Get cards from the specified source"""
@@ -691,12 +714,18 @@ class SelectCards(ActionPrimitive):
             return filtered
 
         # Filter by color (support both singular and plural forms)
+        # Resolve variable references: if the value is a context variable name, use its value
         if "color" in criteria:
-            # Handle singular form
-            allowed_colors = [criteria["color"]]
+            raw = criteria["color"]
+            resolved = context.get_variable(raw) if context.has_variable(raw) else raw
+            allowed_colors = [resolved] if isinstance(resolved, str) else resolved
         elif "colors" in criteria:
-            # Handle plural form
-            allowed_colors = criteria["colors"]
+            raw = criteria["colors"]
+            if isinstance(raw, str) and context.has_variable(raw):
+                resolved = context.get_variable(raw)
+                allowed_colors = [resolved] if isinstance(resolved, str) else resolved
+            else:
+                allowed_colors = raw
         else:
             allowed_colors = None
 
@@ -711,7 +740,8 @@ class SelectCards(ActionPrimitive):
 
         # Filter by NOT color
         if "not_color" in criteria:
-            excluded_color = criteria["not_color"]
+            raw = criteria["not_color"]
+            excluded_color = context.get_variable(raw) if context.has_variable(raw) else raw
             filtered = [
                 c
                 for c in filtered
@@ -817,7 +847,7 @@ class SelectCards(ActionPrimitive):
                 f"Cards before filter: {[(c.name, c.color.value if hasattr(c.color, 'value') else str(c.color)) for c in filtered if hasattr(c, 'color')]}"
             )
 
-            # If no colors on board, allow all cards (since tucking would start a new color)
+            # If no colors on board, allow all cards (since archiving would start a new color)
             if board_colors:
                 # Filter to cards with colors ON board
                 filtered = [
@@ -827,7 +857,7 @@ class SelectCards(ActionPrimitive):
                     and (c.color.value if hasattr(c.color, "value") else str(c.color))
                     in board_colors
                 ]
-            # else: keep all cards since any can be tucked to start a new color stack
+            # else: keep all cards since any can be archived to start a new color stack
 
             logger.debug(
                 f"Cards after color_on_board filter: {[c.name for c in filtered]}"

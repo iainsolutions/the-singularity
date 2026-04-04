@@ -189,10 +189,7 @@ class AIService:
 
     def get_available_difficulties(self) -> list:
         """
-        Get list of available difficulty levels (8 levels).
-
-        Note: Cost estimates are Anthropic-specific. OpenAI costs are typically
-        12x higher (~$0.44/game vs $0.035/game for intermediate difficulty).
+        Get list of available difficulty tiers (3 tiers, each a different model).
         """
         model_map = get_difficulty_model_map()
         fallback_model = get_fallback_model()
@@ -201,14 +198,9 @@ class AIService:
         personalities = get_all_personalities()
 
         base_difficulties = [
-            {"id": "novice", "name": "Novice", "description": "Just learning the rules, makes mistakes", "estimated_cost_per_game": "$0.03-0.08"},
-            {"id": "beginner", "name": "Beginner", "description": "Understands basics, random legal moves", "estimated_cost_per_game": "$0.05-0.15"},
-            {"id": "intermediate", "name": "Intermediate", "description": "Tactical play with basic strategy", "estimated_cost_per_game": "$0.10-0.20"},
-            {"id": "skilled", "name": "Skilled", "description": "Consistent strategy, good card evaluation", "estimated_cost_per_game": "$0.50-0.80"},
-            {"id": "advanced", "name": "Advanced", "description": "Strategic planning and combos", "estimated_cost_per_game": "$0.60-1.00"},
-            {"id": "pro", "name": "Pro", "description": "Strong positional play, anticipates opponent", "estimated_cost_per_game": "$0.80-1.20"},
-            {"id": "expert", "name": "Expert", "description": "Near-optimal play with deep analysis", "estimated_cost_per_game": "$2.50-3.50"},
-            {"id": "master", "name": "Master", "description": "Maximum strategic depth, tournament-level", "estimated_cost_per_game": "$3.00-4.50"},
+            {"id": "easy", "name": "Easy", "description": "Good for learning the game", "estimated_cost_per_game": "$0.01-0.05"},
+            {"id": "medium", "name": "Medium", "description": "Solid strategy, a worthy opponent", "estimated_cost_per_game": "$0.30-0.80"},
+            {"id": "hard", "name": "Hard", "description": "Maximum depth, tournament-level", "estimated_cost_per_game": "$2.50-4.50"},
         ]
 
         result = []

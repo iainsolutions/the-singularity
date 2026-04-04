@@ -71,7 +71,7 @@ def sync_game_state_safely(target_game: Game, source_game: Game):
     """Sync game state from DogmaContext game to main game object.
 
     IMPORTANT: Uses direct assignment, NOT deep copy. Deep copy creates new
-    player objects which loses tucked card changes and other mutations made
+    player objects which loses archived card changes and other mutations made
     during dogma execution. The immutable object concern was a red herring —
     we need the actual modified objects from DogmaContext, not copies.
     """
