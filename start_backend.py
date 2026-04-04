@@ -24,7 +24,7 @@ try:
         for p in candidates:
             if p.exists():
                 # Only override in dev to avoid clobbering deployment secrets
-                is_dev = os.getenv("INNOVATION_ENV", "development") == "development"
+                is_dev = os.getenv("SINGULARITY_ENV", "development") == "development"
                 load_dotenv(dotenv_path=p, override=is_dev)
 except Exception:
     def _load_env_files():

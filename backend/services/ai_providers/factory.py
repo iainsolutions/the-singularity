@@ -8,12 +8,16 @@ from urllib.parse import urlparse
 from logging_config import get_logger
 from services.ai_providers.anthropic_provider import AnthropicAIProvider
 from services.ai_providers.base import AIProvider
+from services.ai_providers.gemini_provider import GeminiAIProvider
+from services.ai_providers.openai_provider import OpenAIProvider
 
 logger = get_logger(__name__)
 
 
 _PROVIDER_REGISTRY: dict[str, type[AIProvider]] = {
     AnthropicAIProvider.name: AnthropicAIProvider,
+    GeminiAIProvider.name: GeminiAIProvider,
+    OpenAIProvider.name: OpenAIProvider,
 }
 
 
@@ -55,7 +59,7 @@ def _validate_ollama_url(url: str) -> str:
 
     # Warn on non-localhost in production (SSRF protection)
     is_localhost = parsed.hostname in ["localhost", "127.0.0.1", "::1"]
-    is_production = os.getenv("INNOVATION_ENV") == "production"
+    is_production = os.getenv("SINGULARITY_ENV") == "production"
 
     if not is_localhost and is_production:
         raise ValueError(
