@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../context/GameContext";
 import JoinGameModal from "./lobby/JoinGameModal";
@@ -12,6 +12,7 @@ function GameLobby() {
   const navigate = useNavigate();
   const [copiedGameId, setCopiedGameId] = useState(false);
   const [showPreamble, setShowPreamble] = useState(false);
+  const freshStart = useRef(false);
   const {
     startGame,
     gameId,
@@ -38,8 +39,9 @@ function GameLobby() {
       gameState &&
       (gameState.phase === "playing" || gameState.phase === "setup_card_selection")
     ) {
-      // Show preamble for AI games on fresh start, otherwise navigate directly
-      if (aiPlayer && !showPreamble) {
+      // Show preamble only for AI games that were just started from this
+      // lobby (freshStart ref).  Rejoining an in-progress game skips it.
+      if (aiPlayer && freshStart.current && !showPreamble) {
         setShowPreamble(true);
       } else if (!showPreamble) {
         navigate(`/game/${gameId}`);
@@ -50,6 +52,7 @@ function GameLobby() {
   const handleStartGame = async () => {
     try {
       clearError();
+      freshStart.current = true;
       await startGame();
     } catch (error) {
       console.error("Error starting game:", error);
