@@ -86,7 +86,7 @@ class TestInteractionFailureCleanup:
         executor = AITurnExecutor(gm)
 
         agent = AsyncMock()
-        agent.difficulty = "expert"
+        agent.difficulty = "hard"
 
         handle_call_count = 0
         clear_called = False
@@ -126,7 +126,7 @@ class TestInteractionFailureCleanup:
         executor = AITurnExecutor(gm)
 
         agent = AsyncMock()
-        agent.difficulty = "expert"
+        agent.difficulty = "hard"
 
         call_count = 0
 
@@ -169,7 +169,7 @@ class TestInteractionFailureCleanup:
         executor = AITurnExecutor(gm)
 
         agent = AsyncMock()
-        agent.difficulty = "expert"
+        agent.difficulty = "hard"
 
         # _handle_interaction succeeds first time but pending_dogma stays set
         handle_count = 0

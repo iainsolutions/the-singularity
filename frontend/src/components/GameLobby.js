@@ -29,7 +29,7 @@ function GameLobby() {
   const aiPlayer = gameState?.players
     ?.filter((p) => p.is_ai)
     ?.sort((a, b) => {
-      const order = ["novice","beginner","intermediate","skilled","advanced","pro","expert","master"];
+      const order = ["easy","medium","hard"];
       return order.indexOf(b.ai_difficulty) - order.indexOf(a.ai_difficulty);
     })?.[0];
 
@@ -110,7 +110,7 @@ function GameLobby() {
   if (showPreamble && aiPlayer) {
     return (
       <GamePreamble
-        aiDifficulty={aiPlayer.ai_difficulty || "intermediate"}
+        aiDifficulty={aiPlayer.ai_difficulty || "medium"}
         playerName={playerName}
         onBegin={() => {
           setShowPreamble(false);

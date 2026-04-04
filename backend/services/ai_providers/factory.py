@@ -8,17 +8,26 @@ from urllib.parse import urlparse
 from logging_config import get_logger
 from services.ai_providers.anthropic_provider import AnthropicAIProvider
 from services.ai_providers.base import AIProvider
-from services.ai_providers.gemini_provider import GeminiAIProvider
-from services.ai_providers.openai_provider import OpenAIProvider
 
 logger = get_logger(__name__)
 
-
+# Optional providers — imported at registration time so missing
+# dependencies (openai, google-genai) don't break startup.
 _PROVIDER_REGISTRY: dict[str, type[AIProvider]] = {
     AnthropicAIProvider.name: AnthropicAIProvider,
-    GeminiAIProvider.name: GeminiAIProvider,
-    OpenAIProvider.name: OpenAIProvider,
 }
+
+try:
+    from services.ai_providers.openai_provider import OpenAIProvider
+    _PROVIDER_REGISTRY[OpenAIProvider.name] = OpenAIProvider
+except ImportError:
+    logger.debug("OpenAI provider not available (openai package not installed)")
+
+try:
+    from services.ai_providers.gemini_provider import GeminiAIProvider
+    _PROVIDER_REGISTRY[GeminiAIProvider.name] = GeminiAIProvider
+except ImportError:
+    logger.debug("Gemini provider not available (google-genai package not installed)")
 
 
 def register_provider(name: str, provider_cls: type[AIProvider]) -> None:

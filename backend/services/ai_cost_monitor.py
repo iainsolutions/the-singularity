@@ -38,16 +38,11 @@ class GlobalAICostMonitor:
         self.player_costs: dict[str, float] = {}  # player_id -> cost
         self.last_reset = datetime.now()
 
-        # Cost breakdown by difficulty (8 levels)
+        # Cost breakdown by difficulty (3 tiers)
         self.costs_by_difficulty: dict[str, float] = {
-            "novice": 0.0,
-            "beginner": 0.0,
-            "intermediate": 0.0,
-            "skilled": 0.0,
-            "advanced": 0.0,
-            "pro": 0.0,
-            "expert": 0.0,
-            "master": 0.0,
+            "easy": 0.0,
+            "medium": 0.0,
+            "hard": 0.0,
         }
 
         logger.info(

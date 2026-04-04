@@ -187,16 +187,11 @@ class AIPlayerAgent:
         return desired_model
 
     def _get_max_tokens(self) -> int:
-        """Get max tokens based on difficulty (8 levels)"""
+        """Get max tokens based on difficulty tier"""
         token_map = {
-            "novice": int(os.getenv("AI_NOVICE_MAX_TOKENS", "800")),
-            "beginner": int(os.getenv("AI_BEGINNER_MAX_TOKENS", "1200")),
-            "intermediate": int(os.getenv("AI_INTERMEDIATE_MAX_TOKENS", "2000")),
-            "skilled": int(os.getenv("AI_SKILLED_MAX_TOKENS", "2500")),
-            "advanced": int(os.getenv("AI_ADVANCED_MAX_TOKENS", "3000")),
-            "pro": int(os.getenv("AI_PRO_MAX_TOKENS", "3500")),
-            "expert": int(os.getenv("AI_EXPERT_MAX_TOKENS", "4000")),
-            "master": int(os.getenv("AI_MASTER_MAX_TOKENS", "5000")),
+            "easy": int(os.getenv("AI_EASY_MAX_TOKENS", "1200")),
+            "medium": int(os.getenv("AI_MEDIUM_MAX_TOKENS", "3000")),
+            "hard": int(os.getenv("AI_HARD_MAX_TOKENS", "5000")),
         }
         return token_map.get(self.difficulty, 2000)
 
@@ -273,18 +268,13 @@ class AIPlayerAgent:
         )
 
     def _get_think_time(self) -> int:
-        """Get think time based on difficulty (8 levels)"""
+        """Get think time based on difficulty tier"""
         time_map = {
-            "novice": int(os.getenv("AI_NOVICE_THINK_TIME_MS", "300")),
-            "beginner": int(os.getenv("AI_BEGINNER_THINK_TIME_MS", "500")),
-            "intermediate": int(os.getenv("AI_INTERMEDIATE_THINK_TIME_MS", "1000")),
-            "skilled": int(os.getenv("AI_SKILLED_THINK_TIME_MS", "1200")),
-            "advanced": int(os.getenv("AI_ADVANCED_THINK_TIME_MS", "1500")),
-            "pro": int(os.getenv("AI_PRO_THINK_TIME_MS", "1800")),
-            "expert": int(os.getenv("AI_EXPERT_THINK_TIME_MS", "2000")),
-            "master": int(os.getenv("AI_MASTER_THINK_TIME_MS", "2500")),
+            "easy": int(os.getenv("AI_EASY_THINK_TIME_MS", "400")),
+            "medium": int(os.getenv("AI_MEDIUM_THINK_TIME_MS", "1200")),
+            "hard": int(os.getenv("AI_HARD_THINK_TIME_MS", "2000")),
         }
-        return time_map.get(self.difficulty, 1500)
+        return time_map.get(self.difficulty, 1200)
 
     def _get_thinking_budget(self) -> int | None:
         """
@@ -294,24 +284,16 @@ class AIPlayerAgent:
         before responding, improving decision quality for high-difficulty AIs.
         Supports both Sonnet 4.5+ and Opus 4+ models.
         """
-        # Only enable for Pro+ difficulties
-        if self.difficulty not in ["pro", "expert", "master"]:
+        # Only enable extended thinking for hard tier (Opus)
+        if self.difficulty != "hard":
             return None
 
-        # Enable for Sonnet 4.5+ and Opus 4+ models (all support extended thinking)
+        # Enable for Opus 4+ models
         model_lower = self.model.lower()
-        thinking_capable = ["sonnet-4-5", "opus-4"]
-        if not any(cap in model_lower for cap in thinking_capable):
+        if "opus-4" not in model_lower:
             return None
 
-        # Token budgets by difficulty (higher = more thinking)
-        # Opus models get higher budgets since they're more capable
-        budget_map = {
-            "pro": int(os.getenv("AI_PRO_THINKING_BUDGET", "4000")),
-            "expert": int(os.getenv("AI_EXPERT_THINKING_BUDGET", "10000")),
-            "master": int(os.getenv("AI_MASTER_THINKING_BUDGET", "20000")),
-        }
-        return budget_map.get(self.difficulty)
+        return int(os.getenv("AI_HARD_THINKING_BUDGET", "15000"))
 
     def _extract_json_from_response(self, response_text: str) -> str:
         """Extract JSON from response, handling markdown code blocks and mixed content"""

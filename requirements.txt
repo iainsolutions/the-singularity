@@ -11,6 +11,10 @@ passlib[bcrypt]==1.7.4
 python-dotenv==1.0.1
 anthropic>=0.86.0
 
+# Optional AI providers (install to enable OpenAI/Gemini/Ollama)
+openai>=1.0.0
+google-genai>=0.2.0
+
 # Testing dependencies
 pytest==8.4.2
 pytest-asyncio==1.2.0

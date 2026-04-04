@@ -987,7 +987,7 @@ async def view_ai_interactions_html(
         recent = interactions[:limit] if len(interactions) > limit else interactions
 
         # Get system prompt for popup
-        prompt_builder = AIPromptBuilder("expert")
+        prompt_builder = AIPromptBuilder("hard")
         # get_cached_system_context returns list of content blocks, extract text
         system_context = prompt_builder.get_cached_system_context()
         system_prompt_text = "\n\n".join(

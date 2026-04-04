@@ -5,27 +5,16 @@ from __future__ import annotations
 import os
 from collections.abc import Iterable
 
-# Difficulty levels and their corresponding environment variable overrides.
-# Phase 2 Optimization: Upgraded Intermediate (Haiku → Sonnet 3.7) and Skilled (Sonnet 3.7 → Sonnet 4)
-#
-# Defaults are Claude models. For Gemini, override with environment variables:
-# - Novice/Beginner: gemini-2.5-flash-lite
-# - Intermediate/Skilled: gemini-2.5-flash
-# - Advanced/Pro: gemini-2.5-flash or gemini-2.5-pro
-# - Expert/Master: gemini-2.5-pro
+# Three difficulty tiers, each backed by a genuinely different model.
+# Override via environment variables for alternative providers (Gemini, Ollama, etc.).
 # Pinned model versions. Update these when new models are released.
 _DIFFICULTY_MODEL_DEFAULTS: list[tuple[str, str, str]] = [
-    ("novice", "AI_NOVICE_MODEL", "claude-sonnet-4-5-20250929"),
-    ("beginner", "AI_BEGINNER_MODEL", "claude-sonnet-4-5-20250929"),
-    ("intermediate", "AI_INTERMEDIATE_MODEL", "claude-sonnet-4-5-20250929"),
-    ("skilled", "AI_SKILLED_MODEL", "claude-sonnet-4-5-20250929"),
-    ("advanced", "AI_ADVANCED_MODEL", "claude-sonnet-4-5-20250929"),
-    ("pro", "AI_PRO_MODEL", "claude-sonnet-4-5-20250929"),
-    ("expert", "AI_EXPERT_MODEL", "claude-opus-4-20250514"),
-    ("master", "AI_MASTER_MODEL", "claude-opus-4-20250514"),
+    ("easy", "AI_EASY_MODEL", "claude-haiku-3-5-20241022"),
+    ("medium", "AI_MEDIUM_MODEL", "claude-sonnet-4-5-20250929"),
+    ("hard", "AI_HARD_MODEL", "claude-opus-4-20250514"),
 ]
 
-_FALLBACK_MODEL = "claude-sonnet-4-5-20250929"
+_FALLBACK_MODEL = "claude-haiku-3-5-20241022"
 
 
 def get_supported_difficulties() -> list[str]:

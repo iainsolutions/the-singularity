@@ -449,8 +449,8 @@ Return ONLY JSON:
         if warnings:
             prompt_parts.append("\n" + "\n".join(warnings))
 
-        # Add phase-specific guidance for intermediate+
-        if diff in ["intermediate", "skilled", "advanced", "pro", "expert", "master"]:
+        # Add phase-specific guidance for medium+
+        if diff in ["medium", "hard"]:
             player_state = game_state.get("current_player_state", {})
             # Determine current phase based on highest card age on board
             board = player_state.get("board", {})
@@ -470,11 +470,11 @@ Return ONLY JSON:
             for avoid in phase_guidance["avoid"]:
                 prompt_parts.append(f"  - {avoid}")
 
-        if diff in ["novice", "beginner"]:
+        if diff == "easy":
             # Minimal context - just current state
             prompt_parts.append(self._format_opponents_basic(game_state))
 
-            # Add critical execute viability checks for novice players
+            # Add critical execute viability checks
             prompt_parts.append(
                 "\n⚠️ CRITICAL EXECUTE CHECKS (Read BEFORE using execute!):"
             )
@@ -487,17 +487,19 @@ Return ONLY JSON:
                 "If an opponent has >= your symbol count, they are NOT vulnerable and the override does NOTHING to them!"
             )
 
-        elif diff in ["intermediate", "skilled"]:
-            # Add recent history and opponent info
+        elif diff == "medium":
+            # Detailed context with opponent info
             prompt_parts.append(self._format_opponents_detailed(game_state))
             prompt_parts.append(self._format_recent_actions(game_state, count=5))
+            prompt_parts.append(self._format_board_analysis(game_state))
+            prompt_parts.append(self._format_achievement_status(game_state))
             prompt_parts.append(
                 "\nPRIORITIZE EXECUTE: Your default action should be execute. "
                 "Only research/deploy when you need to set up better executes. "
                 "Execute is how you harvest, research efficiently, and gain advantage."
             )
 
-        elif diff in ["advanced", "pro", "expert", "master"]:
+        elif diff == "hard":
             # Full context
             prompt_parts.append(self._format_opponents_detailed(game_state))
             prompt_parts.append(self._format_recent_actions(game_state, count=10))
