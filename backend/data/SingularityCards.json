@@ -994,7 +994,7 @@
               "type": "DrawCards",
               "age": 3,
               "count": 2,
-              "location": "hand",
+              "location": "revealed",
               "store_result": "drawn_cards"
             },
             {
@@ -1002,8 +1002,9 @@
               "source": "drawn_cards",
               "min_count": 1,
               "max_count": 1,
-              "message": "Choose one to Deploy",
-              "store_result": "to_meld"
+              "message": "Choose one to Deploy (the other will be scored)",
+              "store_result": "to_meld",
+              "store_remainder": "to_score"
             },
             {
               "type": "MeldCard",
@@ -1011,8 +1012,7 @@
             },
             {
               "type": "ScoreCards",
-              "source": "hand",
-              "count": 1
+              "cards": "to_score"
             }
           ]
         }
