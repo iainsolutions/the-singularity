@@ -691,12 +691,18 @@ class SelectCards(ActionPrimitive):
             return filtered
 
         # Filter by color (support both singular and plural forms)
+        # Resolve variable references: if the value is a context variable name, use its value
         if "color" in criteria:
-            # Handle singular form
-            allowed_colors = [criteria["color"]]
+            raw = criteria["color"]
+            resolved = context.get_variable(raw) if context.has_variable(raw) else raw
+            allowed_colors = [resolved] if isinstance(resolved, str) else resolved
         elif "colors" in criteria:
-            # Handle plural form
-            allowed_colors = criteria["colors"]
+            raw = criteria["colors"]
+            if isinstance(raw, str) and context.has_variable(raw):
+                resolved = context.get_variable(raw)
+                allowed_colors = [resolved] if isinstance(resolved, str) else resolved
+            else:
+                allowed_colors = raw
         else:
             allowed_colors = None
 
@@ -711,7 +717,8 @@ class SelectCards(ActionPrimitive):
 
         # Filter by NOT color
         if "not_color" in criteria:
-            excluded_color = criteria["not_color"]
+            raw = criteria["not_color"]
+            excluded_color = context.get_variable(raw) if context.has_variable(raw) else raw
             filtered = [
                 c
                 for c in filtered
