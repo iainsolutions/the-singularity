@@ -175,15 +175,21 @@
       ],
       "dogma_effects": [
         {
-          "text": "Research a [1].",
+          "text": "Archive a card from your hand.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
             {
-              "type": "DrawCards",
-              "age": 1,
-              "count": 1,
-              "location": "hand"
+              "type": "SelectCards",
+              "source": "hand",
+              "min_count": 1,
+              "max_count": 1,
+              "is_optional": true,
+              "store_result": "to_archive"
+            },
+            {
+              "type": "ArchiveCard",
+              "cards": "to_archive"
             }
           ]
         }
@@ -283,7 +289,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Reveal a card from your hand. If it has a Human Mind icon, Harvest it.",
+          "text": "Reveal a card from your hand. If it has a Human Mind icon, Score it.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -375,7 +381,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you reveal your hand! Transfer the highest card to my Harvest pile!",
+          "text": "I Override you reveal your hand! Transfer the highest card to my Score pile!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -563,7 +569,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you transfer your lowest top card to my Harvest pile!",
+          "text": "I Override you transfer your lowest top card to my Score pile!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -606,7 +612,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Reveal your hand. Harvest any card with an Algorithm icon.",
+          "text": "Reveal your hand. Score any card with an Algorithm icon.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -727,7 +733,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Archive a card from your hand under any stack. If you do, Harvest the top card of that stack.",
+          "text": "Archive a card from your hand under any stack. If you do, Score the top card of that stack.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -737,19 +743,19 @@
               "min_count": 1,
               "max_count": 1,
               "is_optional": true,
-              "store_result": "to_tuck"
+              "store_result": "to_archive"
             },
             {
               "type": "ConditionalAction",
               "condition": {
                 "type": "card_selected",
-                "variable": "to_tuck"
+                "variable": "to_archive"
               },
               "if_true": [
                 {
-                  "type": "TuckCard",
-                  "cards": "to_tuck",
-                  "store_color": "tucked_color"
+                  "type": "ArchiveCard",
+                  "cards": "to_archive",
+                  "store_color": "archived_color"
                 },
                 {
                   "type": "SelectCards",
@@ -757,7 +763,7 @@
                   "min_count": 1,
                   "max_count": 1,
                   "filter_criteria": {
-                    "color": "tucked_color"
+                    "color": "archived_color"
                   },
                   "store_result": "top_to_score"
                 },
@@ -786,7 +792,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Research a [2]. You may transfer a card from your Harvest pile to your hand.",
+          "text": "Research a [2]. You may transfer a card from your Score pile to your hand.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -980,7 +986,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Look at the top two cards of the [3] supply. Deploy one and Harvest the other.",
+          "text": "Look at the top two cards of the [3] supply. Deploy one and Score the other.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1071,7 +1077,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Harvest all cards from your hand. Research a [3].",
+          "text": "Score all cards from your hand. Research a [3].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1257,7 +1263,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "You may exchange the highest cards in your hand and Harvest pile.",
+          "text": "You may exchange the highest cards in your hand and Score pile.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1286,7 +1292,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Research and Harvest a [3]. You may Proliferate your Connection stack left.",
+          "text": "Research and Score a [3]. You may Proliferate your Connection stack left.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1427,7 +1433,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "You may return any number of cards from your Harvest pile. For each, Research a card one era higher than the returned card.",
+          "text": "You may return any number of cards from your Score pile. For each, Research a card one era higher than the returned card.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1486,7 +1492,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Harvest two cards from your hand. Research a [4].",
+          "text": "Score two cards from your hand. Research a [4].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1527,7 +1533,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Deploy a card from your Harvest pile.",
+          "text": "Deploy a card from your Score pile.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1563,7 +1569,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Choose a symbol type. Count how many you have. Research and Harvest a card of that value.",
+          "text": "Choose a symbol type. Count how many you have. Research and Score a card of that value.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1606,7 +1612,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Reveal a card from your hand. If the revealed card's era matches any top card's era on your tech stack, Harvest it and Research a [5].",
+          "text": "Reveal a card from your hand. If the revealed card's era matches any top card's era on your tech stack, Score it and Research a [5].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1782,7 +1788,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "You may transfer a card from your hand to another player's Harvest pile. If you do, transfer a card from their Harvest pile to your hand.",
+          "text": "You may transfer a card from your hand to another player's Score pile. If you do, transfer a card from their Score pile to your hand.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1955,7 +1961,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Reveal your hand. Harvest all cards whose era matches a top card era on your tech stack.",
+          "text": "Reveal your hand. Score all cards whose era matches a top card era on your tech stack.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -1993,7 +1999,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you transfer your highest top card to my Harvest pile! If you do, I Deploy it instead!",
+          "text": "I Override you transfer your highest top card to my Score pile! If you do, I Deploy it instead!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -2036,7 +2042,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "You may Proliferate your Labor stack right. Research and Harvest a [5].",
+          "text": "You may Proliferate your Labor stack right. Research and Score a [5].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2076,7 +2082,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Choose two different domains. Proliferate both right. Harvest a card from your hand.",
+          "text": "Choose two different domains. Proliferate both right. Score a card from your hand.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2142,7 +2148,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you return a card from your Harvest pile for each visible Human Mind icon I have!",
+          "text": "I Override you return a card from your Score pile for each visible Human Mind icon I have!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -2188,7 +2194,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Exchange the highest cards in your hand and Harvest pile. You may Proliferate your Creativity stack right.",
+          "text": "Exchange the highest cards in your hand and Score pile. You may Proliferate your Creativity stack right.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2268,7 +2274,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Research and Harvest a [5] for each domain on your tech stack.",
+          "text": "Research and Score a [5] for each domain on your tech stack.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2368,7 +2374,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Research and reveal a [6]. If it has an Algorithm icon, Harvest it and repeat this effect.",
+          "text": "Research and reveal a [6]. If it has an Algorithm icon, Score it and repeat this effect.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2495,7 +2501,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Harvest your highest top card. Deploy a card from your Harvest pile.",
+          "text": "Score your highest top card. Deploy a card from your Score pile.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2553,7 +2559,7 @@
           ]
         },
         {
-          "text": "If your Ethics is Proliferated up, Research and Harvest a [7].",
+          "text": "If your Ethics is Proliferated up, Research and Score a [7].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2597,7 +2603,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Return all cards from all players' Harvest piles. Each player Researches a card of value equal to the number they returned.",
+          "text": "Return all cards from all players' Score piles. Each player Researches a card of value equal to the number they returned.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2631,7 +2637,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Research and reveal a [6]. If it matches a domain on your tech stack, Deploy it. Otherwise, Harvest it.",
+          "text": "Research and reveal a [6]. If it matches a domain on your tech stack, Deploy it. Otherwise, Score it.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -2727,7 +2733,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you transfer a card from your hand to my Harvest pile!",
+          "text": "I Override you transfer a card from your hand to my Score pile!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -2933,7 +2939,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you transfer your three highest-era cards from your hand to my Harvest pile!",
+          "text": "I Override you transfer your three highest-era cards from your hand to my Score pile!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -2976,7 +2982,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Harvest all top cards from your tech stack. Research and Deploy a [7].",
+          "text": "Score all top cards from your tech stack. Research and Deploy a [7].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -3064,7 +3070,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you return all cards from your tech stack with era higher than your highest Harvest card!",
+          "text": "I Override you return all cards from your tech stack with era higher than your highest Score card!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -3157,7 +3163,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Research and reveal a [7]. If it is Creativity, Harvest it and Research a [8]. Otherwise, Deploy it.",
+          "text": "Research and reveal a [7]. If it is Creativity, Score it and Research a [8]. Otherwise, Deploy it.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -3320,7 +3326,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Return all cards from your hand and Harvest pile. Research three [10]s.",
+          "text": "Return all cards from your hand and Score pile. Research three [10]s.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -3464,7 +3470,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you transfer all but one top card from your tech stack to my Harvest pile!",
+          "text": "I Override you transfer all but one top card from your tech stack to my Score pile!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -3514,7 +3520,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Harvest all cards from your tech stack. Research a [8] and Deploy it. Research a [8] and Deploy it.",
+          "text": "Score all cards from your tech stack. Research a [8] and Deploy it. Research a [8] and Deploy it.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -3954,7 +3960,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "I Override you return all top cards and all Harvest cards! Research a [1] for each card returned!",
+          "text": "I Override you return all top cards and all Score cards! Research a [1] for each card returned!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -4109,7 +4115,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Exchange all cards between your hand and Harvest pile. You may Proliferate any stack up.",
+          "text": "Exchange all cards between your hand and Score pile. You may Proliferate any stack up.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -4472,7 +4478,7 @@
         }
       ],
       "dogma_resource": "circuit",
-      "flavour_text": "Stellar engines harvesting the sun itself; the superintelligence built for the eons ahead."
+      "flavour_text": "Stellar engines scoreing the sun itself; the superintelligence built for the eons ahead."
     },
     {
       "id": "S093",
@@ -4539,7 +4545,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "If you have the most Human Mind icons, and your Harvest pile value is 75 or more, you win.",
+          "text": "If you have the most Human Mind icons, and your Score pile value is 75 or more, you win.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -4904,7 +4910,7 @@
       ],
       "dogma_effects": [
         {
-          "text": "Each player Researches and Harvests a [10]. If your Harvest pile has cards of 8 or more different eras, you win.",
+          "text": "Each player Researches and Scores a [10]. If your Score pile has cards of 8 or more different eras, you win.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -5007,7 +5013,7 @@
       "dogma_resource": "robot",
       "dogma_effects": [
         {
-          "text": "I Override you transfer all cards from your tech stack with Robot icons to my Harvest pile!",
+          "text": "I Override you transfer all cards from your tech stack with Robot icons to my Score pile!",
           "is_demand": true,
           "symbol_count": 1,
           "actions": [
@@ -5186,7 +5192,7 @@
       "dogma_resource": "neural_net",
       "dogma_effects": [
         {
-          "text": "If your Harvest pile score is higher than all other players' scores combined, you win.",
+          "text": "If your Score pile score is higher than all other players' scores combined, you win.",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -5204,7 +5210,7 @@
           ]
         },
         {
-          "text": "Research and Harvest a [10].",
+          "text": "Research and Score a [10].",
           "is_demand": false,
           "symbol_count": 1,
           "actions": [
@@ -5230,14 +5236,14 @@
       "id": "SA01",
       "name": "Emergence",
       "original": "Monument",
-      "trigger": "Archive 6 cards OR Harvest 6 cards in a single turn",
+      "trigger": "Archive 6 cards OR Score 6 cards in a single turn",
       "trigger_type": "turn_event",
-      "description": "The moment self-organizing complexity first appears from simple rules. Achieved through massive accumulation \u2014 either building deep tech stacks (archiving 6) or harvesting resources at scale (scoring 6) in a single turn.",
+      "description": "The moment self-organizing complexity first appears from simple rules. Achieved through massive accumulation \u2014 either building deep tech stacks (archiving 6) or scoreing resources at scale (scoring 6) in a single turn.",
       "condition": {
         "type": "or",
         "conditions": [
           {
-            "type": "tucked_count_this_turn",
+            "type": "archived_count_this_turn",
             "count": 6
           },
           {
@@ -5432,9 +5438,9 @@
       "id": "SA06",
       "name": "Abundance",
       "original": "Wealth",
-      "trigger": "Have 5 or more cards in your Harvest pile, each of a different era",
+      "trigger": "Have 5 or more cards in your Score pile, each of a different era",
       "trigger_type": "board_state",
-      "description": "Overwhelming resource accumulation \u2014 your Harvest pile contains technologies from across the timeline, a diversified portfolio of technological capital spanning at least 5 distinct eras.",
+      "description": "Overwhelming resource accumulation \u2014 your Score pile contains technologies from across the timeline, a diversified portfolio of technological capital spanning at least 5 distinct eras.",
       "condition": {
         "type": "score_pile_unique_ages_at_least",
         "count": 5

@@ -21,7 +21,7 @@ class CardConditions(BaseConditionEvaluator):
     @property
     def supported_conditions(self) -> set[str]:
         return {
-            "cards_tucked",
+            "cards_archived",
             "no_transfer",
             "cards_transferred",
             "no_cards_transferred",
@@ -49,11 +49,11 @@ class CardConditions(BaseConditionEvaluator):
         """Evaluate card-related conditions."""
         condition_type = condition.get("type")
 
-        if condition_type == "cards_tucked":
-            # Check if cards were tucked in previous actions
-            tucked_count = context.get_variable("tucked_count", 0)
+        if condition_type == "cards_archived":
+            # Check if cards were archived in previous actions
+            archived_count = context.get_variable("archived_count", 0)
             expected_count = condition.get("count", 1)
-            return tucked_count >= expected_count
+            return archived_count >= expected_count
 
         elif condition_type == "no_transfer":
             # Check if no cards were transferred

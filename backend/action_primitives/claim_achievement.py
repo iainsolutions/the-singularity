@@ -219,12 +219,12 @@ class ClaimAchievement(ActionPrimitive):
 
         # Special achievement metadata
         special_achievements = {
-            "Emergence": {"age": 1, "description": "Archive 6+ OR Harvest 6+ in a single turn"},
+            "Emergence": {"age": 1, "description": "Archive 6+ OR Score 6+ in a single turn"},
             "Dominion": {"age": 2, "description": "3+ of every icon type visible on board"},
             "Consciousness": {"age": 3, "description": "12+ visible Human Mind icons on board"},
             "Apotheosis": {"age": 4, "description": "All 5 colors, each Proliferated right/up/aslant"},
             "Transcendence": {"age": 5, "description": "All 5 colors, each top card Era 8+"},
-            "Abundance": {"age": 6, "description": "5+ Harvest cards from different eras"},
+            "Abundance": {"age": 6, "description": "5+ Score cards from different eras"},
             "win": {"age": 999, "description": "Instant victory via special achievement"},
         }
 

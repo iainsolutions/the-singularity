@@ -60,13 +60,13 @@ class PlayerBoard(BaseModel):
         if card.color.value in color_map:
             color_map[card.color.value].append(card)
 
-    def tuck_card(self, card: Card):
+    def archive_card(self, card: Card):
         """Tuck a card under its color stack."""
         if card is None:
             # Defensive check: don't tuck None cards
             import logging
 
-            logging.warning("Attempted to tuck None card to player board")
+            logging.warning("Attempted to archive None card to player board")
             return
 
         color = card.color.value

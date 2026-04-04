@@ -17,12 +17,12 @@ const ERA_COLORS = {
 };
 
 const SPECIAL_ACHIEVEMENTS = {
-  Emergence: { color: "#CC3333", description: "Archive 6+ OR Harvest 6+ in a single turn" },
+  Emergence: { color: "#CC3333", description: "Archive 6+ OR Score 6+ in a single turn" },
   Dominion: { color: "#FFD700", description: "3+ of every icon type visible on board" },
   Consciousness: { color: "#4169E1", description: "12+ visible Human Mind icons" },
   Apotheosis: { color: "#9932CC", description: "All 5 colors Proliferated right/up/aslant" },
   Transcendence: { color: "#1E90FF", description: "All 5 colors, each top card Era 8+" },
-  Abundance: { color: "#228B22", description: "5+ Harvest cards from different eras" },
+  Abundance: { color: "#228B22", description: "5+ Score cards from different eras" },
 };
 
 const AchievementRow = memo(

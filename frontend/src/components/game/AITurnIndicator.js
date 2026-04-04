@@ -199,7 +199,7 @@ const AITurnIndicator = memo(function AITurnIndicator({
           >
             <Box>
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {aiPlayerName} appears to be stuck
+                {aiPlayerName} appears to be sarchive
               </Typography>
               <Typography variant="caption" sx={{ color: "text.secondary" }}>
                 {elapsedSeconds}s without response - Click Retry to continue

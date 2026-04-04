@@ -1278,7 +1278,7 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
 
         Per The Singularity rules (p. 947-952), sharing occurs when an opponent's use of
         the shared effect causes them to "do something with a card." This includes:
-        - splay, meld, tuck, exchange, transfer, draw, achieve, etc.
+        - splay, meld, archive, exchange, transfer, draw, achieve, etc.
 
         Revealing a card does NOT count for sharing.
 
@@ -1304,7 +1304,7 @@ class ConsolidatedSharingPhase(ConsolidatedPhase):
             "transfer",
             "meld",
             "score",
-            "tuck",
+            "archive",
             "splay",
             "return",
             "achieve",  # If we track achievements
@@ -2027,7 +2027,7 @@ class ConsolidatedCompletionPhase(ConsolidatedPhase):
                 "transfer",
                 "meld",
                 "score",
-                "tuck",
+                "archive",
                 "splay",
                 "return",
                 "achieve",

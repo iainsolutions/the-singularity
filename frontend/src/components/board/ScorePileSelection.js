@@ -43,7 +43,7 @@ const ScorePileSelection = ({
           mb: compact ? 0.25 : 0.5,
         }}
       >
-        📊 Harvest Pile — Select cards to return ({cards.length} cards)
+        📊 Score Pile — Select cards to return ({cards.length} cards)
       </Typography>
       <Box
         sx={{
@@ -158,7 +158,7 @@ const ScorePileSelection = ({
               width: "100%",
             }}
           >
-            <Typography>No cards in harvest pile</Typography>
+            <Typography>No cards in score pile</Typography>
           </Box>
         )}
       </Box>

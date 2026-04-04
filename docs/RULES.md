@@ -38,7 +38,7 @@ Technologies you deploy will grant you resources, trigger powerful effects, and 
 Where you Deploy Technology Cards. Organized into up to five stacks, one per Domain. Only the top card is fully active, but Proliferating reveals icons on lower cards.
 
 ### Archive (Score Pile)
-Face-down pile of Harvested cards. The total of Era numbers is your score.
+Face-down pile of Scoreed cards. The total of Era numbers is your score.
 
 ### Hand
 Cards you have Researched but not yet Deployed. Hidden from other players.
@@ -83,7 +83,7 @@ Requires 2+ cards. Stays until changed. Up supersedes left/right.
 ## Actions Within Dogma Effects
 
 - **Archive (Tuck)**: Place card at bottom of a stack
-- **Harvest (Score)**: Move card to your Archive
+- **Score (Score)**: Move card to your Archive
 - **Recall (Return)**: Send card back to its Era's supply pile
 - **Research**: Draw a card as specified
 - **Deploy**: Play a card as specified
@@ -111,7 +111,7 @@ If no supply pile has cards when you need to draw, the game ends. Highest Archiv
 - Count every visible icon on your entire tech stack, including Proliferated icons.
 - Override and cooperative effects are mandatory.
 - "You may" = optional. Otherwise, effects are mandatory.
-- Harvested cards are face down. Anyone can count cards in any Archive but cannot look at them.
+- Scoreed cards are face down. Anyone can count cards in any Archive but cannot look at them.
 - Single-card stacks cannot be Proliferated.
 - Effects resolve top to bottom as written on the card.
 
@@ -125,7 +125,7 @@ If no supply pile has cards when you need to draw, the game ends. Highest Archiv
 | Domain | Card color/category (Processing, Labor, Ethics, Creativity, Connection) |
 | Era | Card's technological period (1-10) |
 | Execute | Activate a deployed card's dogma effects |
-| Harvest | Move card to Archive (score pile) |
+| Score | Move card to Archive (score pile) |
 | Proliferate | Fan out a stack to reveal icons |
 | Recall | Return card to its Era's supply pile |
 | Research | Draw card from supply pile |

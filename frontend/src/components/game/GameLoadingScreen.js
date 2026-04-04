@@ -14,7 +14,7 @@ const GameLoadingScreen = memo(function GameLoadingScreen({
     <div className={styles.loadingScreen}>
       <div className={styles.loadingScreen__content}>
         <div className={styles.loadingScreen__message}>
-          {loadingTimeout ? "Game appears to be stuck loading..." : "Loading game..."}
+          {loadingTimeout ? "Game appears to be sarchive loading..." : "Loading game..."}
         </div>
 
         {loadingTimeout && (

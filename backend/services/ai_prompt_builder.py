@@ -300,7 +300,7 @@ Choose ONE action from the annotated list above.
 {achieve_hint}
 ## DECISION PRIORITY:
 1. achieve → ALWAYS claim if available (6 breakthroughs = WIN)
-2. execute marked UNSHARED that researches/harvests/deploys for you → USE IT
+2. execute marked UNSHARED that researches/scores/deploys for you → USE IT
 3. execute with OVERRIDE VIABLE that hurts opponent → USE IT
 4. deploy a card that enables a better execute next turn → DEPLOY
 5. research → safe default
@@ -496,7 +496,7 @@ Return ONLY JSON:
             prompt_parts.append(
                 "\nPRIORITIZE EXECUTE: Your default action should be execute. "
                 "Only research/deploy when you need to set up better executes. "
-                "Execute is how you harvest, research efficiently, and gain advantage."
+                "Execute is how you score, research efficiently, and gain advantage."
             )
 
         elif diff == "hard":
@@ -1049,8 +1049,8 @@ For interactions (card selection etc): {"selected_cards": ["card_id"]} or {"chos
                             requirements["needs_hand_count"], min_count
                         )
 
-            # TuckCard from hand (not last_drawn or other sources)
-            elif action_type == "TuckCard" and action.get("cards") != "last_drawn":
+            # ArchiveCard from hand (not last_drawn or other sources)
+            elif action_type == "ArchiveCard" and action.get("cards") != "last_drawn":
                 requirements["needs_hand_cards"] = True
                 requirements["needs_board_colors_in_hand"] = True
 

@@ -13,7 +13,7 @@ This document defines the complete schema for all 60+ action primitives register
 - [Common Parameters](#common-parameters)
 - [Core Actions](#core-actions) — DrawCards, MeldCard, ScoreCards, ReturnCards, TransferCards, JunkCards, JunkAllDeck
 - [Selection & Filtering](#selection--filtering) — SelectCards, SelectHighest, SelectLowest, SelectAchievement, SelectColor, SelectSymbol, FilterCards, SelectAnyPlayer
-- [Board Manipulation](#board-manipulation) — SplayCards, UnsplayCards, TuckCard, ExchangeCards, TransferBetweenPlayers, MakeAvailable
+- [Board Manipulation](#board-manipulation) — SplayCards, UnsplayCards, ArchiveCard, ExchangeCards, TransferBetweenPlayers, MakeAvailable
 - [Counting & Analysis](#counting--analysis) — CountSymbols, CountCards, CountColorsWithSymbol, CountColorsWithSplay, CountUniqueColors, CountUniqueValues, CountUniqueSymbols, GetCardAge, GetCardColor, GetCardColors, GetCardSymbols, GetSplayDirection, GetLowestValue
 - [Control Flow](#control-flow) — ConditionalAction, EvaluateCondition, LoopAction, RepeatAction, RevealAndProcess
 - [Game Mechanics](#game-mechanics) — DemandEffect, ClaimAchievement, ExecuteDogma, SelfExecute, ChooseOption, CalculateValue
@@ -485,7 +485,7 @@ Removes splay from color stacks (Unseen expansion).
 
 ---
 
-### `TuckCard`
+### `ArchiveCard`
 Places cards under (bottom of) existing board stacks.
 
 **Parameters**:
@@ -493,17 +493,17 @@ Places cards under (bottom of) existing board stacks.
 |-----------|------|---------|-------------|
 | `cards` | string | `"selected_cards"` | Variable containing cards to tuck. `"hand"` = all hand cards |
 | `from` | string | `"hand"` | Where to remove cards from |
-| `color_filter` | string | *(none)* | Optional color restriction for tucking |
-| `store_color` | string | *(none)* | Variable to store the color(s) tucked |
-| `auto_splay` | boolean | `false` | Whether to automatically splay after tucking |
+| `color_filter` | string | *(none)* | Optional color restriction for archiving |
+| `store_color` | string | *(none)* | Variable to store the color(s) archived |
+| `auto_splay` | boolean | `false` | Whether to automatically splay after archiving |
 | `splay_direction` | string | `"left"` | Direction to splay if `auto_splay` is true |
 
-**Side Effects**: Sets `tucked_count` variable. Tracks Monument special achievement.
+**Side Effects**: Sets `archived_count` variable. Tracks Monument special achievement.
 
 **Example**:
 ```json
 {
-  "type": "TuckCard",
+  "type": "ArchiveCard",
   "cards": "last_drawn",
   "auto_splay": true,
   "splay_direction": "left"
@@ -1285,7 +1285,7 @@ Conditions are used in `ConditionalAction`, `EvaluateCondition`, and `LoopAction
 
 | Type | Parameters | Description |
 |------|-----------|-------------|
-| `cards_tucked` | `count` (default: 1) | Cards tucked >= count |
+| `cards_archived` | `count` (default: 1) | Cards archived >= count |
 | `no_transfer` | *(none)* | No cards transferred |
 | `cards_transferred` | `count` (default: 1) | Cards transferred >= count |
 | `no_cards_transferred` | *(none)* | No cards transferred (checks both regular and demand) |
@@ -1340,7 +1340,7 @@ Conditions are used in `ConditionalAction`, `EvaluateCondition`, and `LoopAction
 | `option_chosen` | `option` | Specific option was chosen |
 | `user_choice` | `value` | User made specific choice |
 | `true` | *(none)* | Always true |
-| `tucked_under_age_11` | *(none)* | Card was tucked under age 11 |
+| `archived_under_age_11` | *(none)* | Card was archived under age 11 |
 
 ### Logical Conditions
 

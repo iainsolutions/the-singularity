@@ -824,7 +824,7 @@ class SelectCards(ActionPrimitive):
                 f"Cards before filter: {[(c.name, c.color.value if hasattr(c.color, 'value') else str(c.color)) for c in filtered if hasattr(c, 'color')]}"
             )
 
-            # If no colors on board, allow all cards (since tucking would start a new color)
+            # If no colors on board, allow all cards (since archiving would start a new color)
             if board_colors:
                 # Filter to cards with colors ON board
                 filtered = [
@@ -834,7 +834,7 @@ class SelectCards(ActionPrimitive):
                     and (c.color.value if hasattr(c.color, "value") else str(c.color))
                     in board_colors
                 ]
-            # else: keep all cards since any can be tucked to start a new color stack
+            # else: keep all cards since any can be archived to start a new color stack
 
             logger.debug(
                 f"Cards after color_on_board filter: {[c.name for c in filtered]}"
